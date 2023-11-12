@@ -10,17 +10,17 @@ export default defineConfig({
       { find: '@src', replacement: resolve(__dirname, 'src') },
       {
         find: '@common',
-        replacement: resolve(__dirname, 'src/common'),
+        replacement: resolve(__dirname, 'src/common')
       },
       {
         find: '@styles',
-        replacement: resolve(__dirname, 'src/styles'),
+        replacement: resolve(__dirname, 'src/styles')
       },
       {
         find: '@pages',
-        replacement: resolve(__dirname, 'src/pages'),
-      },
-    ],
+        replacement: resolve(__dirname, 'src/pages')
+      }
+    ]
   },
-  plugins: [react(), viteTsconfigPaths()],
+  plugins: [react(), viteTsconfigPaths()]
 });
