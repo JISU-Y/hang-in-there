@@ -1,8 +1,9 @@
+import PageLayout from '@src/common/layouts/PageLayout';
 import Test from '@src/common/components/Test';
 
 const HomePage = () => {
   return (
-    <div>
+    <PageLayout>
       <h1
         style={{
           fontSize: '48px',
@@ -13,7 +14,7 @@ const HomePage = () => {
         행인들 (H.I.T)
       </h1>
       <Test />
-    </div>
+    </PageLayout>
   );
 };
 
