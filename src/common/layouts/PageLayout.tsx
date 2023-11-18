@@ -53,7 +53,7 @@ const PageContainer = styled.div`
 const Navbar = styled.nav`
   width: 100%;
   height: 48px;
-  background-color: red;
+  background-color: #ff701b;
 `;
 
 const Footer = styled.footer`
@@ -61,12 +61,11 @@ const Footer = styled.footer`
   flex-direction: column;
   gap: 16px;
   padding: 36px 42px;
-  background-color: aquamarine;
+  background-color: #dddddd;
 
   & > div {
     display: flex;
     justify-content: space-between;
-    align-items: center;
 
     & > span:first-child {
       font-weight: 600;
