@@ -23,22 +23,35 @@ const categoryList = {
 const Categories = () => {
   return (
     <Container>
-      {Object.entries(categoryList).map(([key, value]) => (
-        <Menu>
-          <MenuButton as={Button}>{key}</MenuButton>
-          <MenuList>
-            {value?.map(subMenu => <MenuItem>{subMenu}</MenuItem>)}
-          </MenuList>
-        </Menu>
-      ))}
+      <CategoryWrapper>
+        {Object.entries(categoryList).map(([key, value]) => (
+          <Menu key={key}>
+            <MenuButton as={Button}>{key}</MenuButton>
+            {value && (
+              <MenuList>
+                {value.map(subMenu => (
+                  <MenuItem>{subMenu}</MenuItem>
+                ))}
+              </MenuList>
+            )}
+          </Menu>
+        ))}
+      </CategoryWrapper>
     </Container>
   );
 };
 
 const Container = styled.section`
+  display: flex;
+  justify-content: center;
   width: 100%;
   height: 180px;
   background-color: blueviolet;
+`;
+
+const CategoryWrapper = styled.div`
+  display: flex;
+  gap: 24px;
 `;
 
 export default Categories;

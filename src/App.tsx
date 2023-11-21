@@ -5,6 +5,8 @@ import {
   createBrowserRouter
 } from 'react-router-dom';
 
+import { ChakraProvider } from '@chakra-ui/react';
+
 import './App.css';
 
 interface RouteCommon {
@@ -60,7 +62,11 @@ const router = createBrowserRouter(
 );
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <ChakraProvider>
+      <RouterProvider router={router} />
+    </ChakraProvider>
+  );
 }
 
 export default App;
