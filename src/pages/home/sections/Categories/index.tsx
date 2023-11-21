@@ -1,15 +1,5 @@
 import styled from '@emotion/styled';
-import {
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuItemOption,
-  MenuGroup,
-  MenuOptionGroup,
-  MenuDivider,
-  Button
-} from '@chakra-ui/react';
+import { Menu, MenuButton, MenuList, MenuItem, Button } from '@chakra-ui/react';
 
 // 축제 공연 전시 교육/체험 아동/청소년
 const categoryList = {

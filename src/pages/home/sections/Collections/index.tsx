@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 
 const Collections = () => {
-  return <Container>Collections</Container>;
+  return <Container>collecitons</Container>;
 };
 
 const Container = styled.section`
