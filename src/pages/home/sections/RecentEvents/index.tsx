@@ -86,7 +86,6 @@ const RecentEvents = () => {
 
 const Container = styled.section`
   width: 100%;
-  background-color: yellowgreen;
 `;
 
 export default RecentEvents;
