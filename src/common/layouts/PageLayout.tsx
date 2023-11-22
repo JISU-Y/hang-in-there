@@ -28,7 +28,12 @@ const PageLayout = ({
 }: PropsWithChildren<PageLayoutProps>) => {
   return (
     <PageContainer>
-      {withNavbar && <Navbar>행인들(아이콘)</Navbar>}
+      {withNavbar && (
+        <Navbar>
+          {/* TODO: link -> home 추가 */}
+          <Image src="/logo/logo.png" alt="logo" />
+        </Navbar>
+      )}
       {children}
       {withFooter && (
         <Footer>
@@ -51,9 +56,17 @@ const PageContainer = styled.div`
 `;
 
 const Navbar = styled.nav`
+  display: flex;
+  align-items: center;
   width: 100%;
   height: 48px;
+  padding: 0 12px;
   background-color: #ff701b;
+`;
+
+const Image = styled.img`
+  height: 40px;
+  cursor: pointer;
 `;
 
 const Footer = styled.footer`

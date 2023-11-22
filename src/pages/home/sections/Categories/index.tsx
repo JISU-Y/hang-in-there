@@ -16,9 +16,9 @@ const Categories = () => {
       <CategoryWrapper>
         {Object.entries(categoryList).map(([key, value]) => (
           <Menu key={key}>
-            <MenuButton as={Button}>{key}</MenuButton>
+            <MenuButton as={CategoryButton}>{key}</MenuButton>
             {value && (
-              <MenuList>
+              <MenuList as={SubCategoryList}>
                 {value.map(subMenu => (
                   <MenuItem>{subMenu}</MenuItem>
                 ))}
@@ -35,13 +35,22 @@ const Container = styled.section`
   display: flex;
   justify-content: center;
   width: 100%;
-  height: 180px;
-  background-color: blueviolet;
 `;
 
 const CategoryWrapper = styled.div`
   display: flex;
   gap: 24px;
+  width: 100%;
+`;
+
+const CategoryButton = styled(Button)`
+  width: 100%;
+  min-width: 120px;
+`;
+
+const SubCategoryList = styled.div`
+  width: 100%;
+  max-width: 120px;
 `;
 
 export default Categories;
