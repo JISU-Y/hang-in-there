@@ -5,6 +5,8 @@ import {
   createBrowserRouter
 } from 'react-router-dom';
 
+import { ChakraProvider } from '@chakra-ui/react';
+
 import './App.css';
 
 interface RouteCommon {
@@ -25,12 +27,14 @@ interface Pages {
 }
 
 // FIXME: eager option을 생략해야 code splitting이 된다고 하는 것 같은데 생략하면 오류.
-const pages: Pages = import.meta.glob('./pages/**/*.tsx', { eager: true });
+const routeModules: Pages = import.meta.glob('./routes/**/*.tsx', {
+  eager: true
+});
 
 const routes: IRoute[] = [];
 
-for (const path of Object.keys(pages)) {
-  const fileName = path.match(/\.\/pages\/(.*)\.tsx$/)?.[1];
+for (const path of Object.keys(routeModules)) {
+  const fileName = path.match(/\.\/routes\/(.*)\.tsx$/)?.[1];
   if (!fileName) {
     continue;
   }
@@ -41,10 +45,10 @@ for (const path of Object.keys(pages)) {
 
   routes.push({
     path: fileName === 'index' ? '/' : `/${normalizedPathName.toLowerCase()}`, // 등록하려는 경로
-    Element: pages[path].default, // 해당 경로에 나타낼 React 컴포넌트 (페이지)
-    loader: pages[path]?.loader as LoaderFunction | undefined, // 데이터 가져오기 기능 (optional)
-    action: pages[path]?.action as ActionFunction | undefined, // form data 제출 기능 (optional)
-    ErrorBoundary: pages[path]?.ErrorBoundary // path 오류 났을 때 fallback (optional)
+    Element: routeModules[path].default, // 해당 경로에 나타낼 React 컴포넌트 (페이지)
+    loader: routeModules[path]?.loader as LoaderFunction | undefined, // 데이터 가져오기 기능 (optional)
+    action: routeModules[path]?.action as ActionFunction | undefined, // form data 제출 기능 (optional)
+    ErrorBoundary: routeModules[path]?.ErrorBoundary // path 오류 났을 때 fallback (optional)
   });
 }
 
@@ -58,7 +62,11 @@ const router = createBrowserRouter(
 );
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <ChakraProvider>
+      <RouterProvider router={router} />
+    </ChakraProvider>
+  );
 }
 
 export default App;
