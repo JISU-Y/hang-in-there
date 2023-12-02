@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { css } from '@emotion/react';
 import {
   Button,
   Card,
@@ -33,10 +33,19 @@ const EventCard = ({
   return (
     <Card
       direction={{ base: 'column', sm: 'row' }}
-      overflow="hidden"
       variant="elevated"
       maxH={200}
-      cursor="pointer"
+      css={css`
+        position: 'relative';
+        top: 0;
+        transition: top ease 0.2s;
+        cursor: pointer;
+        overflow: hidden;
+
+        &:hover {
+          top: -5px;
+        }
+      `}
     >
       <Image
         objectFit="cover"
