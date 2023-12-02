@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import PageLayout from '@src/common/layouts/PageLayout';
 import EventCard from './components/EventCard';
 import { SimpleGrid } from '@chakra-ui/react';
+import Filter from './components/Filter';
 
 const CategoryPage = () => {
   return (
@@ -10,6 +11,7 @@ const CategoryPage = () => {
         <TitleWrapper>
           <PageTitle>축제</PageTitle>
         </TitleWrapper>
+        <Filter />
         <SimpleGrid columns={2} spacing={8} as={CardListContainer}>
           <EventCard />
           <EventCard />
