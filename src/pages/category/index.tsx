@@ -13,10 +13,46 @@ const CategoryPage = () => {
         </TitleWrapper>
         <Filter />
         <SimpleGrid columns={2} spacing={8} as={CardListContainer}>
-          <EventCard />
-          <EventCard />
-          <EventCard />
-          <EventCard />
+          <EventCard
+            imageUrl=""
+            title=""
+            status="always"
+            range={{
+              startDate: '',
+              endDate: ''
+            }}
+            location=""
+          />
+          <EventCard
+            imageUrl=""
+            title=""
+            status="always"
+            range={{
+              startDate: '',
+              endDate: ''
+            }}
+            location=""
+          />
+          <EventCard
+            imageUrl=""
+            title=""
+            status="always"
+            range={{
+              startDate: '',
+              endDate: ''
+            }}
+            location=""
+          />
+          <EventCard
+            imageUrl=""
+            title=""
+            status="always"
+            range={{
+              startDate: '',
+              endDate: ''
+            }}
+            location=""
+          />
         </SimpleGrid>
       </ContentWrapper>
     </PageLayout>
