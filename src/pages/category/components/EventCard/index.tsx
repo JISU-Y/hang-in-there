@@ -1,3 +1,4 @@
+import { format, isValid, parse } from 'date-fns';
 import { css } from '@emotion/react';
 import {
   Button,
@@ -11,6 +12,7 @@ import {
   Text
 } from '@chakra-ui/react';
 import { LinkIcon } from '@chakra-ui/icons';
+import { ko } from 'date-fns/locale';
 
 interface EventCardProps {
   imageUrl: string;
@@ -30,13 +32,26 @@ const EventCard = ({
   range,
   location
 }: EventCardProps) => {
-  console.log(range, location);
+  const formatRange = () => {
+    const formatType = 'MM. dd. yy (eee)';
+
+    const startDate = parse(range.startDate, 'yyyyMMdd', new Date());
+    const endDate = parse(range.endDate, 'yyyyMMdd', new Date());
+
+    if (!isValid(startDate) || !isValid(endDate)) return;
+
+    return `${format(startDate, formatType, { locale: ko })} ~ ${format(
+      endDate,
+      formatType,
+      { locale: ko }
+    )} `;
+  };
 
   return (
     <Card
       direction={{ base: 'column', sm: 'row' }}
       variant="elevated"
-      maxH={200}
+      height={210}
       css={css`
         position: 'relative';
         top: 0;
@@ -82,16 +97,21 @@ const EventCard = ({
           </Stack>
         </CardHeader>
 
-        <CardBody py={0}>
-          <Heading as="h3" size="sm" fontWeight={700} noOfLines={2}>
+        <CardBody
+          py={0}
+          paddingBottom={2}
+          display="flex"
+          flexDirection="column"
+          justifyContent="space-between"
+        >
+          <Heading as="h3" size="md" fontWeight={700} noOfLines={2}>
             {title || '제목은 이렇게 굵게 표시 두 줄일 때'}
           </Heading>
-
           <Text py="1" pb={0} fontSize="sm">
-            기간: 00. 00. 00.(월) ~ 00. 00. 00.(금)
+            기간: {formatRange()}
           </Text>
           <Text py="1" pt={0} fontSize="sm">
-            장소: 어쩌구저쩌구
+            장소: {location}
           </Text>
         </CardBody>
       </Stack>
