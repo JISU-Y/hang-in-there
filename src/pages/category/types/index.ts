@@ -1,3 +1,7 @@
+import { ApiDataResponseType } from '@src/common/types/utilType';
+
+export type EventListResponseDto = ApiDataResponseType<EventDataType[]>;
+
 export interface EventDataType {
   addr1: string;
   addr2: string;

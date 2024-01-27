@@ -13,8 +13,10 @@ import {
 } from '@chakra-ui/react';
 import { LinkIcon } from '@chakra-ui/icons';
 import { ko } from 'date-fns/locale';
+import { Link } from 'react-router-dom';
 
 interface EventCardProps {
+  eventId: string;
   imageUrl: string;
   title: string;
   status: 'ongoing' | 'soon' | 'always' | 'closed';
@@ -26,6 +28,7 @@ interface EventCardProps {
 }
 
 const EventCard = ({
+  eventId,
   imageUrl,
   title,
   status,
@@ -49,6 +52,8 @@ const EventCard = ({
 
   return (
     <Card
+      as={Link}
+      to={`/eventDetail/${eventId}`}
       direction={{ base: 'column', sm: 'row' }}
       variant="elevated"
       height={210}
