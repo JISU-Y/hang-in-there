@@ -222,3 +222,13 @@ export interface EventDetailImageDataType {
   smallimageurl: string;
   cpyrhtDivCd: string;
 }
+
+export interface DetailInfoType {
+  period: string;
+  place: string;
+  time: string;
+  hostName: string;
+  hostPhone: string;
+  homePageLink: string;
+  description: string;
+}
