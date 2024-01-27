@@ -55,7 +55,6 @@ for (const path of Object.keys(routeModules)) {
   });
 }
 
-// FIXME: 자동 import는 또 왜 안되는겨
 const router = createBrowserRouter(
   routes.map(({ Element, ErrorBoundary, ...rest }) => ({
     ...rest,

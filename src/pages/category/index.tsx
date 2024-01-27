@@ -12,8 +12,6 @@ const CategoryPage = () => {
     pageNo: 1
   });
 
-  console.log('eventList', eventList);
-
   return (
     <PageLayout>
       <ContentWrapper>
@@ -24,6 +22,7 @@ const CategoryPage = () => {
         <SimpleGrid columns={2} spacing={8} as={CardListContainer}>
           {eventList?.map(event => (
             <EventCard
+              eventId={event.contentid}
               imageUrl={event.firstimage}
               title={event.title}
               status="always"
