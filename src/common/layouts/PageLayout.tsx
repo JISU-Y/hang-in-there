@@ -34,7 +34,7 @@ const PageLayout = ({
           <Image src="/logo/logo.png" alt="logo" />
         </Navbar>
       )}
-      {children}
+      <Content>{children}</Content>
       {withFooter && (
         <Footer>
           {footerData.map(({ listTitle, label }) => (
@@ -53,6 +53,8 @@ const PageContainer = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
+  min-height: 100vh;
+  background-color: #dddddd;
 `;
 
 const Navbar = styled.nav`
@@ -67,6 +69,12 @@ const Navbar = styled.nav`
 const Image = styled.img`
   height: 40px;
   cursor: pointer;
+`;
+
+const Content = styled.section`
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
 `;
 
 const Footer = styled.footer`

@@ -6,6 +6,7 @@ import {
   RouterProvider,
   createBrowserRouter
 } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 import { ChakraProvider } from '@chakra-ui/react';
 
@@ -63,11 +64,15 @@ const router = createBrowserRouter(
   }))
 );
 
+const queryClient = new QueryClient();
+
 function App() {
   return (
-    <ChakraProvider>
-      <RouterProvider router={router} />
-    </ChakraProvider>
+    <QueryClientProvider client={queryClient}>
+      <ChakraProvider>
+        <RouterProvider router={router} />
+      </ChakraProvider>
+    </QueryClientProvider>
   );
 }
 
