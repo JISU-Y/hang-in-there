@@ -232,3 +232,5 @@ export interface DetailInfoType {
   homePageLink: string;
   description: string;
 }
+
+export type DetailInfoUnionType = keyof DetailInfoType;

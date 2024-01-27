@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { useParams } from 'react-router-dom';
 import Slider from 'react-slick';
-import { format, isSameDay, isValid } from 'date-fns';
+import { isSameDay } from 'date-fns';
 
 import styled from '@emotion/styled';
 import '@styles/custom-slick.css';
@@ -13,7 +13,7 @@ import {
   useFetchEventDetailQuery
 } from './network/eventDetailQueries';
 import InfoList from './components/InfoList';
-import { DetailInfoType } from './types/detail';
+import { DetailInfoType, DetailInfoUnionType } from './types/detail';
 
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -71,16 +71,25 @@ const EventDetailPage = () => {
     <Container>
       <ContentWrapper>
         <SliderWrapper>
-          <Slider {...settings}>
-            {eventDetailImage?.map(detailImg => (
-              <ImageWrapper key={detailImg.serialnum}>
-                <Image
-                  src={detailImg.originimgurl}
-                  alt={`festival-${detailImg.imgname}`}
-                />
-              </ImageWrapper>
-            ))}
-          </Slider>
+          {eventDetailImage ? (
+            <Slider {...settings}>
+              {eventDetailImage.map(detailImg => (
+                <ImageWrapper key={detailImg.serialnum}>
+                  <Image
+                    src={detailImg.originimgurl}
+                    alt={`festival-${detailImg.imgname}`}
+                  />
+                </ImageWrapper>
+              ))}
+            </Slider>
+          ) : (
+            <ImageWrapper>
+              <Image
+                src={eventDetail?.firstimage}
+                alt={`festival-${eventDetail?.firstimage}`}
+              />
+            </ImageWrapper>
+          )}
         </SliderWrapper>
 
         <DetailWrapper>
@@ -89,7 +98,13 @@ const EventDetailPage = () => {
             {eventDetailInfo &&
               Object.entries(eventDetailInfo).map(
                 ([key, value]) =>
-                  value && <InfoList key={key} title={key} value={value} />
+                  value && (
+                    <InfoList
+                      key={key}
+                      title={key as DetailInfoUnionType}
+                      value={value}
+                    />
+                  )
               )}
           </InfoListWrapper>
         </DetailWrapper>

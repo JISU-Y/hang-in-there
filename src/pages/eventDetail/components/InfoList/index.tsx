@@ -1,15 +1,19 @@
 import styled from '@emotion/styled';
+import { DetailInfoUnionType } from '../../types/detail';
+import { InfoKeyMapper } from '../../constants/detail';
 
 interface InfoListProps {
-  title: string;
+  title: DetailInfoUnionType;
   value: string;
 }
 
 const InfoList = ({ title, value }: InfoListProps) => {
   return (
     <Container>
-      <InfoKey>{title}</InfoKey>
-      <InfoValue>{value}</InfoValue>
+      <InfoKey>{InfoKeyMapper[title]}</InfoKey>
+      <InfoValue>
+        <div dangerouslySetInnerHTML={{ __html: value }} />
+      </InfoValue>
     </Container>
   );
 };

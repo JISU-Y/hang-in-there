@@ -1,6 +1,8 @@
+import { format } from 'date-fns';
 import styled from '@emotion/styled';
-import PageLayout from '@src/common/layouts/PageLayout';
 import { SimpleGrid } from '@chakra-ui/react';
+import PageLayout from '@src/common/layouts/PageLayout';
+
 import { useFetchEventListQuery } from './network/eventListQueries';
 import Filter from './components/Filter';
 import EventCard from './components/EventCard';
@@ -8,7 +10,7 @@ import EventCard from './components/EventCard';
 const CategoryPage = () => {
   const { data: eventList } = useFetchEventListQuery({
     numOfRows: 10,
-    eventStartDate: '20240101',
+    eventStartDate: format(new Date(), 'yyyyMMdd'),
     pageNo: 1
   });
 
