@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { useQuery } from 'react-query';
-import { ApiDataResponseType } from '@src/common/types';
-import { EventDataType } from '../types';
+import { EventListResponseDto } from '../types';
 
 export const useFetchEventListQuery = (params: {
   numOfRows: number;
@@ -11,7 +10,7 @@ export const useFetchEventListQuery = (params: {
   return useQuery(
     'getEventList',
     async () => {
-      const data = await axios.get<ApiDataResponseType<EventDataType>>(
+      const data = await axios.get<EventListResponseDto>(
         `${import.meta.env.VITE_TOUR_API_END_POINT}/searchFestival1` || '',
         {
           params: {
