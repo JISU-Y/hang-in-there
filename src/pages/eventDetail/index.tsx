@@ -43,7 +43,7 @@ const EventDetailPage = () => {
   const eventDetailInfo: DetailInfoType | null = useMemo(() => {
     if (!eventDetail || !eventDetailIntro) return null;
 
-    const formatType = 'yyyy년 M월 d일 (eeeee)';
+    // const formatType = 'yyyy년 M월 d일 (eeeee)';
 
     // const startDate = format(eventDetailIntro.eventstartdate, formatType);
     // const endDate = format(eventDetailIntro.eventenddate, formatType);
