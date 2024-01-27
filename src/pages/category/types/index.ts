@@ -1,4 +1,4 @@
-import { ApiDataResponseType } from '@src/common/types';
+import { ApiDataResponseType } from '@src/common/types/utilType';
 
 export type EventListResponseDto = ApiDataResponseType<EventDataType[]>;
 
