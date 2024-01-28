@@ -1,5 +1,6 @@
 import { PropsWithChildren } from 'react';
 import styled from '@emotion/styled';
+import { Link } from 'react-router-dom';
 
 const footerData: { listTitle: string; label: string }[] = [
   {
@@ -30,8 +31,9 @@ const PageLayout = ({
     <PageContainer>
       {withNavbar && (
         <Navbar>
-          {/* TODO: link -> home 추가 */}
-          <Image src="/logo/logo.png" alt="logo" />
+          <Link to="/">
+            <Image src="/logo/logo.png" alt="logo" />
+          </Link>
         </Navbar>
       )}
       <Content>{children}</Content>

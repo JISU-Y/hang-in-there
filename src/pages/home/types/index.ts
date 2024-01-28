@@ -43,24 +43,3 @@ export interface EventDataType {
   tel: string;
   title: string;
 }
-
-export interface AreaCodeRequestDto {
-  MobileOS: MobileOSType;
-  MobileApp: string;
-  _type: string;
-  areaCode: string;
-  contentId: string;
-  numOfRows: number;
-  pageNo: number;
-  serviceKey: string;
-}
-
-export type AreaCodeResponseDto = ApiDataResponseType<AreaCodeDataType[]>;
-
-export interface AreaCodeDataType {
-  code: string;
-  name: string;
-  rnum: string;
-}
-
-export type AreaCodeType = Omit<AreaCodeDataType, 'rnum'>; // (typeof REGION_CODE)[keyof typeof REGION_CODE];

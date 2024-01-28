@@ -1,10 +1,11 @@
+import PageLayout from '@src/common/layouts/PageLayout';
 import HomePage from '@src/pages/home';
 
 const Home = () => {
   return (
-    <div>
+    <PageLayout>
       <HomePage />
-    </div>
+    </PageLayout>
   );
 };
 

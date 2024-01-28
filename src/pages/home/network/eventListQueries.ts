@@ -1,11 +1,6 @@
 import axios from 'axios';
 import { useQuery } from 'react-query';
-import {
-  AreaCodeRequestDto,
-  AreaCodeResponseDto,
-  EventListRequestDto,
-  EventListResponseDto
-} from '../types';
+import { EventListRequestDto, EventListResponseDto } from '../types';
 import { UseQueryOptionsType } from '@src/common/types/utilType';
 
 export const useFetchEventListQuery = (
@@ -28,6 +23,7 @@ export const useFetchEventListQuery = (
             ...params,
             _type: 'json',
             serviceKey: import.meta.env.VITE_TOUR_API_KEY,
+            arrange: 'R',
             MobileOS: 'ETC',
             MobileApp: 'hanginthere'
           } as EventListRequestDto
@@ -37,36 +33,5 @@ export const useFetchEventListQuery = (
     },
     ...options,
     select: ({ data }) => data.response.body.items.item
-  });
-};
-
-export const useFetchAreaCodeListQuery = (
-  areaCode: AreaCodeRequestDto['areaCode'],
-  options?: Omit<UseQueryOptionsType<AreaCodeResponseDto>, 'select'>
-) => {
-  return useQuery({
-    queryKey: 'getAreaCode',
-    queryFn: async () => {
-      const data = await axios.get<AreaCodeResponseDto>(
-        `${import.meta.env.VITE_TOUR_API_END_POINT}/areaCode1` || '',
-        {
-          params: {
-            areaCode,
-            _type: 'json',
-            serviceKey: import.meta.env.VITE_TOUR_API_KEY,
-            MobileOS: 'ETC',
-            MobileApp: 'hanginthere',
-            numOfRows: 30
-          } as AreaCodeRequestDto
-        }
-      );
-      return data;
-    },
-    ...options,
-    select: ({ data }) =>
-      data.response.body.items.item.map(({ code, name }) => ({
-        code: `${areaCode}-${code}`,
-        name
-      }))
   });
 };
