@@ -12,6 +12,7 @@ import {
   Checkbox,
   Button
 } from '@chakra-ui/react';
+import { REGION_CODE } from '../../constants/categories';
 
 const Filter = () => {
   return (
@@ -29,6 +30,7 @@ const Filter = () => {
               css={css`
                 display: flex;
                 justify-content: space-between;
+                border: 1px solid rgba(0, 0, 0, 0.2);
               `}
             >
               <FilterTitle>지역 검색</FilterTitle>
@@ -57,7 +59,21 @@ const Filter = () => {
               </FilterTagWrapper>
             </AccordionButton>
           </Stack>
-          <AccordionPanel pb={4}>지역 목록</AccordionPanel>
+          <AccordionPanel
+            pb={4}
+            css={css`
+              border: 1px dashed rgba(0, 0, 0, 0.2);
+              border-top: none;
+            `}
+          >
+            <AreaListWrapper>
+              {Object.values(REGION_CODE).map(({ code, name }) => (
+                <AreaList key={code} role="button">
+                  {`${name} ▷`}
+                </AreaList>
+              ))}
+            </AreaListWrapper>
+          </AccordionPanel>
         </AccordionItem>
 
         <AccordionItem>
@@ -115,6 +131,26 @@ const RegionTagsWrapper = styled.div`
   align-items: center;
   gap: 8px;
   margin-left: 8px;
+`;
+
+const AreaListWrapper = styled.ul`
+  max-width: 200px;
+  border-right: 1px solid rgba(0, 0, 0, 0.2);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+`;
+
+const AreaList = styled.li`
+  font-size: 16px;
+  padding: 4px;
+  display: inline-block;
+  width: fit-content;
+  background-color: transparent;
+  transition: all 0.5 ease-in-out;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
 `;
 
 export default Filter;

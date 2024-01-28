@@ -29,43 +29,53 @@ export const REGION_CODE = {
   },
   sejong: {
     code: '8',
-    name: '세종특별자치시'
+    name: '세종',
+    fullname: '세종특별자치시'
   },
   gyeongki: {
     code: '31',
-    name: '경기도'
+    name: '경기',
+    fullname: '경기도'
   },
   gangwon: {
     code: '32',
-    name: '강원특별자치도'
+    name: '강원',
+    fullname: '강원특별자치도'
   },
   chungbuk: {
     code: '33',
-    name: '충청북도'
+    name: '충북',
+    fullname: '충청북도'
   },
   chungnam: {
     code: '34',
-    name: '충청남도'
+    name: '충남',
+    fullname: '충청남도'
   },
   gyeongbuk: {
     code: '35',
-    name: '경상북도'
+    name: '경북',
+    fullname: '경상북도'
   },
   gyeongnam: {
     code: '36',
-    name: '경상남도'
+    name: '경남',
+    fullname: '경상남도'
   },
   jeonbuk: {
     code: '37',
-    name: '전북특별자치도'
+    name: '전북',
+    fullname: '전북특별자치도'
   },
   jeonla: {
     code: '38',
-    name: '전라남도'
+    name: '전남',
+    fullname: '전라남도'
   },
   jeju: {
     code: '39',
-    name: '제주도'
+    name: '제주',
+    fullname: '제주도'
   }
 } as const;
 
