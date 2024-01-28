@@ -1,18 +1,16 @@
 import styled from '@emotion/styled';
-import PageLayout from '@src/common/layouts/PageLayout';
+
 import Collections from './sections/Collections';
 import Categories from './sections/Categories';
 import RecentEvents from './sections/RecentEvents';
 
 const HomePage = () => {
   return (
-    <PageLayout>
-      <ContentWrapper>
-        <Collections />
-        <Categories />
-        <RecentEvents />
-      </ContentWrapper>
-    </PageLayout>
+    <ContentWrapper>
+      <Collections />
+      <Categories />
+      <RecentEvents />
+    </ContentWrapper>
   );
 };
 

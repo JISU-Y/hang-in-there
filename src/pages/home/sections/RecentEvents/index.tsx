@@ -4,16 +4,21 @@ import {
   Card,
   CardBody,
   CardFooter,
-  CardHeader,
+  // CardHeader,
   Heading,
   Image,
   Text
 } from '@chakra-ui/react';
 import Slider from 'react-slick';
+import { format } from 'date-fns';
+
+import { useFetchEventListQuery } from '../../network/eventListQueries';
 
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './custom-slick.css';
+import { Link } from 'react-router-dom';
+import { css } from '@emotion/react';
 
 type SlickArrowProps = Pick<
   HTMLAttributes<HTMLDivElement>,
@@ -52,40 +57,93 @@ const settings = {
 };
 
 const RecentEvents = () => {
+  const { data: eventList } = useFetchEventListQuery({
+    numOfRows: 10,
+    eventStartDate: format(new Date(), 'yyyyMMdd'),
+    pageNo: 1
+  });
+
   return (
     <Container>
-      <Slider {...settings}>
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(el => (
-          <Card
-            key={el}
-            maxW="275px"
-            size="sm"
-            colorScheme="orange"
-            direction="column"
-          >
-            <CardHeader backgroundColor="#F3F72480">진행 예정</CardHeader>
-            <CardBody padding="0">
-              <Image
-                src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-                alt="Green double couch with wooden legs"
-                objectFit="cover"
-              />
-            </CardBody>
-            <CardFooter flexDirection="column">
-              <Heading as="h4" size="md">
-                제목 000문화 축제 (축제 이름)
-              </Heading>
-              <Text>2023.11.16(목) 18시 서울시 광진구</Text>
-            </CardFooter>
-          </Card>
-        ))}
-      </Slider>
+      <SliderWrapper>
+        <Slider {...settings}>
+          {eventList?.map(el => (
+            <Card
+              as={Link}
+              to={`/eventDetail/${el.contentid}`}
+              key={el.title}
+              maxW="275px"
+              h="100%"
+              maxH="420px"
+              size="sm"
+              colorScheme="orange"
+              direction="column"
+              margin={1}
+            >
+              {/* <CardHeader backgroundColor="#F3F72480">진행 예정</CardHeader> */}
+              <CardBody padding="0">
+                <ImageWrapper>
+                  <Img
+                    src={el.firstimage}
+                    alt={`festival-${el.title}`}
+                    objectFit="cover"
+                  />
+                </ImageWrapper>
+              </CardBody>
+              <CardFooter
+                h="160px"
+                flexDirection="column"
+                justifyContent="space-between"
+              >
+                <Heading
+                  as="h4"
+                  size="md"
+                  wordBreak="keep-all"
+                  marginBottom={4}
+                  css={HeadingCSS}
+                >
+                  {el.title}
+                </Heading>
+                <Text>{el.addr1}</Text>
+              </CardFooter>
+            </Card>
+          ))}
+        </Slider>
+      </SliderWrapper>
     </Container>
   );
 };
 
+const HeadingCSS = css`
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-word;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+`;
+
 const Container = styled.section`
   width: 100%;
+`;
+
+const SliderWrapper = styled.div`
+  width: 100%;
+  flex-shrink: 0;
+  border-radius: 4px;
+  padding: 8px 0;
+`;
+
+const ImageWrapper = styled.div`
+  width: auto;
+  height: 240px;
+`;
+
+const Img = styled(Image)`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 `;
 
 export default RecentEvents;
