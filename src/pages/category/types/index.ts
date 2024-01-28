@@ -1,3 +1,4 @@
+import { REGION_CODE } from './../constants/categories';
 import { MobileOSType } from '@src/common/types';
 import { ApiDataResponseType } from '@src/common/types/utilType';
 
@@ -46,3 +47,5 @@ export interface AreaCodeDataType {
   name: string;
   rnum: string;
 }
+
+export type AreaCodeType = Omit<AreaCodeDataType, 'rnum'>; // (typeof REGION_CODE)[keyof typeof REGION_CODE];

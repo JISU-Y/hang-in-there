@@ -1,26 +1,16 @@
-import { useState } from 'react';
-
 import { format } from 'date-fns';
 import styled from '@emotion/styled';
 import { SimpleGrid } from '@chakra-ui/react';
 
-import {
-  useFetchAreaCodeListQuery,
-  useFetchEventListQuery
-} from './network/eventListQueries';
+import { useFetchEventListQuery } from './network/eventListQueries';
 import Filter from './components/Filter';
 import EventCard from './components/EventCard';
 
 const CategoryPage = () => {
-  const [regionCode, setRegionCode] = useState('');
-
   const { data: eventList } = useFetchEventListQuery({
     numOfRows: 10,
     eventStartDate: format(new Date(), 'yyyyMMdd'),
     pageNo: 1
-  });
-  const { data } = useFetchAreaCodeListQuery(regionCode, {
-    enabled: !!regionCode
   });
 
   return (
