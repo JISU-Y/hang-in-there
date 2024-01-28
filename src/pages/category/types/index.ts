@@ -1,3 +1,4 @@
+import { MobileOSType } from '@src/common/types';
 import { ApiDataResponseType } from '@src/common/types/utilType';
 
 export type EventListResponseDto = ApiDataResponseType<EventDataType[]>;
@@ -25,4 +26,23 @@ export interface EventDataType {
   sigungucode: string;
   tel: string;
   title: string;
+}
+
+export interface AreaCodeRequestDto {
+  MobileOS: MobileOSType;
+  MobileApp: string;
+  _type: string;
+  areaCode: string;
+  contentId: string;
+  numOfRows: number;
+  pageNo: number;
+  serviceKey: string;
+}
+
+export type AreaCodeResponseDto = ApiDataResponseType<AreaCodeDataType[]>;
+
+export interface AreaCodeDataType {
+  code: string;
+  name: string;
+  rnum: string;
 }

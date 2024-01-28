@@ -1,43 +1,50 @@
+import { useState } from 'react';
+
 import { format } from 'date-fns';
 import styled from '@emotion/styled';
 import { SimpleGrid } from '@chakra-ui/react';
-import PageLayout from '@src/common/layouts/PageLayout';
 
-import { useFetchEventListQuery } from './network/eventListQueries';
+import {
+  useFetchAreaCodeListQuery,
+  useFetchEventListQuery
+} from './network/eventListQueries';
 import Filter from './components/Filter';
 import EventCard from './components/EventCard';
 
 const CategoryPage = () => {
+  const [regionCode, setRegionCode] = useState('');
+
   const { data: eventList } = useFetchEventListQuery({
     numOfRows: 10,
     eventStartDate: format(new Date(), 'yyyyMMdd'),
     pageNo: 1
   });
+  const { data } = useFetchAreaCodeListQuery(regionCode, {
+    enabled: !!regionCode
+  });
 
   return (
-    <PageLayout>
-      <ContentWrapper>
-        <TitleWrapper>
-          <PageTitle>축제</PageTitle>
-        </TitleWrapper>
-        <Filter />
-        <SimpleGrid columns={2} spacing={8} as={CardListContainer}>
-          {eventList?.map(event => (
-            <EventCard
-              eventId={event.contentid}
-              imageUrl={event.firstimage}
-              title={event.title}
-              status="always"
-              range={{
-                startDate: event.eventstartdate,
-                endDate: event.eventenddate
-              }}
-              location={event.addr1}
-            />
-          ))}
-        </SimpleGrid>
-      </ContentWrapper>
-    </PageLayout>
+    <ContentWrapper>
+      <TitleWrapper>
+        <PageTitle>축제</PageTitle>
+      </TitleWrapper>
+      <Filter />
+      <SimpleGrid columns={2} spacing={8} as={CardListContainer}>
+        {eventList?.map(event => (
+          <EventCard
+            eventId={event.contentid}
+            imageUrl={event.firstimage}
+            title={event.title}
+            status="always"
+            range={{
+              startDate: event.eventstartdate,
+              endDate: event.eventenddate
+            }}
+            location={event.addr1}
+          />
+        ))}
+      </SimpleGrid>
+    </ContentWrapper>
   );
 };
 

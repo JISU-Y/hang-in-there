@@ -1,10 +1,11 @@
+import PageLayout from '@src/common/layouts/PageLayout';
 import CategoryPage from '@src/pages/category';
 
 const Category = () => {
   return (
-    <div>
+    <PageLayout>
       <CategoryPage />
-    </div>
+    </PageLayout>
   );
 };
 
