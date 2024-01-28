@@ -1,6 +1,21 @@
-import { REGION_CODE } from './../constants/categories';
-import { MobileOSType } from '@src/common/types';
+import { MobileOSType, StringBoolean } from '@src/common/types';
 import { ApiDataResponseType } from '@src/common/types/utilType';
+
+export interface EventListRequestDto {
+  MobileOS: MobileOSType;
+  MobileApp: string;
+  _type: string;
+  listYN: StringBoolean;
+  arrange: 'A' | 'C' | 'D' | 'O' | 'Q' | 'R';
+  eventStartDate: string;
+  eventEndDate: string;
+  areaCode: string;
+  sigunguCode: string;
+  modifiedtime: string;
+  numOfRows: number;
+  pageNo: number;
+  serviceKey: string;
+}
 
 export type EventListResponseDto = ApiDataResponseType<EventDataType[]>;
 

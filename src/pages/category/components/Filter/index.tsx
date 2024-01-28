@@ -18,12 +18,15 @@ import {
 import { REGION_CODE } from '../../constants/categories';
 import { useFetchAreaCodeListQuery } from '../../network/eventListQueries';
 import { AreaCodeType } from '../../types';
+import { useSearchParams } from 'react-router-dom';
 
 const MAX_REGION = 5;
 
 const Filter = () => {
   const [selectedRegions, setSelectedRegions] = useState<AreaCodeType[]>([]);
   const [currentRegionCode, setCurrentRegionCode] = useState<AreaCodeType>();
+
+  const [, setSearchParams] = useSearchParams();
 
   const { data: areaCodeList, refetch: fetchAreaCodeList } =
     useFetchAreaCodeListQuery(currentRegionCode?.code || '', {
@@ -38,7 +41,11 @@ const Filter = () => {
   };
 
   const handleRegionSelect = (region: AreaCodeType) => {
-    if (selectedRegions.length >= MAX_REGION) return;
+    if (
+      selectedRegions.length >= MAX_REGION ||
+      selectedRegions.find(el => el.name === region.name)
+    )
+      return;
 
     setSelectedRegions(prev => [...prev, region]);
   };
@@ -61,6 +68,20 @@ const Filter = () => {
     );
   };
 
+  const handleSearchClick = () => {
+    const regionCodes = selectedRegions.map(({ code }) => code);
+
+    setSearchParams(
+      regionCodes.length !== 0 ? { region: regionCodes.join(',') } : undefined
+    );
+  };
+
+  // useEffect(() => {
+  //   const regions = searchParams.get('region')?.split(',');
+
+  //   setSelectedRegions(regions)
+  // }, [searchParams, setSelectedRegions])
+
   return (
     <FilterContainer>
       <Accordion
@@ -73,11 +94,7 @@ const Filter = () => {
           <Stack>
             <AccordionButton
               as={FilterButtonContainer}
-              css={css`
-                display: flex;
-                justify-content: space-between;
-                border: 1px solid rgba(0, 0, 0, 0.2);
-              `}
+              css={accordionButtonCSS}
             >
               <FilterTitle>지역 검색</FilterTitle>
               <FilterTagWrapper>
@@ -138,7 +155,7 @@ const Filter = () => {
         </AccordionItem>
 
         <AccordionItem>
-          <AccordionButton as={FilterButtonContainer}>
+          <AccordionButton as={FilterButtonContainer} css={accordionButtonCSS}>
             <FilterTitle>진행 상태</FilterTitle>
             <Stack spacing={5} direction="row">
               <Checkbox colorScheme="red" defaultChecked>
@@ -157,12 +174,18 @@ const Filter = () => {
         css={css`
           width: fit-content;
         `}
+        onClick={handleSearchClick}
       >
         선택 조건 검색
       </Button>
     </FilterContainer>
   );
 };
+
+const accordionButtonCSS = css`
+  display: flex;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+`;
 
 const FilterContainer = styled.div`
   display: flex;
