@@ -12,6 +12,10 @@ const footerData: { listTitle: string; label: string }[] = [
     label: '유지아 | dbwldk7675@gmail.com'
   },
   {
+    listTitle: '디자이너',
+    label: '김은별 | xxx@gmail.com'
+  },
+  {
     listTitle: '개발자',
     label: '유지수 | jisu129@gmail.com'
   }
@@ -32,7 +36,7 @@ const PageLayout = ({
       {withNavbar && (
         <Navbar>
           <Link to="/">
-            <Image src="/logo/logo.png" alt="logo" />
+            <Image src="/logo/hanginthere-logo.png" alt="logo" />
           </Link>
         </Navbar>
       )}
@@ -63,13 +67,13 @@ const Navbar = styled.nav`
   display: flex;
   align-items: center;
   width: 100%;
-  height: 48px;
-  padding: 0 12px;
-  background-color: #ff701b;
+  padding: 64px 112px 32px;
+  background-color: #ffffff;
 `;
 
 const Image = styled.img`
-  height: 40px;
+  width: auto;
+  height: 32px;
   cursor: pointer;
 `;
 
