@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useQuery } from 'react-query';
+import { useInfiniteQuery, useQuery } from 'react-query';
 import { EventListRequestDto, EventListResponseDto } from '../types';
 import { UseQueryOptionsType } from '@src/common/types/utilType';
 
@@ -33,5 +33,39 @@ export const useFetchEventListQuery = (
     },
     ...options,
     select: ({ data }) => data.response.body.items.item
+  });
+};
+
+export const useFetchEventListInfiniteQuery = (params: {
+  numOfRows: number;
+  areaCode?: string;
+  sigunguCode?: string;
+  eventStartDate: string;
+  pageNo: number;
+}) => {
+  return useInfiniteQuery({
+    queryKey: [`getEventList/${params.eventStartDate}/${params.areaCode}`],
+    queryFn: async ({ pageParam = params.pageNo }) => {
+      const data = await axios.get<EventListResponseDto>(
+        `${import.meta.env.VITE_TOUR_API_END_POINT}/searchFestival1` || '',
+        {
+          params: {
+            ...params,
+            pageNo: pageParam,
+            _type: 'json',
+            serviceKey: import.meta.env.VITE_TOUR_API_KEY,
+            arrange: 'R',
+            MobileOS: 'ETC',
+            MobileApp: 'hanginthere'
+          } as EventListRequestDto
+        }
+      );
+      return data;
+    },
+    getNextPageParam: lastPage => lastPage.data.response.body.pageNo + 1,
+    select: ({ pages, pageParams }) => ({
+      pages: pages.flatMap(({ data }) => data.response.body.items.item),
+      pageParams
+    })
   });
 };

@@ -17,7 +17,7 @@
 
 .custom-dots li button {
   border: none;
-  background: #d1d1d1;
+  background: rgba(255, 255, 255, 0.5);
   color: transparent;
   cursor: pointer;
   display: block;
@@ -28,5 +28,5 @@
 }
 
 .custom-dots li.slick-active button {
-  background-color: orange;
+  background-color: #ffffff;
 }
