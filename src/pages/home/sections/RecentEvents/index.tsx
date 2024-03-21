@@ -98,13 +98,6 @@ const Container = styled.section`
   }
 `;
 
-const SliderWrapper = styled.div`
-  width: 100%;
-  flex-shrink: 0;
-  border-radius: 4px;
-  padding: 8px 0;
-`;
-
 const ImageWrapper = styled.div`
   width: 100%;
   height: auto;
