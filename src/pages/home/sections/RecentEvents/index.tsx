@@ -13,6 +13,7 @@ import { useFetchEventListInfiniteQuery } from '../../network/eventListQueries';
 
 import { Link } from 'react-router-dom';
 import { css } from '@emotion/react';
+import { ImpressionArea } from '@toss/impression-area';
 
 const RecentEvents = () => {
   const { data: eventListPageData, fetchNextPage } =
@@ -24,7 +25,6 @@ const RecentEvents = () => {
 
   return (
     <Container>
-      <button onClick={() => fetchNextPage()}>load more</button>
       <SectionTitle>진행 예정인 행사</SectionTitle>
       <CardListWrapper>
         {eventListPageData?.pages?.flatMap(el => (
@@ -71,6 +71,10 @@ const RecentEvents = () => {
             </CardFooter>
           </Card>
         ))}
+        <HeightImpressionArea
+          onImpressionStart={() => fetchNextPage()}
+          areaThreshold={0.5}
+        />
       </CardListWrapper>
     </Container>
   );
@@ -138,6 +142,10 @@ const CardListWrapper = styled.div`
   @media (max-width: 576px) {
     grid-template-columns: 1fr;
   }
+`;
+
+const HeightImpressionArea = styled(ImpressionArea)`
+  height: 40px;
 `;
 
 export default RecentEvents;
