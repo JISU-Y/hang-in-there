@@ -124,7 +124,6 @@ const CardListWrapper = styled.div`
 
   @media (max-width: 1200px) {
     grid-template-columns: repeat(4, 1fr);
-    /* padding: 16px; */
   }
   @media (max-width: 992px) {
     grid-template-columns: repeat(3, 1fr);

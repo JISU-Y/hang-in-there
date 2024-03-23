@@ -1,6 +1,7 @@
 import { PropsWithChildren } from 'react';
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
+import CategoryMenu from '../components/CategoryMenu/CategoryMenu';
 
 const footerData: { listTitle: string; label: string }[] = [
   {
@@ -38,6 +39,7 @@ const PageLayout = ({
           <Link to="/">
             <Image src="/logo/hanginthere-logo.png" alt="logo" />
           </Link>
+          <CategoryMenu />
         </Navbar>
       )}
       <Content>{children}</Content>
@@ -67,8 +69,12 @@ const Navbar = styled.nav`
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 64px 112px 32px;
+  padding: 70px 112px 0;
   background-color: #ffffff;
+
+  & > a {
+    margin-bottom: 36px;
+  }
 `;
 
 const Image = styled.img`
