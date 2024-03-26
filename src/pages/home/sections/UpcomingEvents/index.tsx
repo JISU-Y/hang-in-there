@@ -17,12 +17,17 @@ import { ImpressionArea } from '@toss/impression-area';
 import { formatDate } from '@src/logics/utils/dateFormat';
 import { formatISO } from 'date-fns/formatISO';
 import { parse } from 'date-fns/parse';
+import { addDays } from 'date-fns/addDays';
 
-const RecentEvents = () => {
+const UpcomingEvents = () => {
   const { data: eventListPageData, fetchNextPage } =
     useFetchEventListInfiniteQuery({
       numOfRows: 10,
-      eventStartDate: format(new Date(), 'yyyyMMdd'),
+      // 이렇게 오늘 날짜로 start, end 요청하면 진행 중인 행사들
+      // eventStartDate: format(new Date(), 'yyyyMMdd'),
+      // eventEndDate: format(new Date(), 'yyyyMMdd'),
+      //
+      eventStartDate: format(addDays(new Date(), 1), 'yyyyMMdd'),
       pageNo: 1
     });
 
@@ -157,4 +162,4 @@ const HeightImpressionArea = styled(ImpressionArea)`
   height: 40px;
 `;
 
-export default RecentEvents;
+export default UpcomingEvents;

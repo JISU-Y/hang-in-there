@@ -2,6 +2,8 @@ import axios from 'axios';
 import { useInfiniteQuery, useQuery } from 'react-query';
 import { EventListRequestDto, EventListResponseDto } from '../types';
 import { UseQueryOptionsType } from '@src/common/types/utilType';
+import { isAfter } from 'date-fns/isAfter';
+import { parse } from 'date-fns/parse';
 
 export const useFetchEventListQuery = (
   params: {
@@ -9,6 +11,7 @@ export const useFetchEventListQuery = (
     areaCode?: string;
     sigunguCode?: string;
     eventStartDate: string;
+    eventEndDate?: string;
     pageNo: number;
   },
   options?: Omit<UseQueryOptionsType<EventListResponseDto>, 'select'>
@@ -41,6 +44,7 @@ export const useFetchEventListInfiniteQuery = (params: {
   areaCode?: string;
   sigunguCode?: string;
   eventStartDate: string;
+  eventEndDate?: string;
   pageNo: number;
 }) => {
   return useInfiniteQuery({
@@ -64,7 +68,12 @@ export const useFetchEventListInfiniteQuery = (params: {
     },
     getNextPageParam: lastPage => lastPage.data.response.body.pageNo + 1,
     select: ({ pages, pageParams }) => ({
-      pages: pages.flatMap(({ data }) => data.response.body.items.item),
+      pages: pages
+        .flatMap(({ data }) => data.response.body.items.item)
+        .filter(
+          ({ eventstartdate }) =>
+            isAfter(parse(eventstartdate, 'yyyyMMdd', new Date()), new Date()) // NOTE: 행사 시작 날짜가 오늘 날짜보다 후일 때 진행 예정 행사로 처리
+        ),
       pageParams
     })
   });
