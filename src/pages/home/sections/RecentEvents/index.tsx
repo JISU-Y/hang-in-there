@@ -14,6 +14,9 @@ import { useFetchEventListInfiniteQuery } from '../../network/eventListQueries';
 import { Link } from 'react-router-dom';
 import { css } from '@emotion/react';
 import { ImpressionArea } from '@toss/impression-area';
+import { formatDate } from '@src/logics/utils/dateFormat';
+import { formatISO } from 'date-fns/formatISO';
+import { parse } from 'date-fns/parse';
 
 const RecentEvents = () => {
   const { data: eventListPageData, fetchNextPage } =
@@ -22,6 +25,17 @@ const RecentEvents = () => {
       eventStartDate: format(new Date(), 'yyyyMMdd'),
       pageNo: 1
     });
+
+  const getFormattedDate = (date: string) => {
+    const parsedDateString = parse(date, 'yyyyMMdd', new Date());
+
+    const formattedDate = formatDate({
+      date: formatISO(parsedDateString),
+      customType: 'yy/MM/dd'
+    });
+
+    return formattedDate;
+  };
 
   return (
     <Container>
@@ -40,6 +54,8 @@ const RecentEvents = () => {
             direction="column"
             borderRadius={0}
             borderWidth={0}
+            shadow="none"
+            boxShadow="none"
           >
             <CardBody padding="0">
               <ImageWrapper>
@@ -52,8 +68,7 @@ const RecentEvents = () => {
             </CardBody>
             <CardFooter
               marginTop="20px"
-              h="136px"
-              paddingTop="0px"
+              padding="0px"
               flexDirection="column"
               gap="8px"
             >
@@ -67,7 +82,9 @@ const RecentEvents = () => {
                 {el.title}
               </Heading>
               <Text>{el.addr1?.split(' ').slice(0, 2).join(' ')}</Text>
-              <Text color="#999999">{`${el.eventstartdate}-${el.eventenddate}`}</Text>
+              <Text color="#999999">{`${getFormattedDate(
+                el.eventstartdate
+              )}-${getFormattedDate(el.eventenddate)}`}</Text>
             </CardFooter>
           </Card>
         ))}
