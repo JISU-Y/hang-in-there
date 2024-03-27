@@ -192,23 +192,4 @@ const SectionTitle = styled.h3`
   margin-bottom: 36px;
 `;
 
-const CardListWrapper = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 32px;
-
-  @media (max-width: 1200px) {
-    grid-template-columns: repeat(4, 1fr);
-  }
-  @media (max-width: 992px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  @media (max-width: 576px) {
-    grid-template-columns: 1fr;
-  }
-`;
-
 export default OngoingEvents;
