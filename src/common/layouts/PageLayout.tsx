@@ -90,26 +90,26 @@ const Content = styled.section`
   background-color: #ffffff;
 `;
 
-const Footer = styled.footer`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 36px 42px;
-  background-color: #dddddd;
+// const Footer = styled.footer`
+//   display: flex;
+//   flex-direction: column;
+//   gap: 16px;
+//   padding: 36px 42px;
+//   background-color: #dddddd;
 
-  & > div {
-    display: flex;
-    justify-content: space-between;
+//   & > div {
+//     display: flex;
+//     justify-content: space-between;
 
-    & > span:first-child {
-      font-weight: 600;
-    }
+//     & > span:first-child {
+//       font-weight: 600;
+//     }
 
-    & > span:last-child {
-      text-align: right;
-      white-space: pre-line;
-    }
-  }
-`;
+//     & > span:last-child {
+//       text-align: right;
+//       white-space: pre-line;
+//     }
+//   }
+// `;
 
 export default PageLayout;
