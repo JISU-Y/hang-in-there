@@ -9,7 +9,6 @@ import Filter from './components/Filter';
 import EventCard from './components/EventCard';
 import { useSearchParams } from 'react-router-dom';
 
-// TODO: category 페이지도 동적 라우팅이 되어야 하는데 카테고리가 데이터에 없음..
 const CategoryPage = () => {
   const [searchParams] = useSearchParams();
   const [regions, setRegions] = useState<
@@ -39,7 +38,7 @@ const CategoryPage = () => {
   return (
     <ContentWrapper>
       <TitleWrapper>
-        <PageTitle>축제</PageTitle>
+        <PageTitle>{searchParams.get('category')}</PageTitle>
       </TitleWrapper>
       <Filter />
       <SimpleGrid columns={2} spacing={8} as={CardListContainer}>
