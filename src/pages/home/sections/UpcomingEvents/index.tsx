@@ -14,14 +14,33 @@ import { useFetchEventListInfiniteQuery } from '../../network/eventListQueries';
 import { Link } from 'react-router-dom';
 import { css } from '@emotion/react';
 import { ImpressionArea } from '@toss/impression-area';
+import { formatDate } from '@src/logics/utils/dateFormat';
+import { formatISO } from 'date-fns/formatISO';
+import { parse } from 'date-fns/parse';
+import { addDays } from 'date-fns/addDays';
 
-const RecentEvents = () => {
+const UpcomingEvents = () => {
   const { data: eventListPageData, fetchNextPage } =
     useFetchEventListInfiniteQuery({
       numOfRows: 10,
-      eventStartDate: format(new Date(), 'yyyyMMdd'),
+      // 이렇게 오늘 날짜로 start, end 요청하면 진행 중인 행사들
+      // eventStartDate: format(new Date(), 'yyyyMMdd'),
+      // eventEndDate: format(new Date(), 'yyyyMMdd'),
+      //
+      eventStartDate: format(addDays(new Date(), 1), 'yyyyMMdd'),
       pageNo: 1
     });
+
+  const getFormattedDate = (date: string) => {
+    const parsedDateString = parse(date, 'yyyyMMdd', new Date());
+
+    const formattedDate = formatDate({
+      date: formatISO(parsedDateString),
+      customType: 'yy/MM/dd'
+    });
+
+    return formattedDate;
+  };
 
   return (
     <Container>
@@ -40,6 +59,8 @@ const RecentEvents = () => {
             direction="column"
             borderRadius={0}
             borderWidth={0}
+            shadow="none"
+            boxShadow="none"
           >
             <CardBody padding="0">
               <ImageWrapper>
@@ -52,8 +73,7 @@ const RecentEvents = () => {
             </CardBody>
             <CardFooter
               marginTop="20px"
-              h="136px"
-              paddingTop="0px"
+              padding="0px"
               flexDirection="column"
               gap="8px"
             >
@@ -67,7 +87,9 @@ const RecentEvents = () => {
                 {el.title}
               </Heading>
               <Text>{el.addr1?.split(' ').slice(0, 2).join(' ')}</Text>
-              <Text color="#999999">{`${el.eventstartdate}-${el.eventenddate}`}</Text>
+              <Text color="#999999">{`${getFormattedDate(
+                el.eventstartdate
+              )}-${getFormattedDate(el.eventenddate)}`}</Text>
             </CardFooter>
           </Card>
         ))}
@@ -124,7 +146,6 @@ const CardListWrapper = styled.div`
 
   @media (max-width: 1200px) {
     grid-template-columns: repeat(4, 1fr);
-    /* padding: 16px; */
   }
   @media (max-width: 992px) {
     grid-template-columns: repeat(3, 1fr);
@@ -141,4 +162,4 @@ const HeightImpressionArea = styled(ImpressionArea)`
   height: 40px;
 `;
 
-export default RecentEvents;
+export default UpcomingEvents;

@@ -1,25 +1,27 @@
 import { PropsWithChildren } from 'react';
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
+import CategoryMenu from '../components/CategoryMenu/CategoryMenu';
 
-const footerData: { listTitle: string; label: string }[] = [
-  {
-    listTitle: '사이드 프로젝트 소개',
-    label: `행사를 즐기는 인싸들 여기서 만나자!\n힘든 일상을 버티게 해줄 행사 플랫폼, HANG IN THERE!`
-  },
-  {
-    listTitle: '기획자/PM',
-    label: '유지아 | dbwldk7675@gmail.com'
-  },
-  {
-    listTitle: '디자이너',
-    label: '김은별 | xxx@gmail.com'
-  },
-  {
-    listTitle: '개발자',
-    label: '유지수 | jisu129@gmail.com'
-  }
-];
+// TODO: Footer 임시 제거 (변경 예정)
+// const footerData: { listTitle: string; label: string }[] = [
+//   {
+//     listTitle: '사이드 프로젝트 소개',
+//     label: `행사를 즐기는 인싸들 여기서 만나자!\n힘든 일상을 버티게 해줄 행사 플랫폼, HANG IN THERE!`
+//   },
+//   {
+//     listTitle: '기획자/PM',
+//     label: '유지아 | dbwldk7675@gmail.com'
+//   },
+//   {
+//     listTitle: '디자이너',
+//     label: '김은별 | xxx@gmail.com'
+//   },
+//   {
+//     listTitle: '개발자',
+//     label: '유지수 | jisu129@gmail.com'
+//   }
+// ];
 
 interface PageLayoutProps {
   withNavbar?: boolean;
@@ -28,7 +30,7 @@ interface PageLayoutProps {
 
 const PageLayout = ({
   withNavbar = true,
-  withFooter = true,
+  // withFooter = true,
   children
 }: PropsWithChildren<PageLayoutProps>) => {
   return (
@@ -38,10 +40,11 @@ const PageLayout = ({
           <Link to="/">
             <Image src="/logo/hanginthere-logo.png" alt="logo" />
           </Link>
+          <CategoryMenu />
         </Navbar>
       )}
       <Content>{children}</Content>
-      {withFooter && (
+      {/* {withFooter && (
         <Footer>
           {footerData.map(({ listTitle, label }) => (
             <div>
@@ -50,7 +53,7 @@ const PageLayout = ({
             </div>
           ))}
         </Footer>
-      )}
+      )} */}
     </PageContainer>
   );
 };
@@ -67,8 +70,12 @@ const Navbar = styled.nav`
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 64px 112px 32px;
+  padding: 70px 112px 0;
   background-color: #ffffff;
+
+  & > a {
+    margin-bottom: 36px;
+  }
 `;
 
 const Image = styled.img`

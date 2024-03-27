@@ -1,15 +1,15 @@
 import styled from '@emotion/styled';
 
 import Collections from './sections/Collections';
-// import Categories from './sections/Categories';
-import RecentEvents from './sections/RecentEvents';
+import OngoingEvents from './sections/OngoingEvents';
+import UpcomingEvents from './sections/UpcomingEvents';
 
 const HomePage = () => {
   return (
     <ContentWrapper>
       <Collections />
-      {/* <Categories /> */}
-      <RecentEvents />
+      <OngoingEvents />
+      <UpcomingEvents />
     </ContentWrapper>
   );
 };
