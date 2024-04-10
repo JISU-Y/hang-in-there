@@ -1,19 +1,17 @@
-import { format, isValid, parse } from 'date-fns';
+import { parse } from 'date-fns';
 import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 import {
-  Button,
   Card,
   CardBody,
-  CardHeader,
+  CardFooter,
   Heading,
   Image,
-  Stack,
-  Tag,
   Text
 } from '@chakra-ui/react';
-import { LinkIcon } from '@chakra-ui/icons';
-import { ko } from 'date-fns/locale';
 import { Link } from 'react-router-dom';
+import { formatDate } from '@src/logics/utils/dateFormat';
+import { formatISO } from 'date-fns/fp';
 
 interface EventCardProps {
   eventId: string;
@@ -31,97 +29,85 @@ const EventCard = ({
   eventId,
   imageUrl,
   title,
-  status,
   range,
   location
 }: EventCardProps) => {
-  const formatRange = () => {
-    const formatType = 'MM. dd. yy (eee)';
+  const getFormattedDate = (date: string) => {
+    const parsedDateString = parse(date, 'yyyyMMdd', new Date());
 
-    const startDate = parse(range.startDate, 'yyyyMMdd', new Date());
-    const endDate = parse(range.endDate, 'yyyyMMdd', new Date());
+    const formattedDate = formatDate({
+      date: formatISO(parsedDateString),
+      customType: 'yy/MM/dd'
+    });
 
-    if (!isValid(startDate) || !isValid(endDate)) return;
-
-    return `${format(startDate, formatType, { locale: ko })} ~ ${format(
-      endDate,
-      formatType,
-      { locale: ko }
-    )} `;
+    return formattedDate;
   };
 
   return (
     <Card
       as={Link}
       to={`/eventDetail/${eventId}`}
-      direction={{ base: 'column', sm: 'row' }}
-      variant="elevated"
-      height={210}
-      css={css`
-        position: 'relative';
-        top: 0;
-        transition: top ease 0.2s;
-        cursor: pointer;
-        overflow: hidden;
-
-        &:hover {
-          top: -5px;
-        }
-      `}
+      key={title}
+      w="233px"
+      h="auto"
+      aspectRatio={2 / 3}
+      size="sm"
+      colorScheme="orange"
+      direction="column"
+      borderRadius={0}
+      borderWidth={0}
+      shadow="none"
+      boxShadow="none"
     >
-      <Image
-        objectFit="cover"
-        maxW={{ base: '100%', sm: '160px' }}
-        src={
-          imageUrl ||
-          'https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60'
-        }
-        alt="Caffe Latte"
-      />
-
-      <Stack
-        css={css`
-          width: 100%;
-        `}
+      <CardBody padding="0">
+        <ImageWrapper>
+          <Img src={imageUrl} alt={`festival-${title}`} objectFit="cover" />
+        </ImageWrapper>
+      </CardBody>
+      <CardFooter
+        marginTop="20px"
+        padding="0px"
+        flexDirection="column"
+        gap="8px"
       >
-        <CardHeader py={2}>
-          <Stack
-            direction={['column', 'row']}
-            justify="space-between"
-            spacing="24px"
-          >
-            <Tag size="sm">{status || '진행예정'}</Tag>
-            <Button
-              rightIcon={<LinkIcon />}
-              colorScheme="blue"
-              size="xs"
-              variant="link"
-            >
-              공유하기
-            </Button>
-          </Stack>
-        </CardHeader>
-
-        <CardBody
-          py={0}
-          paddingBottom={2}
-          display="flex"
-          flexDirection="column"
-          justifyContent="space-between"
+        <Heading
+          as="h4"
+          size="md"
+          wordBreak="keep-all"
+          fontWeight={700}
+          css={HeadingCSS}
         >
-          <Heading as="h3" size="md" fontWeight={700} noOfLines={2}>
-            {title || '제목은 이렇게 굵게 표시 두 줄일 때'}
-          </Heading>
-          <Text py="1" pb={0} fontSize="sm">
-            기간: {formatRange()}
-          </Text>
-          <Text py="1" pt={0} fontSize="sm">
-            장소: {location}
-          </Text>
-        </CardBody>
-      </Stack>
+          {title}
+        </Heading>
+        <Text>{location?.split(' ').slice(0, 2).join(' ')}</Text>
+        <Text color="#999999">{`${getFormattedDate(
+          range.startDate
+        )}-${getFormattedDate(range.endDate)}`}</Text>
+      </CardFooter>
     </Card>
   );
 };
 
 export default EventCard;
+
+const HeadingCSS = css`
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-word;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+`;
+
+const ImageWrapper = styled.div`
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2/3;
+`;
+
+const Img = styled(Image)`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`;

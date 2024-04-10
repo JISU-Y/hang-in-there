@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
@@ -12,21 +12,16 @@ import {
   TagLabel,
   TagCloseButton,
   Checkbox,
-  Button
+  Divider
 } from '@chakra-ui/react';
 
 import { REGION_CODE } from '../../constants/categories';
 import { useFetchAreaCodeListQuery } from '../../network/eventListQueries';
 import { AreaCodeType } from '../../types';
-import { useSearchParams } from 'react-router-dom';
-
-const MAX_REGION = 5;
 
 const Filter = () => {
   const [selectedRegions, setSelectedRegions] = useState<AreaCodeType[]>([]);
   const [currentRegionCode, setCurrentRegionCode] = useState<AreaCodeType>();
-
-  const [, setSearchParams] = useSearchParams();
 
   const { data: areaCodeList, refetch: fetchAreaCodeList } =
     useFetchAreaCodeListQuery(currentRegionCode?.code || '', {
@@ -40,27 +35,11 @@ const Filter = () => {
     setCurrentRegionCode(region);
   };
 
-  const handleRegionSelect = (region: AreaCodeType) => {
-    if (
-      selectedRegions.length >= MAX_REGION ||
-      selectedRegions.find(el => el.name === region.name)
-    )
-      return;
-
-    setSelectedRegions(prev => [...prev, region]);
-  };
-
   useEffect(() => {
     if (!areaCodeList) return;
 
     fetchAreaCodeList();
   }, [currentRegionCode, areaCodeList, fetchAreaCodeList]);
-
-  const selectableAreaList = useMemo(() => {
-    if (!areaCodeList || !currentRegionCode) return [];
-
-    return [currentRegionCode, ...areaCodeList];
-  }, [areaCodeList, currentRegionCode]);
 
   const handleRemoveTag = (region: AreaCodeType) => {
     setSelectedRegions(prev =>
@@ -68,26 +47,12 @@ const Filter = () => {
     );
   };
 
-  const handleSearchClick = () => {
-    const regionCodes = selectedRegions.map(({ code }) => code);
-
-    setSearchParams(
-      regionCodes.length !== 0 ? { region: regionCodes.join(',') } : undefined
-    );
-  };
-
-  // useEffect(() => {
-  //   const regions = searchParams.get('region')?.split(',');
-
-  //   setSelectedRegions(regions)
-  // }, [searchParams, setSelectedRegions])
-
   return (
     <FilterContainer>
       <Accordion
         allowMultiple
         css={css`
-          width: 100%;
+          width: 237px;
         `}
       >
         <AccordionItem>
@@ -95,10 +60,10 @@ const Filter = () => {
             <AccordionButton
               as={FilterButtonContainer}
               css={accordionButtonCSS}
+              padding={0}
             >
-              <FilterTitle>지역 검색</FilterTitle>
+              <FilterTitle>지역별 검색</FilterTitle>
               <FilterTagWrapper>
-                <span>최대 5개</span>
                 <RegionTagsWrapper>
                   {selectedRegions.map(({ code, name }) => (
                     <Tag
@@ -124,9 +89,8 @@ const Filter = () => {
           <AccordionPanel
             pb={4}
             css={css`
-              border: 1px dashed rgba(0, 0, 0, 0.2);
               border-top: none;
-              display: flex;
+              padding: 0;
             `}
           >
             <AreaListPanel>
@@ -136,62 +100,76 @@ const Filter = () => {
                   role="button"
                   onClick={() => handleRegionClick({ code, name })}
                 >
-                  {`${name} ▷`}
+                  <Checkbox
+                    size="md"
+                    colorScheme="blackAlpha"
+                    borderColor="black"
+                  >
+                    {name}
+                  </Checkbox>
                 </AreaListButton>
               ))}
             </AreaListPanel>
-            <AreaList>
-              {selectableAreaList?.map(({ code, name }) => (
-                <AreaListButton
-                  key={`${name}-${code}`}
-                  role="button"
-                  onClick={() => handleRegionSelect({ code, name })}
-                >
-                  {name}
-                </AreaListButton>
-              ))}
-            </AreaList>
           </AccordionPanel>
         </AccordionItem>
 
+        <Divider
+          height="1px"
+          color="#EDEDED"
+          margin="24px 0"
+          orientation="horizontal"
+        />
+
         <AccordionItem>
-          <AccordionButton as={FilterButtonContainer} css={accordionButtonCSS}>
+          <AccordionButton
+            as={FilterButtonContainer}
+            css={accordionButtonCSS}
+            padding={0}
+          >
             <FilterTitle>진행 상태</FilterTitle>
-            <Stack spacing={5} direction="row">
-              <Checkbox colorScheme="red" defaultChecked>
-                진행 예정
-              </Checkbox>
-              <Checkbox colorScheme="green" defaultChecked>
-                진행중
-              </Checkbox>
-            </Stack>
           </AccordionButton>
+          <AccordionPanel
+            pb={4}
+            css={css`
+              border-top: none;
+              padding: 0;
+            `}
+          >
+            <AreaListPanel>
+              <AreaListButton role="button">
+                <Checkbox
+                  size="md"
+                  colorScheme="blackAlpha"
+                  borderColor="black"
+                >
+                  진행 예정
+                </Checkbox>
+              </AreaListButton>
+              <AreaListButton role="button">
+                <Checkbox
+                  size="md"
+                  colorScheme="blackAlpha"
+                  borderColor="black"
+                >
+                  진행 중
+                </Checkbox>
+              </AreaListButton>
+            </AreaListPanel>
+          </AccordionPanel>
         </AccordionItem>
       </Accordion>
-
-      <Button
-        size="sm"
-        css={css`
-          width: fit-content;
-        `}
-        onClick={handleSearchClick}
-      >
-        선택 조건 검색
-      </Button>
     </FilterContainer>
   );
 };
 
 const accordionButtonCSS = css`
   display: flex;
-  border: 1px solid rgba(0, 0, 0, 0.2);
 `;
 
 const FilterContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
   gap: 8px;
 `;
 
@@ -203,7 +181,7 @@ const FilterTitle = styled.h2`
   font-size: 18px;
   font-weight: 600;
   flex-shrink: 0;
-  padding: 0 16px;
+  line-height: 36px;
 `;
 
 const FilterTagWrapper = styled.div`
@@ -220,10 +198,10 @@ const RegionTagsWrapper = styled.div`
 `;
 
 const AreaListPanel = styled.ul`
-  width: 200px;
-  border-right: 1px solid rgba(0, 0, 0, 0.2);
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
   flex-shrink: 0;
 `;
 
@@ -240,15 +218,6 @@ const AreaListButton = styled.li`
   &:hover {
     background-color: rgba(0, 0, 0, 0.1);
   }
-`;
-
-const AreaList = styled.div`
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  align-content: flex-start;
-  padding: 0 16px;
 `;
 
 export default Filter;
