@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useQuery } from 'react-query';
+import { useInfiniteQuery, useQuery } from 'react-query';
 import {
   AreaCodeRequestDto,
   AreaCodeResponseDto,
@@ -68,5 +68,40 @@ export const useFetchAreaCodeListQuery = (
         code: `${areaCode}-${code}`,
         name
       }))
+  });
+};
+
+export const useFetchEventListInfiniteQuery = (params: {
+  numOfRows: number;
+  areaCode?: string;
+  sigunguCode?: string;
+  eventStartDate: string;
+  eventEndDate?: string;
+  pageNo: number;
+}) => {
+  return useInfiniteQuery({
+    queryKey: [`getEventList/${params.eventStartDate}/${params.areaCode}`],
+    queryFn: async ({ pageParam = params.pageNo }) => {
+      const data = await axios.get<EventListResponseDto>(
+        `${import.meta.env.VITE_TOUR_API_END_POINT}/searchFestival1` || '',
+        {
+          params: {
+            ...params,
+            pageNo: pageParam,
+            _type: 'json',
+            serviceKey: import.meta.env.VITE_TOUR_API_KEY,
+            arrange: 'R',
+            MobileOS: 'ETC',
+            MobileApp: 'hanginthere'
+          } as EventListRequestDto
+        }
+      );
+      return data;
+    },
+    getNextPageParam: lastPage => lastPage.data.response.body.pageNo + 1,
+    select: ({ pages, pageParams }) => ({
+      pages: pages.flatMap(({ data }) => data.response.body.items.item),
+      pageParams
+    })
   });
 };
