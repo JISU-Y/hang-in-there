@@ -37,11 +37,8 @@ const CategoryPage = () => {
 
   return (
     <ContentWrapper>
-      <TitleWrapper>
-        <PageTitle>{searchParams.get('category')}</PageTitle>
-      </TitleWrapper>
       <Filter />
-      <SimpleGrid columns={2} spacing={8} as={CardListContainer}>
+      <SimpleGrid minChildWidth="232px" spacing="32px" as={CardListContainer}>
         {eventList?.map(event => (
           <EventCard
             eventId={event.contentid}
@@ -62,22 +59,8 @@ const CategoryPage = () => {
 
 const ContentWrapper = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 24px;
-  padding: 64px 48px;
-`;
-
-const TitleWrapper = styled.div`
-  width: 100%;
-  border-bottom: 2px solid lightgray;
-`;
-
-const PageTitle = styled.h1`
-  font-size: 28px;
-  font-weight: 600;
-  width: fit-content;
-  padding: 8px 32px;
-  background-color: lightgray;
+  gap: 27px;
+  padding: 40px 112px;
 `;
 
 const CardListContainer = styled.div`
