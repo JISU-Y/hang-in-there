@@ -87,7 +87,7 @@ const EventDetailPage = () => {
             <HostInfoKey>주최</HostInfoKey>
             <HostInfoValue>
               <a href={eventDetailInfo?.homePageLink} target="_blank">
-                {eventDetailInfo?.hostName}
+                {eventDetailInfo?.hostName || eventDetailInfo?.homePageLink}
               </a>
             </HostInfoValue>
           </EventHostInfoWrapper>

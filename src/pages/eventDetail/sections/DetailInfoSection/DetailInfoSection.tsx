@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import styled from '@emotion/styled';
 
@@ -6,24 +6,40 @@ import {
   useFetchEventDetailImageQuery,
   useFetchEventDetailQuery
 } from '../../network/eventDetailQueries';
+import EventMap from '../../components/EventMap/EventMap';
 
 const DetailInfoSection = () => {
   const { contentid } = useParams<{ contentid: string }>();
+  const navigate = useNavigate();
 
   const { data: eventDetail } = useFetchEventDetailQuery(contentid || '');
   const { data: eventDetailImage } = useFetchEventDetailImageQuery(
     contentid || ''
   );
 
+  const handleClickBackToList = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate('/category?=축제'); // TODO: 들어왔던 경로(query)로 되돌아갈 수 있도록
+    }
+  };
+
   return (
     <DetailInfoContainer>
-      {eventDetailImage?.map(image => (
-        <ImageWrapper key={image.contentid}>
+      {eventDetailImage?.map((image, index) => (
+        <ImageWrapper key={`${image.contentid}-${index}`}>
           <Image src={image.originimgurl} />
         </ImageWrapper>
       ))}
       {/* TODO: 접기 / 더보기 */}
       <Description>{eventDetail?.overview}</Description>
+
+      <EventMap />
+
+      <BackToListButton type="button" onClick={handleClickBackToList}>
+        목록으로
+      </BackToListButton>
     </DetailInfoContainer>
   );
 };
@@ -51,4 +67,14 @@ const Description = styled.p`
   line-height: 20px;
   color: #191919;
   margin: 24px 0 96px;
+`;
+
+const BackToListButton = styled.button`
+  font-size: 16px;
+  font-weight: 400;
+  color: #ffffff;
+  padding: 8px 74px;
+  background-color: #ff6917;
+  margin: 0 auto;
+  display: block;
 `;
