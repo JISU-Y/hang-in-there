@@ -1,42 +1,25 @@
 import { useMemo } from 'react';
 
 import { useParams } from 'react-router-dom';
-import Slider from 'react-slick';
 import { isSameDay } from 'date-fns';
 
 import styled from '@emotion/styled';
 import '@styles/custom-slick.css';
 
 import {
-  useFetchEventDetailImageQuery,
   useFetchEventDetailIntroQuery,
   useFetchEventDetailQuery
 } from './network/eventDetailQueries';
-import InfoList from './components/InfoList';
-import { DetailInfoType, DetailInfoUnionType } from './types/detail';
+import { DetailInfoType } from './types/detail';
 
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-
-const settings = {
-  dots: true,
-  dotsClass: 'custom-dots',
-  infinite: true,
-  speed: 500,
-  slidesToShow: 1,
-  slidesToScroll: 1,
-  autoplay: false,
-  arrows: false
-};
+import { extractUrl } from '@src/logics/utils/extractUrl';
+import DetailInfoSection from './sections/DetailInfoSection/DetailInfoSection';
 
 const EventDetailPage = () => {
   const { contentid } = useParams<{ contentid: string }>();
 
   const { data: eventDetail } = useFetchEventDetailQuery(contentid || '');
   const { data: eventDetailIntro } = useFetchEventDetailIntroQuery(
-    contentid || ''
-  );
-  const { data: eventDetailImage } = useFetchEventDetailImageQuery(
     contentid || ''
   );
 
@@ -60,9 +43,10 @@ const EventDetailPage = () => {
       }`,
       place: `${eventDetail.addr1} ${eventDetail.addr2}`,
       time: eventDetailIntro.playtime,
-      hostName: eventDetailIntro.sponsor1,
-      hostPhone: eventDetailIntro.sponsor1tel,
-      homePageLink: eventDetail.homepage,
+      sponsorName: eventDetailIntro.sponsor1,
+      hostName: eventDetailIntro.sponsor2,
+      hostPhone: eventDetailIntro.sponsor2tel,
+      homePageLink: extractUrl(eventDetail.homepage),
       description: eventDetail.overview
     };
   }, [eventDetail, eventDetailIntro]);
@@ -70,45 +54,47 @@ const EventDetailPage = () => {
   return (
     <Container>
       <ContentWrapper>
-        <SliderWrapper>
-          {eventDetailImage ? (
-            <Slider {...settings}>
-              {eventDetailImage.map(detailImg => (
-                <ImageWrapper key={detailImg.serialnum}>
-                  <Image
-                    src={detailImg.originimgurl}
-                    alt={`festival-${detailImg.imgname}`}
-                  />
-                </ImageWrapper>
-              ))}
-            </Slider>
-          ) : (
-            <ImageWrapper>
-              <Image
-                src={eventDetail?.firstimage}
-                alt={`festival-${eventDetail?.firstimage}`}
-              />
-            </ImageWrapper>
-          )}
-        </SliderWrapper>
+        <ImageWrapper>
+          <Image
+            src={eventDetail?.firstimage}
+            alt={`festival-${eventDetail?.firstimage}`}
+          />
+        </ImageWrapper>
 
         <DetailWrapper>
           <Title>{eventDetail?.title}</Title>
-          <InfoListWrapper>
-            {eventDetailInfo &&
-              Object.entries(eventDetailInfo).map(
-                ([key, value]) =>
-                  value && (
-                    <InfoList
-                      key={key}
-                      title={key as DetailInfoUnionType}
-                      value={value}
-                    />
-                  )
-              )}
-          </InfoListWrapper>
+          <EventTimeWrapper>
+            <EventTime
+              dangerouslySetInnerHTML={{
+                __html: eventDetailInfo?.period || ''
+              }}
+            />
+            <EventTime
+              dangerouslySetInnerHTML={{ __html: eventDetailInfo?.time || '' }}
+            />
+          </EventTimeWrapper>
+
+          <EventInfoWrapper>
+            <EventPlace>{eventDetailInfo?.place}</EventPlace>
+            <EventHostPhone>{eventDetailInfo?.hostPhone}</EventHostPhone>
+          </EventInfoWrapper>
+
+          <EventHostInfoWrapper>
+            <HostInfoKey>주관</HostInfoKey>
+            <HostInfoValue>{eventDetailInfo?.sponsorName}</HostInfoValue>
+          </EventHostInfoWrapper>
+          <EventHostInfoWrapper>
+            <HostInfoKey>주최</HostInfoKey>
+            <HostInfoValue>
+              <a href={eventDetailInfo?.homePageLink} target="_blank">
+                {eventDetailInfo?.hostName}
+              </a>
+            </HostInfoValue>
+          </EventHostInfoWrapper>
         </DetailWrapper>
       </ContentWrapper>
+
+      <DetailInfoSection />
     </Container>
   );
 };
@@ -116,7 +102,7 @@ const EventDetailPage = () => {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 64px;
+  gap: 72px;
   padding: 64px 48px;
 `;
 
@@ -124,20 +110,13 @@ const ContentWrapper = styled.section`
   width: 100%;
   display: flex;
   justify-content: center;
-  gap: 24px;
-`;
-
-const SliderWrapper = styled.div`
-  width: 360px;
-  height: 480px;
-  flex-shrink: 0;
-  border-radius: 4px;
-  overflow: hidden;
+  gap: 32px;
 `;
 
 const ImageWrapper = styled.div`
-  width: 360px;
-  height: 480px;
+  width: 60%;
+  max-width: 760px;
+  height: auto;
 `;
 
 const Image = styled.img`
@@ -147,17 +126,83 @@ const Image = styled.img`
 `;
 
 const DetailWrapper = styled.div`
-  width: 100%;
+  width: 40%;
+  max-width: 496px;
+  padding: 56px 0;
 `;
 
 const Title = styled.h2`
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 600;
+  line-height: 36px;
   width: 100%;
-  padding: 4px;
-  text-align: center;
-  background-color: rgba(255, 165, 0, 0.2);
-  border-radius: 4px;
+  margin-bottom: 24px;
+  color: #191919;
+`;
+
+const EventTimeWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 32px;
+`;
+
+const EventTime = styled.p`
+  width: 100%;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 400;
+  color: #191919;
+`;
+
+const EventInfoWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+`;
+
+const EventPlace = styled.p`
+  width: 100%;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 400;
+  color: #191919;
+`;
+
+const EventHostPhone = styled.p`
+  width: 100%;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 400;
+  color: #191919;
+`;
+
+const EventHostInfoWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+`;
+
+const HostInfoKey = styled.p`
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 600;
+  color: #767676;
+`;
+
+const HostInfoValue = styled.p`
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 400;
+  color: #767676;
+
+  a {
+    text-decoration: underline;
+  }
 `;
 
 const InfoListWrapper = styled.div`

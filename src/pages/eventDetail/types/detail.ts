@@ -229,6 +229,7 @@ export interface DetailInfoType {
   time: string;
   hostName: string;
   hostPhone: string;
+  sponsorName: string;
   homePageLink: string;
   description: string;
 }
