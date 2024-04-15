@@ -25,7 +25,7 @@ import './custom-slick.css';
 const settings: Settings = {
   dots: false,
   infinite: false,
-  slidesToShow: 5,
+  slidesToShow: 5.5,
   slidesToScroll: 1,
   swipeToSlide: true,
   touchThreshold: 100,
