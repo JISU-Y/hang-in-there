@@ -1,48 +1,49 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
 const EventMap = () => {
-  const mapElement = useRef<HTMLDivElement>(null);
-  const { naver } = window;
-
+  // TODO: Map 로드가 안되고 있음.
   // useEffect(() => {
   //   function loadNaverMapsScript() {
-  //     if (window.naver && window.naver.maps) return;
-
   //     const script = document.createElement('script');
   //     script.type = 'text/javascript';
-  //     script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${
+  //     script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${
   //       import.meta.env.VITE_NAVER_MAPS_CLIENT_ID
   //     }`;
   //     script.async = true;
 
-  //     document.head.appendChild(script);
+  //     document.body.appendChild(script);
   //   }
 
   //   loadNaverMapsScript();
   // }, []);
 
   useEffect(() => {
-    if (!mapElement.current || !naver) return;
+    if (!window.naver) return;
 
-    // 지도에 표시할 위치의 위도와 경도 좌표를 파라미터로 넣어줍니다.
-    const location = new naver.maps.LatLng(37.5656, 126.9769);
-    const mapOptions = {
-      center: location,
-      zoom: 17,
-      zoomControl: true
-    };
+    // const location = new naver.maps.LatLng(37.5656, 126.9769);
+    // const mapOptions = {
+    //   center: location,
+    //   zoom: 17,
+    //   zoomControl: true
+    // };
 
-    const map = new naver.maps.Map(mapElement.current, mapOptions);
-    new naver.maps.Marker({
-      position: location,
-      map
-    });
-  }, [naver]);
+    const mapDiv = document.getElementById('map');
+    // const map = new naver.maps.Map(mapDiv, {
+    //   center: new naver.maps.LatLng(37.3595704, 127.105399),
+    //   zoom: 15
+    // });
+
+    // const marker = new naver.maps.Marker({
+    //   position: new naver.maps.LatLng(37.3595704, 127.105399),
+    //   map: map
+    // });
+  }, []);
 
   return (
     <>
       <h1>Naver Map - Default</h1>
-      <div ref={mapElement} style={{ minHeight: '400px' }} />
+
+      <div id="map" style={{ width: '400px', minHeight: '400px' }} />
     </>
   );
 };

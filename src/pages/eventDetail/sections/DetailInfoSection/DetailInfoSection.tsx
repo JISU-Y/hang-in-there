@@ -21,7 +21,7 @@ const DetailInfoSection = () => {
     if (window.history.length > 1) {
       navigate(-1);
     } else {
-      navigate('/category?=축제'); // TODO: 들어왔던 경로(query)로 되돌아갈 수 있도록
+      navigate('/category?=축제'); // TODO: 행사에 해당하는 category로 보내주기
     }
   };
 
@@ -33,7 +33,11 @@ const DetailInfoSection = () => {
         </ImageWrapper>
       ))}
       {/* TODO: 접기 / 더보기 */}
-      <Description>{eventDetail?.overview}</Description>
+      <Description
+        dangerouslySetInnerHTML={{
+          __html: eventDetail?.overview || ''
+        }}
+      />
 
       <EventMap />
 
@@ -67,6 +71,7 @@ const Description = styled.p`
   line-height: 20px;
   color: #191919;
   margin: 24px 0 96px;
+  white-space: pre-line;
 `;
 
 const BackToListButton = styled.button`
