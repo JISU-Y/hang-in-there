@@ -47,7 +47,7 @@ const PageLayout = ({
           </CopyRightWrapper>
           <ExternalLinksWrapper>
             {Object.values(EXTERNAL_DOCUMENT_LINKS).map(({ NAME, LINK }) => (
-              <a href={LINK} target="_blank">
+              <a key={NAME} href={LINK} target="_blank">
                 {NAME}
               </a>
             ))}
@@ -85,7 +85,6 @@ const Image = styled.img`
 
 const Content = styled.section`
   width: 100%;
-  max-width: 1280px;
   height: 100%;
   background-color: #ffffff;
   margin: 0 auto;
@@ -109,7 +108,7 @@ const CopyRightWrapper = styled.div`
     line-height: 21px;
     font-weight: 400;
 
-    &:first-child {
+    &:first-of-type {
       margin-bottom: 8px;
     }
 

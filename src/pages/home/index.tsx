@@ -8,8 +8,10 @@ const HomePage = () => {
   return (
     <ContentWrapper>
       <Collections />
-      <OngoingEvents />
-      <UpcomingEvents />
+      <EventListWrapper>
+        <OngoingEvents />
+        <UpcomingEvents />
+      </EventListWrapper>
     </ContentWrapper>
   );
 };
@@ -18,6 +20,12 @@ const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 64px;
+`;
+
+const EventListWrapper = styled.section`
+  width: 100%;
+  max-width: 1280px;
+  margin: auto;
 `;
 
 export default HomePage;
