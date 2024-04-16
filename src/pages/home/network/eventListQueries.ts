@@ -17,7 +17,7 @@ export const useFetchEventListQuery = (
   options?: Omit<UseQueryOptionsType<EventListResponseDto>, 'select'>
 ) => {
   return useQuery({
-    queryKey: `getEventList/${params.eventStartDate}/${params.areaCode}`,
+    queryKey: `getEventList/${params.eventStartDate}/${params.areaCode}/${params.pageNo}`,
     queryFn: async () => {
       const data = await axios.get<EventListResponseDto>(
         `${import.meta.env.VITE_TOUR_API_END_POINT}/searchFestival1` || '',
@@ -35,7 +35,16 @@ export const useFetchEventListQuery = (
       return data;
     },
     ...options,
-    select: ({ data }) => data.response.body.items.item
+    select: ({ data }) => ({
+      list: data.response.body.items.item,
+      pageInfo: {
+        currentPage: data.response.body.pageNo,
+        totalPage: Math.floor(
+          data.response.body.totalCount / data.response.body.numOfRows
+        ),
+        totalCount: data.response.body.totalCount
+      }
+    })
   });
 };
 
@@ -48,7 +57,9 @@ export const useFetchEventListInfiniteQuery = (params: {
   pageNo: number;
 }) => {
   return useInfiniteQuery({
-    queryKey: [`getEventList/${params.eventStartDate}/${params.areaCode}`],
+    queryKey: [
+      `getEventList/Infinite/${params.eventStartDate}/${params.areaCode}`
+    ],
     queryFn: async ({ pageParam = params.pageNo }) => {
       const data = await axios.get<EventListResponseDto>(
         `${import.meta.env.VITE_TOUR_API_END_POINT}/searchFestival1` || '',

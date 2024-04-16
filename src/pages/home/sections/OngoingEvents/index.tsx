@@ -25,7 +25,7 @@ import './custom-slick.css';
 const settings: Settings = {
   dots: false,
   infinite: false,
-  slidesToShow: 5,
+  slidesToShow: 5.5,
   slidesToScroll: 1,
   swipeToSlide: true,
   touchThreshold: 100,
@@ -64,7 +64,7 @@ const OngoingEvents = () => {
   const [isMouseMoving, setIsMouseMoving, unsetIsMouseMoving] =
     useBooleanState();
 
-  const { data: eventListData } = useFetchEventListQuery({
+  const { data: eventData } = useFetchEventListQuery({
     numOfRows: 10,
     eventStartDate: format(new Date(), 'yyyyMMdd'),
     eventEndDate: format(new Date(), 'yyyyMMdd'),
@@ -93,7 +93,7 @@ const OngoingEvents = () => {
       <SectionTitle>진행 중인 행사</SectionTitle>
       <SliderWrapper>
         <Slider {...settings}>
-          {eventListData?.map(el => (
+          {eventData?.list?.map(el => (
             <Card
               key={el.title}
               w="100%"

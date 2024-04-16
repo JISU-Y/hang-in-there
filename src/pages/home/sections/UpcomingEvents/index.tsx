@@ -8,28 +8,43 @@ import {
   Text
 } from '@chakra-ui/react';
 import { format } from 'date-fns';
+import { isAfter } from 'date-fns/isAfter';
 
-import { useFetchEventListInfiniteQuery } from '../../network/eventListQueries';
+import { useFetchEventListQuery } from '../../network/eventListQueries';
 
 import { Link } from 'react-router-dom';
 import { css } from '@emotion/react';
-import { ImpressionArea } from '@toss/impression-area';
 import { formatDate } from '@src/logics/utils/dateFormat';
 import { formatISO } from 'date-fns/formatISO';
 import { parse } from 'date-fns/parse';
 import { addDays } from 'date-fns/addDays';
+import { useState } from 'react';
 
 const UpcomingEvents = () => {
-  const { data: eventListPageData, fetchNextPage } =
-    useFetchEventListInfiniteQuery({
-      numOfRows: 10,
-      // 이렇게 오늘 날짜로 start, end 요청하면 진행 중인 행사들
-      // eventStartDate: format(new Date(), 'yyyyMMdd'),
-      // eventEndDate: format(new Date(), 'yyyyMMdd'),
-      //
-      eventStartDate: format(addDays(new Date(), 1), 'yyyyMMdd'),
-      pageNo: 1
-    });
+  const [pageNo, setPageNo] = useState(1);
+  const {
+    data: eventData,
+    isLoading,
+    isError
+  } = useFetchEventListQuery({
+    numOfRows: 30,
+    // 이렇게 오늘 날짜로 start, end 요청하면 진행 중인 행사들
+    // eventStartDate: format(new Date(), 'yyyyMMdd'),
+    // eventEndDate: format(new Date(), 'yyyyMMdd'),
+    eventStartDate: format(addDays(new Date(), 1), 'yyyyMMdd'),
+    pageNo
+  });
+
+  if (isLoading) return <div>로딩 중...</div>;
+  if (isError) return <div>오류가 발생했습니다.</div>;
+
+  const filteredEventListData =
+    eventData?.list
+      ?.filter(
+        ({ eventstartdate }) =>
+          isAfter(parse(eventstartdate, 'yyyyMMdd', new Date()), new Date()) // NOTE: 행사 시작 날짜가 오늘 날짜보다 후일 때 진행 예정 행사로 처리
+      )
+      .slice(0, 20) || [];
 
   const getFormattedDate = (date: string) => {
     const parsedDateString = parse(date, 'yyyyMMdd', new Date());
@@ -46,7 +61,7 @@ const UpcomingEvents = () => {
     <Container>
       <SectionTitle>진행 예정인 행사</SectionTitle>
       <CardListWrapper>
-        {eventListPageData?.pages?.flatMap(el => (
+        {filteredEventListData.map(el => (
           <Card
             as={Link}
             to={`/eventDetail/${el.contentid}`}
@@ -93,11 +108,32 @@ const UpcomingEvents = () => {
             </CardFooter>
           </Card>
         ))}
-        <HeightImpressionArea
-          onImpressionStart={() => fetchNextPage()}
-          areaThreshold={0.5}
-        />
       </CardListWrapper>
+      <PaginationWrapper>
+        <ArrowButton
+          type="button"
+          disabled={pageNo === 1}
+          onClick={() => setPageNo(prev => Math.max(prev - 1, 1))}
+        >{`<`}</ArrowButton>
+        {new Array(eventData?.pageInfo.totalPage)
+          .fill(0)
+          .map((_, i) => i + 1)
+          .map(el => (
+            <PageButton
+              key={el}
+              type="button"
+              $isActive={el === pageNo}
+              onClick={() => setPageNo(el)}
+            >
+              {el}
+            </PageButton>
+          ))}
+        <ArrowButton
+          type="button"
+          disabled={eventData?.pageInfo.totalPage === pageNo}
+          onClick={() => setPageNo(prev => prev + 1)}
+        >{`>`}</ArrowButton>
+      </PaginationWrapper>
     </Container>
   );
 };
@@ -158,8 +194,32 @@ const CardListWrapper = styled.div`
   }
 `;
 
-const HeightImpressionArea = styled(ImpressionArea)`
+const PaginationWrapper = styled.div`
+  margin: 56px auto;
+  width: fit-content;
+  display: block;
+`;
+
+const PageButton = styled.button<{ $isActive?: boolean }>`
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  border-radius: 50%;
+
+  width: 40px;
   height: 40px;
+  color: #000000;
+
+  background-color: ${({ $isActive }) =>
+    $isActive ? 'rgba(255,105,23, 0.7)' : 'transparent'};
+
+  transition: all 0.3s ease-in-out;
+`;
+
+const ArrowButton = styled(PageButton)`
+  background-color: transparent;
+
+  color: ${({ $isActive }) => ($isActive ? '#000000' : '#8B8B8B')};
 `;
 
 export default UpcomingEvents;
