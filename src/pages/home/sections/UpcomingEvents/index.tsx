@@ -10,10 +10,7 @@ import {
 import { format } from 'date-fns';
 import { isAfter } from 'date-fns/isAfter';
 
-import {
-  useFetchEventListInfiniteQuery,
-  useFetchEventListQuery
-} from '../../network/eventListQueries';
+import { useFetchEventListQuery } from '../../network/eventListQueries';
 
 import { Link } from 'react-router-dom';
 import { css } from '@emotion/react';
