@@ -27,7 +27,7 @@ const EventMap = () => {
     //   zoomControl: true
     // };
 
-    const mapDiv = document.getElementById('map');
+    // const mapDiv = document.getElementById('map');
     // const map = new naver.maps.Map(mapDiv, {
     //   center: new naver.maps.LatLng(37.3595704, 127.105399),
     //   zoom: 15

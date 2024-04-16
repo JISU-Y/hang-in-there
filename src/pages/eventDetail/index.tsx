@@ -205,11 +205,4 @@ const HostInfoValue = styled.p`
   }
 `;
 
-const InfoListWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-top: 16px;
-`;
-
 export default EventDetailPage;

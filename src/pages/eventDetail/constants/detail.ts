@@ -6,6 +6,7 @@ export const InfoKeyMapper: DetailInfoType = {
   time: '축제 진행 시간',
   hostName: '축제 진행 기관',
   hostPhone: '기관 전화번호',
+  sponsorName: '축제 스폰서 기관',
   homePageLink: '축제 홈페이지',
   description: '축제 설명'
 };
