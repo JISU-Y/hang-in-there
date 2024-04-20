@@ -19,6 +19,7 @@ import { formatISO } from 'date-fns/formatISO';
 import { parse } from 'date-fns/parse';
 import { addDays } from 'date-fns/addDays';
 import { useState } from 'react';
+import { ChevronRightIcon, ChevronLeftIcon } from '@chakra-ui/icons';
 
 const UpcomingEvents = () => {
   const [pageNo, setPageNo] = useState(1);
@@ -114,7 +115,14 @@ const UpcomingEvents = () => {
           type="button"
           disabled={pageNo === 1}
           onClick={() => setPageNo(prev => Math.max(prev - 1, 1))}
-        >{`<`}</ArrowButton>
+        >
+          <ChevronLeftIcon
+            w={6}
+            h={6}
+            strokeWidth={1}
+            color={pageNo === 1 ? '#8B8B8B' : '#000000'}
+          />
+        </ArrowButton>
         {new Array(eventData?.pageInfo.totalPage)
           .fill(0)
           .map((_, i) => i + 1)
@@ -132,7 +140,16 @@ const UpcomingEvents = () => {
           type="button"
           disabled={eventData?.pageInfo.totalPage === pageNo}
           onClick={() => setPageNo(prev => prev + 1)}
-        >{`>`}</ArrowButton>
+        >
+          <ChevronRightIcon
+            w={6}
+            h={6}
+            strokeWidth={1}
+            color={
+              eventData?.pageInfo.totalPage === pageNo ? '#8B8B8B' : '#000000'
+            }
+          />
+        </ArrowButton>
       </PaginationWrapper>
     </Container>
   );
@@ -219,7 +236,9 @@ const PageButton = styled.button<{ $isActive?: boolean }>`
 const ArrowButton = styled(PageButton)`
   background-color: transparent;
 
-  color: ${({ $isActive }) => ($isActive ? '#000000' : '#8B8B8B')};
+  &:disabled {
+    pointer-events: none;
+  }
 `;
 
 export default UpcomingEvents;

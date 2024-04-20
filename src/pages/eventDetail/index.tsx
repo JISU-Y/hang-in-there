@@ -14,6 +14,9 @@ import { DetailInfoType } from './types/detail';
 
 import { extractUrl } from '@src/logics/utils/extractUrl';
 import DetailInfoSection from './sections/DetailInfoSection/DetailInfoSection';
+import LocationIcon from '@src/styles/icons/LocationIcon';
+import CallOutgoingIcon from '@src/styles/icons/CallOutgoingIcon';
+import ShareIcon from '@src/styles/icons/ShareIcon';
 
 const EventDetailPage = () => {
   const { contentid } = useParams<{ contentid: string }>();
@@ -75,8 +78,17 @@ const EventDetailPage = () => {
           </EventTimeWrapper>
 
           <EventInfoWrapper>
-            <EventPlace>{eventDetailInfo?.place}</EventPlace>
-            <EventHostPhone>{eventDetailInfo?.hostPhone}</EventHostPhone>
+            <EventPlace>
+              <LocationIcon color="#000000" />
+              <span>{eventDetailInfo?.place}</span>
+            </EventPlace>
+            {eventDetailInfo?.hostPhone && (
+              <EventHostPhone>
+                <CallOutgoingIcon color="#000000" />
+                <span>{eventDetailInfo?.hostPhone}</span>
+              </EventHostPhone>
+            )}
+            <ShareIcon color="#000000" />
           </EventInfoWrapper>
 
           <EventHostInfoWrapper>
@@ -170,6 +182,9 @@ const EventPlace = styled.p`
   line-height: 24px;
   font-weight: 400;
   color: #191919;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 `;
 
 const EventHostPhone = styled.p`
