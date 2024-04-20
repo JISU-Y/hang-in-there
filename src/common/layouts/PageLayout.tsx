@@ -1,7 +1,8 @@
-import { PropsWithChildren } from 'react';
+import { useEffect, PropsWithChildren } from 'react';
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 import CategoryMenu from '../components/CategoryMenu/CategoryMenu';
+import { Collapse, Slide, useDisclosure } from '@chakra-ui/react';
 
 const EXTERNAL_DOCUMENT_LINKS = {
   SERVICE: { NAME: '이용약관', LINK: '' },
@@ -11,52 +12,109 @@ const EXTERNAL_DOCUMENT_LINKS = {
 };
 
 interface PageLayoutProps {
+  withLineBanner?: boolean;
   withNavbar?: boolean;
   withFooter?: boolean;
 }
 
 const PageLayout = ({
+  withLineBanner,
   withNavbar = true,
   withFooter = true,
   children
 }: PropsWithChildren<PageLayoutProps>) => {
+  const { isOpen, onOpen } = useDisclosure();
+
+  useEffect(() => {
+    onOpen();
+  }, []);
+
   return (
-    <PageContainer>
-      {withNavbar && (
-        <Navbar>
-          <Link to="/">
-            <Image src="/logo/hanginthere-logo.png" alt="logo" />
-          </Link>
-          <CategoryMenu />
-        </Navbar>
+    <>
+      {withLineBanner && (
+        <LineBannerWrapper>
+          <Collapse in={isOpen}>
+            <BannerLink
+              to="/" // TODO: 소개 노션 링크 추가
+              target="_blank"
+            >
+              <span>
+                <strong>무료함</strong>은 행인들에서 <strong>무료</strong>{' '}
+                문화로 해결
+              </span>
+              <Image src="/logo/hanginthere-logo-white.png" alt="logo-white" />
+            </BannerLink>
+          </Collapse>
+        </LineBannerWrapper>
       )}
-      <Content>{children}</Content>
-      {withFooter && (
-        <Footer>
-          <CopyRightWrapper>
-            <FooterLogoImage
-              src="/logo/hanginthere-logo-light.png"
-              alt="hanginthere-footer-logo"
-            />
-            <div>
-              <p>
-                <span>Contact</span>teamhangindle@gmail.com
-              </p>
-              <p>Copyright hangindle. All rights reserved</p>
-            </div>
-          </CopyRightWrapper>
-          <ExternalLinksWrapper>
-            {Object.values(EXTERNAL_DOCUMENT_LINKS).map(({ NAME, LINK }) => (
-              <a key={NAME} href={LINK} target="_blank">
-                {NAME}
-              </a>
-            ))}
-          </ExternalLinksWrapper>
-        </Footer>
-      )}
-    </PageContainer>
+      <PageContainer>
+        {withNavbar && (
+          <Navbar>
+            <Link to="/">
+              <Image src="/logo/hanginthere-logo.png" alt="logo" />
+            </Link>
+            <CategoryMenu />
+          </Navbar>
+        )}
+        <Content>{children}</Content>
+        {withFooter && (
+          <Footer>
+            <CopyRightWrapper>
+              <FooterLogoImage
+                src="/logo/hanginthere-logo-light.png"
+                alt="hanginthere-footer-logo"
+              />
+              <div>
+                <p>
+                  <span>Contact</span>teamhangindle@gmail.com
+                </p>
+                <p>Copyright hangindle. All rights reserved</p>
+              </div>
+            </CopyRightWrapper>
+            <ExternalLinksWrapper>
+              {Object.values(EXTERNAL_DOCUMENT_LINKS).map(({ NAME, LINK }) => (
+                <a key={NAME} href={LINK} target="_blank">
+                  {NAME}
+                </a>
+              ))}
+            </ExternalLinksWrapper>
+          </Footer>
+        )}
+      </PageContainer>
+    </>
   );
 };
+
+const LineBannerWrapper = styled.div`
+  width: 100%;
+  height: 44px;
+`;
+
+const BannerLink = styled(Link)`
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+  background-color: #ff6917;
+  padding: 4px 0;
+
+  span {
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 36px;
+    color: #ffffff;
+  }
+
+  strong {
+    font-weight: 600;
+    color: #ffffff;
+  }
+
+  img {
+    width: auto;
+    height: 22px;
+  }
+`;
 
 const PageContainer = styled.div`
   position: relative;
@@ -69,7 +127,7 @@ const Navbar = styled.nav`
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 70px 112px 0;
+  padding: 45px 112px 0;
   background-color: #ffffff;
 
   & > a {

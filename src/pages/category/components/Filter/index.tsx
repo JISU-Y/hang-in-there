@@ -17,12 +17,15 @@ import {
   Divider,
   useDisclosure
 } from '@chakra-ui/react';
+import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
+
 import useGeoLocationPoint from '@src/logics/hooks/useGeoLocation';
 
 import { REGION_CODE } from '../../constants/categories';
 import { useFetchAreaCodeListQuery } from '../../network/eventListQueries';
 import { AreaCodeType } from '../../types';
 import NearEventListModal from '../../modal/NearEventListModal/NearEventListModal';
+import LocationIcon from '@src/styles/icons/LocationIcon';
 
 interface FilterProps {
   mapX: string;
@@ -78,7 +81,8 @@ const Filter = ({ mapX, mapY, handleSetGeoLocation }: FilterProps) => {
   return (
     <FilterContainer>
       <NearEventButton type="button" onClick={handleClickFindNearEvent}>
-        내 주변 찾기
+        <span>내 주변 찾기</span>
+        <LocationIcon color="#000000" />
       </NearEventButton>
 
       <NearEventListModal
@@ -103,61 +107,82 @@ const Filter = ({ mapX, mapY, handleSetGeoLocation }: FilterProps) => {
         `}
       >
         <AccordionItem>
-          <Stack>
-            <AccordionButton
-              as={FilterButtonContainer}
-              css={accordionButtonCSS}
-              padding={0}
-            >
-              <FilterTitle>지역별 검색</FilterTitle>
-              <FilterTagWrapper>
-                <RegionTagsWrapper>
-                  {selectedRegions.map(({ code, name }) => (
-                    <Tag
-                      key={`${name}-${code}`}
-                      size="sm"
-                      borderRadius="full"
-                      variant="solid"
-                      colorScheme="orange"
-                    >
-                      <TagLabel>{name}</TagLabel>
-                      <TagCloseButton
-                        onClick={e => {
-                          e.preventDefault();
-                          handleRemoveTag({ code, name });
-                        }}
-                      />
-                    </Tag>
-                  ))}
-                </RegionTagsWrapper>
-              </FilterTagWrapper>
-            </AccordionButton>
-          </Stack>
-          <AccordionPanel
-            pb={4}
-            css={css`
-              border-top: none;
-              padding: 0;
-            `}
-          >
-            <AreaListPanel>
-              {Object.values(REGION_CODE).map(({ code, name }) => (
-                <AreaListButton
-                  key={`${name}-${code}`}
-                  role="button"
-                  onClick={() => handleRegionClick({ code, name })}
+          {({ isExpanded }) => (
+            <>
+              <Stack>
+                <AccordionButton
+                  as={FilterButtonContainer}
+                  css={accordionButtonCSS}
+                  padding={0}
                 >
-                  <Checkbox
-                    size="md"
-                    colorScheme="blackAlpha"
-                    borderColor="black"
-                  >
-                    {name}
-                  </Checkbox>
-                </AreaListButton>
-              ))}
-            </AreaListPanel>
-          </AccordionPanel>
+                  <FilterTitle>
+                    <span>지역별 검색</span>
+                    {isExpanded ? (
+                      <ChevronUpIcon
+                        w={6}
+                        h={6}
+                        strokeWidth={1}
+                        color="#000000"
+                      />
+                    ) : (
+                      <ChevronDownIcon
+                        w={6}
+                        h={6}
+                        strokeWidth={1}
+                        color="#000000"
+                      />
+                    )}
+                  </FilterTitle>
+                  <FilterTagWrapper>
+                    <RegionTagsWrapper>
+                      {selectedRegions.map(({ code, name }) => (
+                        <Tag
+                          key={`${name}-${code}`}
+                          size="sm"
+                          borderRadius="full"
+                          variant="solid"
+                          colorScheme="orange"
+                        >
+                          <TagLabel>{name}</TagLabel>
+                          <TagCloseButton
+                            onClick={e => {
+                              e.preventDefault();
+                              handleRemoveTag({ code, name });
+                            }}
+                          />
+                        </Tag>
+                      ))}
+                    </RegionTagsWrapper>
+                  </FilterTagWrapper>
+                </AccordionButton>
+              </Stack>
+              <AccordionPanel
+                pb={4}
+                css={css`
+                  border-top: none;
+                  padding: 0;
+                `}
+              >
+                <AreaListPanel>
+                  {Object.values(REGION_CODE).map(({ code, name }) => (
+                    <AreaListButton
+                      key={`${name}-${code}`}
+                      role="button"
+                      onClick={() => handleRegionClick({ code, name })}
+                    >
+                      <Checkbox
+                        size="md"
+                        colorScheme="blackAlpha"
+                        borderColor="black"
+                      >
+                        {name}
+                      </Checkbox>
+                    </AreaListButton>
+                  ))}
+                </AreaListPanel>
+              </AccordionPanel>
+            </>
+          )}
         </AccordionItem>
 
         <Divider
@@ -168,41 +193,62 @@ const Filter = ({ mapX, mapY, handleSetGeoLocation }: FilterProps) => {
         />
 
         <AccordionItem>
-          <AccordionButton
-            as={FilterButtonContainer}
-            css={accordionButtonCSS}
-            padding={0}
-          >
-            <FilterTitle>진행 상태</FilterTitle>
-          </AccordionButton>
-          <AccordionPanel
-            pb={4}
-            css={css`
-              border-top: none;
-              padding: 0;
-            `}
-          >
-            <AreaListPanel>
-              <AreaListButton role="button">
-                <Checkbox
-                  size="md"
-                  colorScheme="blackAlpha"
-                  borderColor="black"
-                >
-                  진행 예정
-                </Checkbox>
-              </AreaListButton>
-              <AreaListButton role="button">
-                <Checkbox
-                  size="md"
-                  colorScheme="blackAlpha"
-                  borderColor="black"
-                >
-                  진행 중
-                </Checkbox>
-              </AreaListButton>
-            </AreaListPanel>
-          </AccordionPanel>
+          {({ isExpanded }) => (
+            <>
+              <AccordionButton
+                as={FilterButtonContainer}
+                css={accordionButtonCSS}
+                padding={0}
+              >
+                <FilterTitle>
+                  <span>진행 상태</span>
+                  {isExpanded ? (
+                    <ChevronUpIcon
+                      w={6}
+                      h={6}
+                      strokeWidth={1}
+                      color="#000000"
+                    />
+                  ) : (
+                    <ChevronDownIcon
+                      w={6}
+                      h={6}
+                      strokeWidth={1}
+                      color="#000000"
+                    />
+                  )}
+                </FilterTitle>
+              </AccordionButton>
+              <AccordionPanel
+                pb={4}
+                css={css`
+                  border-top: none;
+                  padding: 0;
+                `}
+              >
+                <AreaListPanel>
+                  <AreaListButton role="button">
+                    <Checkbox
+                      size="md"
+                      colorScheme="blackAlpha"
+                      borderColor="black"
+                    >
+                      진행 예정
+                    </Checkbox>
+                  </AreaListButton>
+                  <AreaListButton role="button">
+                    <Checkbox
+                      size="md"
+                      colorScheme="blackAlpha"
+                      borderColor="black"
+                    >
+                      진행 중
+                    </Checkbox>
+                  </AreaListButton>
+                </AreaListPanel>
+              </AccordionPanel>
+            </>
+          )}
         </AccordionItem>
       </Accordion>
     </FilterContainer>
@@ -210,7 +256,7 @@ const Filter = ({ mapX, mapY, handleSetGeoLocation }: FilterProps) => {
 };
 
 const accordionButtonCSS = css`
-  display: flex;
+  width: 100%;
 `;
 
 const FilterContainer = styled.div`
@@ -228,6 +274,11 @@ const FilterTitle = styled.h2`
   font-weight: 600;
   flex-shrink: 0;
   line-height: 36px;
+
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 const FilterTagWrapper = styled.div`
@@ -273,6 +324,10 @@ const NearEventButton = styled.button`
   line-height: 36px;
   text-align: left;
   width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 export default Filter;

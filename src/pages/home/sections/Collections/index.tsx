@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import '@styles/custom-slick.css';
+import './custom-slick.css';
 
 const settings: Settings = {
   dots: true,

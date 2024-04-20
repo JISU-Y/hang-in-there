@@ -4,7 +4,9 @@ import {
   AreaCodeRequestDto,
   AreaCodeResponseDto,
   EventListRequestDto,
+  EventListRequestDtoNew,
   EventListResponseDto,
+  EventListResponseDtoNew,
   NearEventListRequestDto
 } from '../types';
 import { UseQueryOptionsType } from '@src/common/types/utilType';
@@ -132,6 +134,39 @@ export const useFetchEventListInfiniteQuery = (params: {
             MobileOS: 'ETC',
             MobileApp: 'hanginthere'
           } as EventListRequestDto
+        }
+      );
+      return data;
+    },
+    getNextPageParam: lastPage => lastPage.data.response.body.pageNo + 1,
+    select: ({ pages, pageParams }) => ({
+      pages: pages.flatMap(({ data }) => data.response.body.items.item),
+      pageParams
+    })
+  });
+};
+
+export const useFetchEventListInfiniteQueryH = (params: {
+  area_cd: string;
+  sigungu_cd?: string;
+  category?: string;
+  sub_category?: string;
+  detail_sub_category?: string;
+  size: number;
+  page: number;
+}) => {
+  return useInfiniteQuery({
+    queryKey: [
+      `event/${params.area_cd}/${params.sigungu_cd}/${params.category}/${params.sub_category}/${params.detail_sub_category}`
+    ],
+    queryFn: async ({ pageParam = params.page }) => {
+      const data = await axios.get<EventListResponseDtoNew>(
+        `${import.meta.env.VITE_HANGINTHERE_API_END_POINT}/v1/user/event` || '',
+        {
+          params: {
+            ...params,
+            page: pageParam
+          } as EventListRequestDtoNew
         }
       );
       return data;

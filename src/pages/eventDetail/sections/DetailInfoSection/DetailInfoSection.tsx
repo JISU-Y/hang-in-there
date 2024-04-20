@@ -39,7 +39,7 @@ const DetailInfoSection = () => {
         }}
       />
 
-      <EventMap />
+      {/* <EventMap /> */}
 
       <BackToListButton type="button" onClick={handleClickBackToList}>
         목록으로
