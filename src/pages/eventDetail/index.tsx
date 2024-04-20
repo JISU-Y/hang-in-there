@@ -17,6 +17,7 @@ import DetailInfoSection from './sections/DetailInfoSection/DetailInfoSection';
 import LocationIcon from '@src/styles/icons/LocationIcon';
 import CallOutgoingIcon from '@src/styles/icons/CallOutgoingIcon';
 import ShareIcon from '@src/styles/icons/ShareIcon';
+import Breadcrumbs from '@src/common/components/Breadcrums/Breadcrums';
 
 const EventDetailPage = () => {
   const { contentid } = useParams<{ contentid: string }>();
@@ -56,6 +57,10 @@ const EventDetailPage = () => {
 
   return (
     <Container>
+      <BreadcrumWrapper>
+        <Breadcrumbs />
+      </BreadcrumWrapper>
+
       <ContentWrapper>
         <ImageWrapper>
           <Image
@@ -116,6 +121,11 @@ const Container = styled.div`
   flex-direction: column;
   gap: 72px;
   padding: 64px 48px;
+`;
+
+const BreadcrumWrapper = styled.div`
+  width: 100%;
+  margin-bottom: -27px;
 `;
 
 const ContentWrapper = styled.section`
