@@ -18,7 +18,7 @@ interface EventCardProps {
   imageUrl: string;
   title: string;
   status: 'ongoing' | 'soon' | 'always' | 'closed';
-  range: {
+  range?: {
     startDate: string;
     endDate: string;
   };
@@ -80,9 +80,11 @@ const EventCard = ({
           {title}
         </Heading>
         <Text>{location?.split(' ').slice(0, 2).join(' ')}</Text>
-        <Text color="#999999">{`${getFormattedDate(
-          range.startDate
-        )}-${getFormattedDate(range.endDate)}`}</Text>
+        {range && (
+          <Text color="#999999">{`${getFormattedDate(
+            range.startDate
+          )}-${getFormattedDate(range.endDate)}`}</Text>
+        )}
       </CardFooter>
     </Card>
   );

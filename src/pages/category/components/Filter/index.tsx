@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import { format } from 'date-fns';
+
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import {
@@ -12,16 +14,30 @@ import {
   TagLabel,
   TagCloseButton,
   Checkbox,
-  Divider
+  Divider,
+  useDisclosure
 } from '@chakra-ui/react';
+import useGeoLocationPoint from '@src/logics/hooks/useGeoLocation';
 
 import { REGION_CODE } from '../../constants/categories';
 import { useFetchAreaCodeListQuery } from '../../network/eventListQueries';
 import { AreaCodeType } from '../../types';
+import NearEventListModal from '../../modal/NearEventListModal/NearEventListModal';
 
-const Filter = () => {
+interface FilterProps {
+  mapX: string;
+  mapY: string;
+  handleSetGeoLocation: (args: { mapX: string; mapY: string }) => void;
+}
+
+const Filter = ({ mapX, mapY, handleSetGeoLocation }: FilterProps) => {
   const [selectedRegions, setSelectedRegions] = useState<AreaCodeType[]>([]);
   const [currentRegionCode, setCurrentRegionCode] = useState<AreaCodeType>();
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const { loading: isGeoLocationLoading, loadGeoLocation } =
+    useGeoLocationPoint();
 
   const { data: areaCodeList, refetch: fetchAreaCodeList } =
     useFetchAreaCodeListQuery(currentRegionCode?.code || '', {
@@ -47,8 +63,39 @@ const Filter = () => {
     );
   };
 
+  const handleClickFindNearEvent = async () => {
+    onOpen();
+
+    const geoLocationRes = await loadGeoLocation();
+
+    if (geoLocationRes) {
+      const { latitude, longitude } = geoLocationRes;
+
+      handleSetGeoLocation({ mapX: String(longitude), mapY: String(latitude) });
+    }
+  };
+
   return (
     <FilterContainer>
+      <NearEventButton type="button" onClick={handleClickFindNearEvent}>
+        내 주변 찾기
+      </NearEventButton>
+
+      <NearEventListModal
+        isLocationLoading={isGeoLocationLoading}
+        mapX={mapX}
+        mapY={mapY}
+        isOpen={isOpen}
+        onClose={onClose}
+      />
+
+      <Divider
+        height="1px"
+        color="#EDEDED"
+        margin="24px 0"
+        orientation="horizontal"
+      />
+
       <Accordion
         allowMultiple
         css={css`
@@ -170,7 +217,6 @@ const FilterContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
 `;
 
 const FilterButtonContainer = styled.div`
@@ -218,6 +264,15 @@ const AreaListButton = styled.li`
   &:hover {
     background-color: rgba(0, 0, 0, 0.1);
   }
+`;
+
+const NearEventButton = styled.button`
+  font-size: 18px;
+  font-weight: 600;
+  flex-shrink: 0;
+  line-height: 36px;
+  text-align: left;
+  width: 100%;
 `;
 
 export default Filter;

@@ -17,6 +17,12 @@ export interface EventListRequestDto {
   serviceKey: string;
 }
 
+export interface NearEventListRequestDto extends EventListRequestDto {
+  mapX: string;
+  mapY: string;
+  radius: string;
+}
+
 export type EventListResponseDto = ApiDataResponseType<EventDataType[]>;
 
 export interface EventDataType {

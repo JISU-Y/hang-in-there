@@ -15,6 +15,10 @@ const CategoryPage = () => {
   const [regions, setRegions] = useState<
     { areaCode: string; sigunguCode: string }[]
   >([]);
+  const [geoLocation, setGeoLocation] = useState<{
+    mapX: string;
+    mapY: string;
+  }>();
 
   // TODO: regions에 들어있는 코드 모두를 이용해서 해당하는 것들 모두 가져와야 함.
   // TODO: category에 따라 다르게 요청해야 함.
@@ -26,6 +30,10 @@ const CategoryPage = () => {
       areaCode: regions?.[0]?.areaCode,
       sigunguCode: regions?.[0]?.sigunguCode || ''
     });
+
+  const handleSetGeoLocation = (param: { mapX: string; mapY: string }) => {
+    setGeoLocation(param);
+  };
 
   useEffect(() => {
     const parsedRegions = searchParams.get('region')?.split(',');
@@ -40,12 +48,17 @@ const CategoryPage = () => {
 
   return (
     <ContentWrapper>
-      <Filter />
+      <Filter
+        mapX={geoLocation?.mapX || ''}
+        mapY={geoLocation?.mapY || ''}
+        handleSetGeoLocation={handleSetGeoLocation}
+      />
 
       <CardListContainer>
         <SimpleGrid minChildWidth="232px" spacing="32px">
           {eventListPageData?.pages?.flatMap(event => (
             <EventCard
+              key={event.contentid}
               eventId={event.contentid}
               imageUrl={event.firstimage}
               title={event.title}
