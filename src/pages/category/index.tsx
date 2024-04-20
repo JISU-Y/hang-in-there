@@ -4,7 +4,10 @@ import { format } from 'date-fns';
 import styled from '@emotion/styled';
 import { SimpleGrid } from '@chakra-ui/react';
 
-import { useFetchEventListInfiniteQuery } from './network/eventListQueries';
+import {
+  useFetchEventListInfiniteQuery,
+  useFetchEventListInfiniteQueryH
+} from './network/eventListQueries';
 import Filter from './components/Filter';
 import EventCard from './components/EventCard';
 import { useSearchParams } from 'react-router-dom';
@@ -30,6 +33,17 @@ const CategoryPage = () => {
       areaCode: regions?.[0]?.areaCode,
       sigunguCode: regions?.[0]?.sigunguCode || ''
     });
+
+  // const { data: eventListPageDataNew, fetchNextPage: fetchNextPageEventList } =
+  //   useFetchEventListInfiniteQueryH({
+  //     size: 10,
+  //     page: 1
+  //     // area_cd: regions?.[0]?.areaCode,
+  //     // sigungu_cd: regions?.[0]?.sigunguCode
+  //     // category: string;
+  //     // sub_category: string;
+  //     // detail_sub_category?: string;
+  //   });
 
   const handleSetGeoLocation = (param: { mapX: string; mapY: string }) => {
     setGeoLocation(param);

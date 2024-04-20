@@ -54,7 +54,7 @@ const NearEventListModal = ({
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Modal Title</ModalHeader>
+        <ModalHeader>내 주변 행사</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           {(isLoading || isLocationLoading) && (

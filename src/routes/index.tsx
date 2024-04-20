@@ -3,7 +3,7 @@ import HomePage from '@src/pages/home';
 
 const Home = () => {
   return (
-    <PageLayout>
+    <PageLayout withLineBanner>
       <HomePage />
     </PageLayout>
   );
