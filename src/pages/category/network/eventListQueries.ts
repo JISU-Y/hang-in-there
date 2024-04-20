@@ -4,7 +4,8 @@ import {
   AreaCodeRequestDto,
   AreaCodeResponseDto,
   EventListRequestDto,
-  EventListResponseDto
+  EventListResponseDto,
+  NearEventListRequestDto
 } from '../types';
 import { UseQueryOptionsType } from '@src/common/types/utilType';
 
@@ -68,6 +69,43 @@ export const useFetchAreaCodeListQuery = (
         code: `${areaCode}-${code}`,
         name
       }))
+  });
+};
+
+export const useFetchNearEventListInfiniteQuery = (
+  params: {
+    numOfRows: number;
+    pageNo: number;
+    mapX: string;
+    mapY: string;
+  },
+  options?: Omit<UseQueryOptionsType<EventListResponseDto>, 'select'>
+) => {
+  return useInfiniteQuery({
+    queryKey: `getNearEventList/${params.mapX}/${params.mapY}`,
+    queryFn: async ({ pageParam = params.pageNo }) => {
+      const data = await axios.get<EventListResponseDto>(
+        `${import.meta.env.VITE_TOUR_API_END_POINT}/locationBasedList1` || '',
+        {
+          params: {
+            ...params,
+            pageNo: pageParam,
+            _type: 'json',
+            serviceKey: import.meta.env.VITE_TOUR_API_KEY,
+            MobileOS: 'ETC',
+            MobileApp: 'hanginthere',
+            radius: '5000' // 반경 5KM 이내
+          } as NearEventListRequestDto
+        }
+      );
+      return data;
+    },
+    getNextPageParam: lastPage => lastPage.data.response.body.pageNo + 1,
+    select: ({ pages, pageParams }) => ({
+      pages: pages.flatMap(({ data }) => data.response.body.items.item),
+      pageParams
+    }),
+    ...options
   });
 };
 
