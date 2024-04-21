@@ -1,5 +1,8 @@
 import { MobileOSType, StringBoolean } from '@src/common/types';
-import { ApiDataResponseType } from '@src/common/types/utilType';
+import {
+  ApiDataResponseType,
+  ApiPaginationDataResponseType
+} from '@src/common/types/utilType';
 
 export interface EventListRequestDtoNew {
   area_cd: string;
@@ -34,7 +37,9 @@ export interface NearEventListRequestDto extends EventListRequestDto {
 }
 
 export type EventListResponseDto = ApiDataResponseType<EventDataType[]>;
-export type EventListResponseDtoNew = ApiDataResponseType<EventDataTypeNew[]>;
+export type EventListResponseDtoNew = ApiPaginationDataResponseType<
+  EventDataTypeNew[]
+>;
 
 export interface EventDataTypeNew {
   event_id: number;

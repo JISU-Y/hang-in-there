@@ -1,4 +1,3 @@
-import { parse } from 'date-fns';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import {
@@ -11,7 +10,6 @@ import {
 } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { formatDate } from '@src/logics/utils/dateFormat';
-import { formatISO } from 'date-fns/fp';
 
 interface EventCardProps {
   eventId: string;
@@ -33,10 +31,8 @@ const EventCard = ({
   location
 }: EventCardProps) => {
   const getFormattedDate = (date: string) => {
-    const parsedDateString = parse(date, 'yyyyMMdd', new Date());
-
     const formattedDate = formatDate({
-      date: formatISO(parsedDateString),
+      date,
       customType: 'yy/MM/dd'
     });
 

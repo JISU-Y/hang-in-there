@@ -1,13 +1,9 @@
 import { useEffect, useState } from 'react';
 
-import { format } from 'date-fns';
 import styled from '@emotion/styled';
 import { SimpleGrid } from '@chakra-ui/react';
 
-import {
-  useFetchEventListInfiniteQuery,
-  useFetchEventListInfiniteQueryH
-} from './network/eventListQueries';
+import { useFetchEventListInfiniteQuery } from './network/eventListQueries';
 import Filter from './components/Filter';
 import EventCard from './components/EventCard';
 import { useSearchParams } from 'react-router-dom';
@@ -25,30 +21,19 @@ const CategoryPage = () => {
     mapY: string;
   }>();
 
-  // TODO: regions에 들어있는 코드 모두를 이용해서 해당하는 것들 모두 가져와야 함.
-  // TODO: category에 따라 다르게 요청해야 함.
   const {
     data: eventListPageData,
-    fetchNextPage,
+    fetchNextPage: fetchNextPageEventList,
     isLoading
   } = useFetchEventListInfiniteQuery({
-    numOfRows: 10,
-    eventStartDate: format(new Date(), 'yyyyMMdd'),
-    pageNo: 1,
-    areaCode: regions?.[0]?.areaCode,
-    sigunguCode: regions?.[0]?.sigunguCode || ''
+    size: 10,
+    page: 1,
+    area_cd: '3'
+    // sigungu_cd: regions?.[0]?.sigunguCode
+    // category: string;
+    // sub_category: string;
+    // de.tail_sub_category?: string;
   });
-
-  // const { data: eventListPageDataNew, fetchNextPage: fetchNextPageEventList } =
-  //   useFetchEventListInfiniteQueryH({
-  //     size: 10,
-  //     page: 1
-  //     // area_cd: regions?.[0]?.areaCode,
-  //     // sigungu_cd: regions?.[0]?.sigunguCode
-  //     // category: string;
-  //     // sub_category: string;
-  //     // detail_sub_category?: string;
-  //   });
 
   const handleSetGeoLocation = (param: { mapX: string; mapY: string }) => {
     setGeoLocation(param);
@@ -85,16 +70,16 @@ const CategoryPage = () => {
             ) : (
               eventListPageData?.pages?.flatMap(event => (
                 <EventCard
-                  key={event.contentid}
-                  eventId={event.contentid}
-                  imageUrl={event.firstimage}
+                  key={event.event_id}
+                  eventId={String(event.event_id)}
+                  imageUrl={event.image}
                   title={event.title}
                   status="always"
                   range={{
-                    startDate: event.eventstartdate,
-                    endDate: event.eventenddate
+                    startDate: event.event_st,
+                    endDate: event.event_ed
                   }}
-                  location={event.addr1}
+                  location={event.title}
                 />
               ))
             )}
@@ -103,7 +88,7 @@ const CategoryPage = () => {
             )}
           </SimpleGrid>
           <HeightImpressionArea
-            onImpressionStart={() => fetchNextPage()}
+            onImpressionStart={() => fetchNextPageEventList()}
             areaThreshold={0.5}
           />
         </CardListContainer>
