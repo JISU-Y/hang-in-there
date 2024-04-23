@@ -29,24 +29,22 @@ export default ({ mode }) => {
       ]
     },
     plugins: [react(), viteTsconfigPaths()],
-    server:
-      env.VITE_ENVIRONMENT !== 'production'
-        ? {
-            // Proxy 설정
-            proxy: {
-              // 경로가 "/api" 로 시작하는 요청을 대상으로 proxy 설정
-              '/api': {
-                // 요청 전달 대상 서버 주소 설정
-                target: 'http://59.7.183.217:3000', // env.VITE_TOUR_API_END_POINT,
-                // 요청 헤더 host 필드 값을 대상 서버의 호스트 이름으로  변경
-                changeOrigin: true,
-                // 요청 경로에서 '/api' 제거
-                rewrite: path => path.replace(/^\/api/, ''),
-                // SSL 인증서 검증 무시
-                secure: false
-              }
-            }
-          }
-        : undefined
+    // NOTE: 임시로 proxy production에도 설정
+    server: {
+      // Proxy 설정
+      proxy: {
+        // 경로가 "/api" 로 시작하는 요청을 대상으로 proxy 설정
+        '/api': {
+          // 요청 전달 대상 서버 주소 설정
+          target: 'http://59.7.183.217:3000', // env.VITE_TOUR_API_END_POINT,
+          // 요청 헤더 host 필드 값을 대상 서버의 호스트 이름으로  변경
+          changeOrigin: true,
+          // 요청 경로에서 '/api' 제거
+          rewrite: path => path.replace(/^\/api/, ''),
+          // SSL 인증서 검증 무시
+          secure: false
+        }
+      }
+    }
   });
 };
