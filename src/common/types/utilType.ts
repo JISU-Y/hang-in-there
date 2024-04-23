@@ -17,6 +17,18 @@ export interface ApiDataResponseType<T> {
   };
 }
 
+export interface ApiPaginationDataResponseType<T> {
+  data: T;
+  pagination: {
+    totalItem: number;
+    totalPage: number;
+    size: number;
+    page: number;
+  };
+  message: string;
+  timeStamp: string;
+}
+
 /* UseQuery 커스텀 훅 만들 때 options 인자의 타이핑을 도와주는 유틸 타입 */
 export type UseQueryOptionsType<T> = T extends AxiosResponse<infer TData>
   ? UseQueryOptions<T, unknown, TData>

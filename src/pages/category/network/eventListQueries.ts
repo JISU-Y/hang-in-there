@@ -102,9 +102,11 @@ export const useFetchNearEventListInfiniteQuery = (
       );
       return data;
     },
-    getNextPageParam: lastPage => lastPage.data.response.body.pageNo + 1,
+    getNextPageParam: lastPage => lastPage.data.response?.body.pageNo + 1,
     select: ({ pages, pageParams }) => ({
-      pages: pages.flatMap(({ data }) => data.response.body.items.item),
+      pages: pages
+        .flatMap(({ data }) => data.response?.body.items.item)
+        .filter(el => el),
       pageParams
     }),
     ...options
@@ -112,44 +114,8 @@ export const useFetchNearEventListInfiniteQuery = (
 };
 
 export const useFetchEventListInfiniteQuery = (params: {
-  numOfRows: number;
-  areaCode?: string;
-  sigunguCode?: string;
-  eventStartDate: string;
-  eventEndDate?: string;
-  pageNo: number;
-}) => {
-  return useInfiniteQuery({
-    queryKey: [`getEventList/${params.eventStartDate}/${params.areaCode}`],
-    queryFn: async ({ pageParam = params.pageNo }) => {
-      const data = await axios.get<EventListResponseDto>(
-        `${import.meta.env.VITE_TOUR_API_END_POINT}/searchFestival1` || '',
-        {
-          params: {
-            ...params,
-            pageNo: pageParam,
-            _type: 'json',
-            serviceKey: import.meta.env.VITE_TOUR_API_KEY,
-            arrange: 'R',
-            MobileOS: 'ETC',
-            MobileApp: 'hanginthere'
-          } as EventListRequestDto
-        }
-      );
-      return data;
-    },
-    getNextPageParam: lastPage => lastPage.data.response.body.pageNo + 1,
-    select: ({ pages, pageParams }) => ({
-      pages: pages.flatMap(({ data }) => data.response.body.items.item),
-      pageParams
-    })
-  });
-};
-
-export const useFetchEventListInfiniteQueryH = (params: {
-  area_cd: string;
+  area_cd?: string;
   sigungu_cd?: string;
-  category?: string;
   sub_category?: string;
   detail_sub_category?: string;
   size: number;
@@ -157,23 +123,24 @@ export const useFetchEventListInfiniteQueryH = (params: {
 }) => {
   return useInfiniteQuery({
     queryKey: [
-      `event/${params.area_cd}/${params.sigungu_cd}/${params.category}/${params.sub_category}/${params.detail_sub_category}`
+      `event/${params.area_cd}/${params.sigungu_cd}/${params.sub_category}/${params.detail_sub_category}`
     ],
     queryFn: async ({ pageParam = params.page }) => {
       const data = await axios.get<EventListResponseDtoNew>(
-        `${import.meta.env.VITE_HANGINTHERE_API_END_POINT}/v1/user/event` || '',
+        `/api/v1/user/event` || '',
         {
           params: {
             ...params,
+            category: '264', // A02
             page: pageParam
           } as EventListRequestDtoNew
         }
       );
       return data;
     },
-    getNextPageParam: lastPage => lastPage.data.response.body.pageNo + 1,
+    getNextPageParam: lastPage => lastPage.data.pagination.page + 1,
     select: ({ pages, pageParams }) => ({
-      pages: pages.flatMap(({ data }) => data.response.body.items.item),
+      pages: pages.flatMap(({ data }) => data.data),
       pageParams
     })
   });

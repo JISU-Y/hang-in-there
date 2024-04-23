@@ -1,5 +1,8 @@
 import { MobileOSType, StringBoolean } from '@src/common/types';
-import { ApiDataResponseType } from '@src/common/types/utilType';
+import {
+  ApiDataResponseType,
+  ApiPaginationDataResponseType
+} from '@src/common/types/utilType';
 
 export interface EventListRequestDtoNew {
   area_cd: string;
@@ -34,7 +37,9 @@ export interface NearEventListRequestDto extends EventListRequestDto {
 }
 
 export type EventListResponseDto = ApiDataResponseType<EventDataType[]>;
-export type EventListResponseDtoNew = ApiDataResponseType<EventDataTypeNew[]>;
+export type EventListResponseDtoNew = ApiPaginationDataResponseType<
+  EventDataTypeNew[]
+>;
 
 export interface EventDataTypeNew {
   event_id: number;
@@ -89,9 +94,10 @@ export interface AreaCodeRequestDto {
 export type AreaCodeResponseDto = ApiDataResponseType<AreaCodeDataType[]>;
 
 export interface AreaCodeDataType {
-  code: string;
+  code: number;
   name: string;
   rnum: string;
 }
 
-export type AreaCodeType = Omit<AreaCodeDataType, 'rnum'>; // (typeof REGION_CODE)[keyof typeof REGION_CODE];
+export type AreaCodeType = Omit<AreaCodeDataType, 'rnum'>; // (typeof AREA_CODE)[keyof typeof AREA_CODE];
+export type AreaCodeParamType = AreaCodeType['code'];
