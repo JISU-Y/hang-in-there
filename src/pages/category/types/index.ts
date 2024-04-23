@@ -94,9 +94,10 @@ export interface AreaCodeRequestDto {
 export type AreaCodeResponseDto = ApiDataResponseType<AreaCodeDataType[]>;
 
 export interface AreaCodeDataType {
-  code: string;
+  code: number;
   name: string;
   rnum: string;
 }
 
-export type AreaCodeType = Omit<AreaCodeDataType, 'rnum'>; // (typeof REGION_CODE)[keyof typeof REGION_CODE];
+export type AreaCodeType = Omit<AreaCodeDataType, 'rnum'>; // (typeof AREA_CODE)[keyof typeof AREA_CODE];
+export type AreaCodeParamType = AreaCodeType['code'];

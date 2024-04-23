@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import styled from '@emotion/styled';
 import { SimpleGrid } from '@chakra-ui/react';
@@ -10,12 +10,16 @@ import { useSearchParams } from 'react-router-dom';
 import { ImpressionArea } from '@toss/impression-area';
 import EmptyResult from './components/EmptyResult/EmptyResult';
 import Breadcrumbs from '@src/common/components/Breadcrums/Breadcrums';
+import {
+  CATEGORY_CODE,
+  CategoryCodeType
+} from '@src/common/constants/categories';
 
 const CategoryPage = () => {
   const [searchParams] = useSearchParams();
-  const [regions, setRegions] = useState<
-    { areaCode: string; sigunguCode: string }[]
-  >([]);
+  const categoryCode = searchParams.get('category') as CategoryCodeType;
+  const areaCode = searchParams.getAll('areaCode')?.[0];
+
   const [geoLocation, setGeoLocation] = useState<{
     mapX: string;
     mapY: string;
@@ -28,27 +32,18 @@ const CategoryPage = () => {
   } = useFetchEventListInfiniteQuery({
     size: 10,
     page: 1,
-    area_cd: '3'
-    // sigungu_cd: regions?.[0]?.sigunguCode
-    // category: string;
-    // sub_category: string;
-    // de.tail_sub_category?: string;
+    area_cd: areaCode,
+    ...(categoryCode && {
+      sub_category: String(CATEGORY_CODE[categoryCode].code) || undefined
+    }),
+    ...(categoryCode && {
+      detail_sub_category: CATEGORY_CODE[categoryCode].subCategoryList.join(',')
+    })
   });
 
   const handleSetGeoLocation = (param: { mapX: string; mapY: string }) => {
     setGeoLocation(param);
   };
-
-  useEffect(() => {
-    const parsedRegions = searchParams.get('region')?.split(',');
-    const regionObjList =
-      parsedRegions?.map(region => ({
-        areaCode: region.split('-')[0],
-        sigunguCode: region.split('-')[1]
-      })) || [];
-
-    setRegions(regionObjList);
-  }, [searchParams.get('region'), setRegions]);
 
   return (
     <ContentWrapper>

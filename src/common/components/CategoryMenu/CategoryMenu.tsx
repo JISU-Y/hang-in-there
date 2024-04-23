@@ -1,16 +1,20 @@
 import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import styled from '@emotion/styled';
-import { categories } from '@src/common/constants/categories';
+import {
+  CATEGORY_CODE,
+  CategoryCodeType,
+  categories
+} from '@src/common/constants/categories';
 
 const CategoryMenu = () => {
   const [, setMenuEl] = useState<HTMLDivElement | null>(null);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
-  // TODO: 추후 hover시 dropdown으로 처리
   // const [dropdownEl, setDropdownEl] = useState<HTMLUListElement | null>(null);
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const categoryCode = searchParams.get('category') as CategoryCodeType;
 
   const handleMouseEnterMenu = (menuName: string) => {
     setActiveMenu(menuName === activeMenu ? null : menuName);
@@ -20,8 +24,8 @@ const CategoryMenu = () => {
     setActiveMenu(menuName === activeMenu ? null : menuName);
   };
 
-  const handleCategoryClick = (category: string) => {
-    navigate(`/category?category=${category}`);
+  const handleCategoryClick = (categoryCode: string) => {
+    navigate(`/category?category=${categoryCode}`);
   };
 
   // useOutsideClickEffect([menuEl, dropdownEl], () => {
@@ -42,12 +46,12 @@ const CategoryMenu = () => {
             }
             onMouseEnter={() => handleMouseEnterMenu(category.name)}
             onMouseLeave={() => handleMouseLeaveMenu(category.name)}
-            onClick={() => handleCategoryClick(category.name)}
+            onClick={() => handleCategoryClick(category.code)}
           >
             <MenuName
               $isActive={
                 activeMenu === category.name ||
-                searchParams.get('category') === category.name
+                CATEGORY_CODE[categoryCode]?.name === category.name
               }
             >
               {category.name}

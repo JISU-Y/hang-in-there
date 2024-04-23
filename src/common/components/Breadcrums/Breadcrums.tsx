@@ -1,9 +1,16 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 import queryString from 'query-string';
 import { ChevronRightIcon } from '@chakra-ui/icons';
+import {
+  CATEGORY_CODE,
+  CategoryCodeType
+} from '@src/common/constants/categories';
 
 const Breadcrumbs = () => {
+  const [searchParams] = useSearchParams();
+  const categoryCode = searchParams.get('category') as CategoryCodeType;
+
   const location = useLocation();
   const queryParams = queryString.parse(location.search);
   const category = queryParams.category as string;
@@ -21,7 +28,7 @@ const Breadcrumbs = () => {
         <ChevronRightIcon w={6} h={6} strokeWidth={1} color="#8B8B8B" />
       </Separator>,
       <BreadcrumbLink key="category" to={`/category?category=${category}`}>
-        {category}
+        {CATEGORY_CODE[categoryCode].name}
       </BreadcrumbLink>
     );
   }

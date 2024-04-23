@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-import { format } from 'date-fns';
+import { omit } from 'lodash';
 
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
@@ -21,11 +21,12 @@ import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 
 import useGeoLocationPoint from '@src/logics/hooks/useGeoLocation';
 
-import { REGION_CODE } from '../../constants/categories';
-import { useFetchAreaCodeListQuery } from '../../network/eventListQueries';
+import { AREA_CODE } from '../../constants/categories';
 import { AreaCodeType } from '../../types';
 import NearEventListModal from '../../modal/NearEventListModal/NearEventListModal';
 import LocationIcon from '@src/styles/icons/LocationIcon';
+import { useLocation, useNavigate } from 'react-router-dom';
+import queryString from 'query-string';
 
 interface FilterProps {
   mapX: string;
@@ -34,31 +35,52 @@ interface FilterProps {
 }
 
 const Filter = ({ mapX, mapY, handleSetGeoLocation }: FilterProps) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const [selectedRegions, setSelectedRegions] = useState<AreaCodeType[]>([]);
-  const [currentRegionCode, setCurrentRegionCode] = useState<AreaCodeType>();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { loading: isGeoLocationLoading, loadGeoLocation } =
     useGeoLocationPoint();
 
-  const { data: areaCodeList, refetch: fetchAreaCodeList } =
-    useFetchAreaCodeListQuery(currentRegionCode?.code || '', {
-      enabled: !!currentRegionCode,
-      refetchOnMount: false,
-      refetchOnReconnect: false,
-      refetchInterval: false
-    });
+  // const { data: areaCodeList, refetch: fetchAreaCodeList } =
+  //   useFetchAreaCodeListQuery(String(currentRegionCode?.code), {
+  //     enabled: !!currentRegionCode,
+  //     refetchOnMount: false,
+  //     refetchOnReconnect: false,
+  //     refetchInterval: false
+  //   });
 
   const handleRegionClick = (region: AreaCodeType) => {
-    setCurrentRegionCode(region);
+    const regionCode = String(region.code);
+    const queryParams = queryString.parse(location.search);
+
+    let areaCodes: string[] = queryParams.areaCode
+      ? (queryParams.areaCode as string).split(',')
+      : [];
+
+    if (areaCodes.includes(regionCode)) {
+      // 이미 존재한다면 제거
+      areaCodes = areaCodes.filter(code => code !== regionCode);
+    } else {
+      // 존재하지 않는다면 추가
+      areaCodes.push(regionCode);
+    }
+
+    // 새로운 쿼리 파라미터 객체 생성
+    const newQueryParams =
+      areaCodes.length === 0
+        ? omit(queryParams, 'areaCode')
+        : {
+            ...queryParams,
+            areaCode: areaCodes.join(',')
+          };
+
+    // 새로운 쿼리 파라미터로 URL 업데이트
+    navigate(`${location.pathname}?${queryString.stringify(newQueryParams)}`);
   };
-
-  useEffect(() => {
-    if (!areaCodeList) return;
-
-    fetchAreaCodeList();
-  }, [currentRegionCode, areaCodeList, fetchAreaCodeList]);
 
   const handleRemoveTag = (region: AreaCodeType) => {
     setSelectedRegions(prev =>
@@ -164,16 +186,16 @@ const Filter = ({ mapX, mapY, handleSetGeoLocation }: FilterProps) => {
                 `}
               >
                 <AreaListPanel>
-                  {Object.values(REGION_CODE).map(({ code, name }) => (
-                    <AreaListButton
-                      key={`${name}-${code}`}
-                      role="button"
-                      onClick={() => handleRegionClick({ code, name })}
-                    >
+                  {Object.values(AREA_CODE).map(({ code, name }) => (
+                    <AreaListButton key={`${name}-${code}`} role="button">
                       <Checkbox
                         size="md"
                         colorScheme="blackAlpha"
                         borderColor="black"
+                        onChange={e => {
+                          e.preventDefault();
+                          handleRegionClick({ code, name });
+                        }}
                       >
                         {name}
                       </Checkbox>

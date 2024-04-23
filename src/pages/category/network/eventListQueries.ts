@@ -102,9 +102,11 @@ export const useFetchNearEventListInfiniteQuery = (
       );
       return data;
     },
-    getNextPageParam: lastPage => lastPage.data.response.body.pageNo + 1,
+    getNextPageParam: lastPage => lastPage.data.response?.body.pageNo + 1,
     select: ({ pages, pageParams }) => ({
-      pages: pages.flatMap(({ data }) => data.response.body.items.item),
+      pages: pages
+        .flatMap(({ data }) => data.response?.body.items.item)
+        .filter(el => el),
       pageParams
     }),
     ...options
@@ -112,9 +114,8 @@ export const useFetchNearEventListInfiniteQuery = (
 };
 
 export const useFetchEventListInfiniteQuery = (params: {
-  area_cd: string;
+  area_cd?: string;
   sigungu_cd?: string;
-  category?: string;
   sub_category?: string;
   detail_sub_category?: string;
   size: number;
@@ -122,7 +123,7 @@ export const useFetchEventListInfiniteQuery = (params: {
 }) => {
   return useInfiniteQuery({
     queryKey: [
-      `event/${params.area_cd}/${params.sigungu_cd}/${params.category}/${params.sub_category}/${params.detail_sub_category}`
+      `event/${params.area_cd}/${params.sigungu_cd}/${params.sub_category}/${params.detail_sub_category}`
     ],
     queryFn: async ({ pageParam = params.page }) => {
       const data = await axios.get<EventListResponseDtoNew>(
@@ -130,6 +131,7 @@ export const useFetchEventListInfiniteQuery = (params: {
         {
           params: {
             ...params,
+            category: '264', // A02
             page: pageParam
           } as EventListRequestDtoNew
         }
