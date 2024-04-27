@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { isSameDay } from 'date-fns';
 
 import styled from '@emotion/styled';
@@ -18,9 +18,11 @@ import LocationIcon from '@src/styles/icons/LocationIcon';
 import CallOutgoingIcon from '@src/styles/icons/CallOutgoingIcon';
 import ShareIcon from '@src/styles/icons/ShareIcon';
 import Breadcrumbs from '@src/common/components/Breadcrums/Breadcrums';
+import copyToClipboard from '@src/logics/utils/copyToClipboardHandler';
 
 const EventDetailPage = () => {
   const { contentid } = useParams<{ contentid: string }>();
+  const location = useLocation();
 
   const { data: eventDetail } = useFetchEventDetailQuery(contentid || '');
   const { data: eventDetailIntro } = useFetchEventDetailIntroQuery(
@@ -54,6 +56,14 @@ const EventDetailPage = () => {
       description: eventDetail.overview
     };
   }, [eventDetail, eventDetailIntro]);
+
+  const handleClickShare = () => {
+    copyToClipboard(window.location.href, {
+      resolve: () => {
+        alert('링크가 복사 되었습니다.');
+      }
+    });
+  };
 
   return (
     <Container>
@@ -93,7 +103,9 @@ const EventDetailPage = () => {
                 <span>{eventDetailInfo?.hostPhone}</span>
               </EventHostPhone>
             )}
-            <ShareIcon color="#000000" />
+            <IconButton type="button" onClick={handleClickShare}>
+              <ShareIcon color="#000000" />
+            </IconButton>
           </EventInfoWrapper>
 
           <EventHostInfoWrapper>
@@ -203,6 +215,9 @@ const EventHostPhone = styled.p`
   line-height: 24px;
   font-weight: 400;
   color: #191919;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 `;
 
 const EventHostInfoWrapper = styled.div`
@@ -228,6 +243,11 @@ const HostInfoValue = styled.p`
   a {
     text-decoration: underline;
   }
+`;
+
+const IconButton = styled.button`
+  width: fit-content;
+  cursor: pointer;
 `;
 
 export default EventDetailPage;

@@ -27,7 +27,7 @@ const bannerList = [
   },
   {
     themeColor: '#FF7D34',
-    title: `마주, 봄. 함께라서 행복한 자기\n여주 도자기 축제`,
+    title: `마주, 봄.\n함께라서 행복한 자기\n여주 도자기 축제`,
     contentId: '3',
     link: '',
     backgroundImageUrl: 'banner/yeoju-festival-background.png',
@@ -58,7 +58,7 @@ const settings: Settings = {
   speed: 500,
   slidesToShow: 1,
   slidesToScroll: 1,
-  // autoplay: true,
+  autoplay: true,
   autoplaySpeed: 4800,
   arrows: false,
   touchThreshold: 100
