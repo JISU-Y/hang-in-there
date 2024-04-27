@@ -25,6 +25,24 @@ export const CATEGORY_CODE = {
   }
 } as const;
 
+export const STATUS_CODE = {
+  A0207: {
+    name: '축제',
+    code: 278,
+    subCategoryList: [361, 362]
+  },
+  A0208: {
+    name: '공연',
+    code: 279,
+    subCategoryList: [363, 364, 365, 366, 369, 370, 371, 372]
+  },
+  A0209: {
+    name: '전시',
+    code: 279,
+    subCategoryList: [367, 368, 373, 374]
+  }
+} as const;
+
 // 363	A02080100	전통공연
 // 364	A02080200	연극
 // 365	A02080300	뮤지컬
