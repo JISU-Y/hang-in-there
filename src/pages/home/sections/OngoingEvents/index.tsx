@@ -20,7 +20,6 @@ import { useFetchEventListQuery } from '../../network/eventListQueries';
 
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import './custom-slick.css';
 
 const settings: Settings = {
   dots: false,
@@ -171,6 +170,14 @@ const SliderWrapper = styled.div`
   flex-shrink: 0;
   border-radius: 4px;
   padding: 8px 0;
+
+  .slick-list {
+    margin: 0 -7px;
+
+    & .slick-slide > div {
+      padding: 0 16px;
+    }
+  }
 `;
 
 const ImageWrapper = styled.div`

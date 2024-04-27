@@ -68,7 +68,7 @@ const PageLayout = ({
                 <p>
                   <span>Contact</span>teamhangindle@gmail.com
                 </p>
-                <p>Copyright hangindle. All rights reserved</p>
+                <p>Copyright 2024. 행인들 All rights reserved.</p>
               </div>
             </CopyRightWrapper>
             <ExternalLinksWrapper>
