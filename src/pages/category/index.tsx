@@ -19,6 +19,7 @@ const CategoryPage = () => {
   const [searchParams] = useSearchParams();
   const categoryCode = searchParams.get('category') as CategoryCodeType;
   const areaCode = searchParams.getAll('areaCode')?.[0];
+  const status = searchParams.getAll('status')?.[0];
 
   const [geoLocation, setGeoLocation] = useState<{
     mapX: string;
@@ -33,6 +34,7 @@ const CategoryPage = () => {
     size: 10,
     page: 1,
     area_cd: areaCode,
+    status,
     ...(categoryCode && {
       sub_category: String(CATEGORY_CODE[categoryCode].code) || undefined
     }),

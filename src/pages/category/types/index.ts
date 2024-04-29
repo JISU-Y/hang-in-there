@@ -4,6 +4,8 @@ import {
   ApiPaginationDataResponseType
 } from '@src/common/types/utilType';
 
+export type EventStatusEnumType = 'on_going' | 'up_comming' | 'closed';
+
 export interface EventListRequestDtoNew {
   area_cd: string;
   sigungu_cd?: string;
@@ -54,6 +56,7 @@ export interface EventDataTypeNew {
   category: number;
   sub_category: number;
   detail_sub_category: number;
+  status: EventStatusEnumType;
 }
 
 export interface EventDataType {

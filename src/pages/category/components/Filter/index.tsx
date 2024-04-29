@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import { omit } from 'lodash';
 
 import { css } from '@emotion/react';
@@ -10,9 +8,6 @@ import {
   AccordionButton,
   AccordionPanel,
   Stack,
-  Tag,
-  TagLabel,
-  TagCloseButton,
   Checkbox,
   Divider,
   useDisclosure
@@ -22,11 +17,17 @@ import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import useGeoLocationPoint from '@src/logics/hooks/useGeoLocation';
 
 import { AREA_CODE } from '../../constants/categories';
-import { AreaCodeType } from '../../types';
+import { AreaCodeType, EventStatusEnumType } from '../../types';
 import NearEventListModal from '../../modal/NearEventListModal/NearEventListModal';
 import LocationIcon from '@src/styles/icons/LocationIcon';
 import { useLocation, useNavigate } from 'react-router-dom';
 import queryString from 'query-string';
+
+const EVENT_STATUS = {
+  on_going: '진행 중',
+  up_comming: '진행 예정',
+  closed: '진행 마감'
+} as const;
 
 interface FilterProps {
   mapX: string;
@@ -38,20 +39,10 @@ const Filter = ({ mapX, mapY, handleSetGeoLocation }: FilterProps) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [selectedRegions, setSelectedRegions] = useState<AreaCodeType[]>([]);
-
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { loading: isGeoLocationLoading, loadGeoLocation } =
     useGeoLocationPoint();
-
-  // const { data: areaCodeList, refetch: fetchAreaCodeList } =
-  //   useFetchAreaCodeListQuery(String(currentRegionCode?.code), {
-  //     enabled: !!currentRegionCode,
-  //     refetchOnMount: false,
-  //     refetchOnReconnect: false,
-  //     refetchInterval: false
-  //   });
 
   const handleRegionClick = (region: AreaCodeType) => {
     const regionCode = String(region.code);
@@ -82,10 +73,32 @@ const Filter = ({ mapX, mapY, handleSetGeoLocation }: FilterProps) => {
     navigate(`${location.pathname}?${queryString.stringify(newQueryParams)}`);
   };
 
-  const handleRemoveTag = (region: AreaCodeType) => {
-    setSelectedRegions(prev =>
-      prev.filter(el => JSON.stringify(el) !== JSON.stringify(region))
-    );
+  const handleStatusClick = (status: EventStatusEnumType) => {
+    const queryParams = queryString.parse(location.search);
+
+    let selectedStatus: string[] = queryParams.status
+      ? (queryParams.status as string).split(',')
+      : [];
+
+    if (selectedStatus.includes(status)) {
+      // 이미 존재한다면 제거
+      selectedStatus = selectedStatus.filter(st => st !== status);
+    } else {
+      // 존재하지 않는다면 추가
+      selectedStatus.push(status);
+    }
+
+    // 새로운 쿼리 파라미터 객체 생성
+    const newQueryParams =
+      selectedStatus.length === 0
+        ? omit(queryParams, 'status')
+        : {
+            ...queryParams,
+            status: selectedStatus.join(',')
+          };
+
+    // 새로운 쿼리 파라미터로 URL 업데이트
+    navigate(`${location.pathname}?${queryString.stringify(newQueryParams)}`);
   };
 
   const handleClickFindNearEvent = async () => {
@@ -155,27 +168,6 @@ const Filter = ({ mapX, mapY, handleSetGeoLocation }: FilterProps) => {
                       />
                     )}
                   </FilterTitle>
-                  <FilterTagWrapper>
-                    <RegionTagsWrapper>
-                      {selectedRegions.map(({ code, name }) => (
-                        <Tag
-                          key={`${name}-${code}`}
-                          size="sm"
-                          borderRadius="full"
-                          variant="solid"
-                          colorScheme="orange"
-                        >
-                          <TagLabel>{name}</TagLabel>
-                          <TagCloseButton
-                            onClick={e => {
-                              e.preventDefault();
-                              handleRemoveTag({ code, name });
-                            }}
-                          />
-                        </Tag>
-                      ))}
-                    </RegionTagsWrapper>
-                  </FilterTagWrapper>
                 </AccordionButton>
               </Stack>
               <AccordionPanel
@@ -186,21 +178,29 @@ const Filter = ({ mapX, mapY, handleSetGeoLocation }: FilterProps) => {
                 `}
               >
                 <AreaListPanel>
-                  {Object.values(AREA_CODE).map(({ code, name }) => (
-                    <AreaListButton key={`${name}-${code}`} role="button">
-                      <Checkbox
-                        size="md"
-                        colorScheme="blackAlpha"
-                        borderColor="black"
-                        onChange={e => {
-                          e.preventDefault();
-                          handleRegionClick({ code, name });
-                        }}
-                      >
-                        {name}
-                      </Checkbox>
-                    </AreaListButton>
-                  ))}
+                  {Object.values(AREA_CODE).map(({ code, name }) => {
+                    const queryParams = queryString.parse(location.search);
+                    const areaCodes: string[] = queryParams.areaCode
+                      ? (queryParams.areaCode as string).split(',')
+                      : [];
+
+                    return (
+                      <AreaListButton key={`${name}-${code}`} role="button">
+                        <Checkbox
+                          size="md"
+                          colorScheme="blackAlpha"
+                          borderColor="black"
+                          defaultChecked={areaCodes.includes(String(code))}
+                          onChange={e => {
+                            e.preventDefault();
+                            handleRegionClick({ code, name });
+                          }}
+                        >
+                          {name}
+                        </Checkbox>
+                      </AreaListButton>
+                    );
+                  })}
                 </AreaListPanel>
               </AccordionPanel>
             </>
@@ -249,24 +249,29 @@ const Filter = ({ mapX, mapY, handleSetGeoLocation }: FilterProps) => {
                 `}
               >
                 <AreaListPanel>
-                  <AreaListButton role="button">
-                    <Checkbox
-                      size="md"
-                      colorScheme="blackAlpha"
-                      borderColor="black"
-                    >
-                      진행 예정
-                    </Checkbox>
-                  </AreaListButton>
-                  <AreaListButton role="button">
-                    <Checkbox
-                      size="md"
-                      colorScheme="blackAlpha"
-                      borderColor="black"
-                    >
-                      진행 중
-                    </Checkbox>
-                  </AreaListButton>
+                  {Object.entries(EVENT_STATUS).map(([key, value]) => {
+                    const queryParams = queryString.parse(location.search);
+                    const selectedStatus: string[] = queryParams.status
+                      ? (queryParams.status as string).split(',')
+                      : [];
+
+                    return (
+                      <AreaListButton key={key} role="button">
+                        <Checkbox
+                          size="md"
+                          colorScheme="blackAlpha"
+                          borderColor="black"
+                          defaultChecked={selectedStatus?.includes(key)}
+                          onChange={e => {
+                            e.preventDefault();
+                            handleStatusClick(key as EventStatusEnumType);
+                          }}
+                        >
+                          {value}
+                        </Checkbox>
+                      </AreaListButton>
+                    );
+                  })}
                 </AreaListPanel>
               </AccordionPanel>
             </>
@@ -301,19 +306,6 @@ const FilterTitle = styled.h2`
   display: flex;
   align-items: center;
   justify-content: space-between;
-`;
-
-const FilterTagWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  width: 100%;
-`;
-
-const RegionTagsWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-left: 8px;
 `;
 
 const AreaListPanel = styled.ul`

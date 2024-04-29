@@ -121,10 +121,11 @@ export const useFetchEventListInfiniteQuery = (params: {
   detail_sub_category?: string;
   size: number;
   page: number;
+  status: string;
 }) => {
   return useInfiniteQuery({
     queryKey: [
-      `event/${params.area_cd}/${params.sigungu_cd}/${params.sub_category}/${params.detail_sub_category}`
+      `event/${params.area_cd}/${params.status}/${params.sigungu_cd}/${params.sub_category}/${params.detail_sub_category}`
     ],
     queryFn: async ({ pageParam = params.page }) => {
       const data = await axios.get<EventListResponseDtoNew>(
