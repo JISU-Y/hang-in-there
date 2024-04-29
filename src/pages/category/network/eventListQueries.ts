@@ -94,6 +94,7 @@ export const useFetchNearEventListInfiniteQuery = (
             pageNo: pageParam,
             _type: 'json',
             serviceKey: import.meta.env.VITE_TOUR_API_KEY,
+            contentTypeId: 15,
             MobileOS: 'ETC',
             MobileApp: 'hanginthere',
             radius: '5000' // 반경 5KM 이내

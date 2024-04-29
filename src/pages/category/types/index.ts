@@ -28,6 +28,7 @@ export interface EventListRequestDto {
   numOfRows: number;
   pageNo: number;
   serviceKey: string;
+  contentTypeId: number;
 }
 
 export interface NearEventListRequestDto extends EventListRequestDto {
