@@ -67,8 +67,8 @@ const CategoryPage = () => {
             ) : (
               (eventListPageData?.pages || []).flatMap(event => (
                 <EventCard
-                  key={event?.event_id}
-                  eventId={String(event?.event_id)}
+                  key={event.event_id}
+                  eventId={String(event.event_id)}
                   imageUrl={event.image}
                   title={event.title}
                   status="always"
