@@ -34,15 +34,12 @@ const NearEventListModal = ({
     fetchNextPage,
     isLoading,
     isFetchingNextPage
-  } = useFetchNearEventListInfiniteQuery(
-    {
-      numOfRows: 10,
-      pageNo: 1,
-      mapX,
-      mapY
-    },
-    { enabled: !!mapX && !!mapY }
-  );
+  } = useFetchNearEventListInfiniteQuery({
+    numOfRows: 10,
+    pageNo: 1,
+    mapX,
+    mapY
+  });
 
   return (
     <Modal
@@ -57,12 +54,16 @@ const NearEventListModal = ({
         <ModalHeader>내 주변 행사</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          {(isLoading || isLocationLoading) && (
+          {isLoading || isLocationLoading ? (
             <div>내 주변 행사 로딩 중...</div>
+          ) : (
+            (!nearEventList || nearEventList?.pages.length === 0) && (
+              <div>권한 재설정해주세요</div>
+            )
           )}
           <SimpleGrid minChildWidth="232px" spacing="32px">
             {nearEventList &&
-              nearEventList.pages?.map(event => (
+              nearEventList.pages.map(event => (
                 <EventCard
                   key={event.contentid}
                   eventId={event.contentid}
@@ -75,7 +76,11 @@ const NearEventListModal = ({
             {isFetchingNextPage && <div>...</div>}
           </SimpleGrid>
           <HeightImpressionArea
-            onImpressionStart={() => fetchNextPage()}
+            onImpressionStart={() => {
+              if (!!mapX && !!mapY) {
+                fetchNextPage();
+              }
+            }}
             areaThreshold={0.5}
           />
         </ModalBody>
