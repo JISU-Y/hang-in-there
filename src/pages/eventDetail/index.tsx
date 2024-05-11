@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { isSameDay } from 'date-fns';
 
 import styled from '@emotion/styled';
@@ -17,12 +17,13 @@ import DetailInfoSection from './sections/DetailInfoSection/DetailInfoSection';
 import LocationIcon from '@src/styles/icons/LocationIcon';
 import CallOutgoingIcon from '@src/styles/icons/CallOutgoingIcon';
 import ShareIcon from '@src/styles/icons/ShareIcon';
-import Breadcrumbs from '@src/common/components/Breadcrums/Breadcrums';
 import copyToClipboard from '@src/logics/utils/copyToClipboardHandler';
+import usePreventScrollRestoration from '@src/logics/hooks/usePreventScrollRestoration';
 
 const EventDetailPage = () => {
   const { contentid } = useParams<{ contentid: string }>();
-  const location = useLocation();
+
+  usePreventScrollRestoration();
 
   const { data: eventDetail } = useFetchEventDetailQuery(contentid || '');
   const { data: eventDetailIntro } = useFetchEventDetailIntroQuery(
@@ -67,9 +68,9 @@ const EventDetailPage = () => {
 
   return (
     <Container>
-      <BreadcrumWrapper>
+      {/* <BreadcrumWrapper>
         <Breadcrumbs />
-      </BreadcrumWrapper>
+      </BreadcrumWrapper> */}
 
       <ContentWrapper>
         <ImageWrapper>
@@ -115,9 +116,13 @@ const EventDetailPage = () => {
           <EventHostInfoWrapper>
             <HostInfoKey>주최</HostInfoKey>
             <HostInfoValue>
-              <a href={eventDetailInfo?.homePageLink} target="_blank">
-                {eventDetailInfo?.hostName || eventDetailInfo?.homePageLink}
-              </a>
+              {eventDetailInfo?.homePageLink ? (
+                <a href={eventDetailInfo?.homePageLink} target="_blank">
+                  {eventDetailInfo?.hostName || eventDetailInfo?.homePageLink}
+                </a>
+              ) : (
+                <span>{eventDetailInfo?.hostName}</span>
+              )}
             </HostInfoValue>
           </EventHostInfoWrapper>
         </DetailWrapper>
@@ -132,7 +137,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 72px;
-  padding: 64px 48px;
+  padding: 32px 48px 64px;
 `;
 
 const BreadcrumWrapper = styled.div`
