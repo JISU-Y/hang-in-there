@@ -62,7 +62,7 @@ const CategoryPage = () => {
 
         <CardListContainer>
           <SimpleGrid minChildWidth="232px" spacing="32px">
-            {isLoading ? (
+            {isLoading || !eventListPageData ? (
               <div>loading..</div>
             ) : (
               eventListPageData?.pages?.flatMap(event => (
