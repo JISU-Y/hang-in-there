@@ -141,7 +141,7 @@ export const useFetchEventListInfiniteQuery = (params: {
       );
       return data;
     },
-    getNextPageParam: lastPage => lastPage.data.pagination.page + 1,
+    getNextPageParam: lastPage => lastPage.data.pagination?.page + 1,
     select: ({ pages, pageParams }) => ({
       pages: pages.flatMap(({ data }) => data.data),
       pageParams
