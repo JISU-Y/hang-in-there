@@ -65,23 +65,20 @@ const CategoryPage = () => {
             {isLoading ? (
               <div>loading..</div>
             ) : (
-              eventListPageData?.pages?.flatMap(
-                event =>
-                  event && (
-                    <EventCard
-                      key={event?.event_id}
-                      eventId={String(event?.event_id)}
-                      imageUrl={event.image}
-                      title={event.title}
-                      status="always"
-                      range={{
-                        startDate: event.event_st,
-                        endDate: event.event_ed
-                      }}
-                      location={event.title}
-                    />
-                  )
-              )
+              (eventListPageData?.pages || []).flatMap(event => (
+                <EventCard
+                  key={event?.event_id}
+                  eventId={String(event?.event_id)}
+                  imageUrl={event.image}
+                  title={event.title}
+                  status="always"
+                  range={{
+                    startDate: event.event_st,
+                    endDate: event.event_ed
+                  }}
+                  location={event.title}
+                />
+              ))
             )}
             {!isLoading && (eventListPageData?.pages?.length || 0) === 0 && (
               <EmptyResult />
