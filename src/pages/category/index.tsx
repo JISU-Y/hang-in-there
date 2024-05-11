@@ -65,6 +65,7 @@ const CategoryPage = () => {
             {isLoading ? (
               <div>loading..</div>
             ) : (
+              (eventListPageData?.pages.length || 0) > 0 &&
               eventListPageData?.pages?.flatMap(event => (
                 <EventCard
                   key={event.event_id}
