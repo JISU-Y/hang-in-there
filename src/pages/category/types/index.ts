@@ -56,7 +56,10 @@ export interface EventDataTypeNew {
   category: number;
   sub_category: number;
   detail_sub_category: number;
-  status: EventStatusEnumType;
+  reg_dt: string;
+  addr: string;
+  addr_detail: string;
+  // status: EventStatusEnumType;
 }
 
 export interface EventDataType {

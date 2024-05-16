@@ -7,8 +7,6 @@ import {
   Image,
   Text
 } from '@chakra-ui/react';
-import { format } from 'date-fns';
-import { isAfter } from 'date-fns/isAfter';
 
 import { useFetchEventListQuery } from '../../network/eventListQueries';
 
@@ -16,8 +14,6 @@ import { Link } from 'react-router-dom';
 import { css } from '@emotion/react';
 import { formatDate } from '@src/logics/utils/dateFormat';
 import { formatISO } from 'date-fns/formatISO';
-import { parse } from 'date-fns/parse';
-import { addDays } from 'date-fns/addDays';
 import { useState } from 'react';
 import { ChevronRightIcon, ChevronLeftIcon } from '@chakra-ui/icons';
 
@@ -28,30 +24,17 @@ const UpcomingEvents = () => {
     isLoading,
     isError
   } = useFetchEventListQuery({
-    numOfRows: 30,
-    // 이렇게 오늘 날짜로 start, end 요청하면 진행 중인 행사들
-    // eventStartDate: format(new Date(), 'yyyyMMdd'),
-    // eventEndDate: format(new Date(), 'yyyyMMdd'),
-    eventStartDate: format(addDays(new Date(), 1), 'yyyyMMdd'),
-    pageNo
+    page: 1,
+    size: 30,
+    status: 'up_comming'
   });
 
   if (isLoading) return <div>로딩 중...</div>;
   if (isError) return <div>오류가 발생했습니다.</div>;
 
-  const filteredEventListData =
-    eventData?.list
-      ?.filter(
-        ({ eventstartdate }) =>
-          isAfter(parse(eventstartdate, 'yyyyMMdd', new Date()), new Date()) // NOTE: 행사 시작 날짜가 오늘 날짜보다 후일 때 진행 예정 행사로 처리
-      )
-      .slice(0, 20) || [];
-
   const getFormattedDate = (date: string) => {
-    const parsedDateString = parse(date, 'yyyyMMdd', new Date());
-
     const formattedDate = formatDate({
-      date: formatISO(parsedDateString),
+      date: formatISO(date),
       customType: 'yy/MM/dd'
     });
 
@@ -62,10 +45,10 @@ const UpcomingEvents = () => {
     <Container>
       <SectionTitle>진행 예정인 행사</SectionTitle>
       <CardListWrapper>
-        {filteredEventListData.map(el => (
+        {eventData?.list?.map(el => (
           <Card
             as={Link}
-            to={`/eventDetail/${el.contentid}`}
+            to={`/eventDetail/${el.event_id}`}
             key={el.title}
             w="100%"
             h="auto"
@@ -81,7 +64,7 @@ const UpcomingEvents = () => {
             <CardBody padding="0">
               <ImageWrapper>
                 <Img
-                  src={el.firstimage}
+                  src={el.image}
                   alt={`festival-${el.title}`}
                   objectFit="cover"
                 />
@@ -102,10 +85,10 @@ const UpcomingEvents = () => {
               >
                 {el.title}
               </Heading>
-              <Text>{el.addr1?.split(' ').slice(0, 2).join(' ')}</Text>
+              <Text>{el.addr?.split(' ').slice(0, 2).join(' ')}</Text>
               <Text color="#999999">{`${getFormattedDate(
-                el.eventstartdate
-              )}-${getFormattedDate(el.eventenddate)}`}</Text>
+                el.event_st
+              )}-${getFormattedDate(el.event_ed)}`}</Text>
             </CardFooter>
           </Card>
         ))}

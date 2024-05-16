@@ -6,10 +6,7 @@ import { isSameDay } from 'date-fns';
 import styled from '@emotion/styled';
 import '@styles/custom-slick.css';
 
-import {
-  useFetchEventDetailIntroQuery,
-  useFetchEventDetailQuery
-} from './network/eventDetailQueries';
+import { useFetchEventDetailQuery } from './network/eventDetailQueries';
 import { DetailInfoType } from './types/detail';
 
 import { extractUrl } from '@src/logics/utils/extractUrl';
@@ -25,38 +22,28 @@ const EventDetailPage = () => {
 
   usePreventScrollRestoration();
 
-  const { data: eventDetail } = useFetchEventDetailQuery(contentid || '');
-  const { data: eventDetailIntro } = useFetchEventDetailIntroQuery(
-    contentid || ''
-  );
+  const { data: eventDetail } = useFetchEventDetailQuery(Number(contentid));
 
   const eventDetailInfo: DetailInfoType | null = useMemo(() => {
-    if (!eventDetail || !eventDetailIntro) return null;
+    if (!eventDetail) return null;
 
-    // const formatType = 'yyyy년 M월 d일 (eeeee)';
-
-    // const startDate = format(eventDetailIntro.eventstartdate, formatType);
-    // const endDate = format(eventDetailIntro.eventenddate, formatType);
     const hasPeriod =
-      eventDetailIntro.eventenddate &&
-      !isSameDay(
-        eventDetailIntro.eventstartdate,
-        eventDetailIntro.eventenddate
-      );
+      eventDetail.event_ed &&
+      !isSameDay(eventDetail.event_st, eventDetail.event_ed);
 
     return {
-      period: `${eventDetailIntro.eventstartdate}${
-        hasPeriod ? ` ~ ${eventDetailIntro.eventenddate}` : ''
+      period: `${eventDetail.event_st}${
+        hasPeriod ? ` ~ ${eventDetail.event_ed}` : ''
       }`,
-      place: `${eventDetail.addr1} ${eventDetail.addr2}`,
-      time: eventDetailIntro.playtime,
-      sponsorName: eventDetailIntro.sponsor1,
-      hostName: eventDetailIntro.sponsor2,
-      hostPhone: eventDetailIntro.sponsor2tel,
-      homePageLink: extractUrl(eventDetail.homepage),
-      description: eventDetail.overview
+      place: `${eventDetail.addr} ${eventDetail.addr_detail}`,
+      time: eventDetail.costInfo, // TODO: playtime 없음.
+      sponsorName: eventDetail.sponsor,
+      hostName: eventDetail.host,
+      hostPhone: eventDetail.tel,
+      homePageLink: extractUrl(eventDetail.homepage_url),
+      description: eventDetail.description
     };
-  }, [eventDetail, eventDetailIntro]);
+  }, [eventDetail]);
 
   const handleClickShare = () => {
     copyToClipboard(window.location.href, {
@@ -75,8 +62,8 @@ const EventDetailPage = () => {
       <ContentWrapper>
         <ImageWrapper>
           <Image
-            src={eventDetail?.firstimage}
-            alt={`festival-${eventDetail?.firstimage}`}
+            src={eventDetail?.img[0].url}
+            alt={`festival-${eventDetail?.img[0].url}`}
           />
         </ImageWrapper>
 
@@ -89,7 +76,9 @@ const EventDetailPage = () => {
               }}
             />
             <EventTime
-              dangerouslySetInnerHTML={{ __html: eventDetailInfo?.time || '' }}
+              dangerouslySetInnerHTML={{
+                __html: eventDetailInfo?.time || ''
+              }}
             />
           </EventTimeWrapper>
 
