@@ -69,7 +69,7 @@ const Collections = () => {
     <Container>
       <Slider {...settings}>
         {bannerList.map(festival => (
-          <BannerCard>
+          <BannerCard key={festival.title}>
             <BackgroundImageWrapper key={festival.contentId}>
               <Image
                 src={festival.backgroundImageUrl}

@@ -64,24 +64,21 @@ const OngoingEvents = () => {
     useBooleanState();
 
   const { data: eventData } = useFetchEventListQuery({
-    numOfRows: 10,
-    eventStartDate: format(new Date(), 'yyyyMMdd'),
-    eventEndDate: format(new Date(), 'yyyyMMdd'),
-    pageNo: 1
+    size: 10,
+    page: 1,
+    status: 'on_going'
   });
 
   const getFormattedDate = (date: string) => {
-    const parsedDateString = parse(date, 'yyyyMMdd', new Date());
-
     const formattedDate = formatDate({
-      date: formatISO(parsedDateString),
+      date: formatISO(date),
       customType: 'yy/MM/dd'
     });
 
     return formattedDate;
   };
 
-  const handleClickCard = (contentId: string) => {
+  const handleClickCard = (contentId: number) => {
     if (isMouseMoving || !contentId) return;
 
     navigate(`/eventDetail/${contentId}`);
@@ -108,12 +105,12 @@ const OngoingEvents = () => {
               draggable={false}
               onMouseMove={() => setIsMouseMoving()}
               onMouseDown={() => unsetIsMouseMoving()}
-              onMouseUp={() => handleClickCard(el.contentid)}
+              onMouseUp={() => handleClickCard(el.event_id)}
             >
               <CardBody padding="0">
                 <ImageWrapper>
                   <Img
-                    src={el.firstimage}
+                    src={el.image}
                     alt={`festival-${el.title}`}
                     objectFit="cover"
                   />
@@ -134,10 +131,10 @@ const OngoingEvents = () => {
                 >
                   {el.title}
                 </Heading>
-                <Text>{el.addr1?.split(' ').slice(0, 2).join(' ')}</Text>
+                <Text>{el.addr?.split(' ').slice(0, 2).join(' ')}</Text>
                 <Text color="#999999">{`${getFormattedDate(
-                  el.eventstartdate
-                )}-${getFormattedDate(el.eventenddate)}`}</Text>
+                  el.event_st
+                )}-${getFormattedDate(el.event_ed)}`}</Text>
               </CardFooter>
             </Card>
           ))}
