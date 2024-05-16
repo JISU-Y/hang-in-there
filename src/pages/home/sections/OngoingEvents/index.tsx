@@ -8,13 +8,11 @@ import {
   Text
 } from '@chakra-ui/react';
 import Slider, { Settings } from 'react-slick';
-import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import { css } from '@emotion/react';
 import { useBooleanState } from '@toss/react';
 import { formatDate } from '@src/logics/utils/dateFormat';
 import { formatISO } from 'date-fns/formatISO';
-import { parse } from 'date-fns/parse';
 
 import { useFetchEventListQuery } from '../../network/eventListQueries';
 

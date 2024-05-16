@@ -14,7 +14,6 @@ import { Link } from 'react-router-dom';
 import { css } from '@emotion/react';
 import { formatDate } from '@src/logics/utils/dateFormat';
 import { formatISO } from 'date-fns/formatISO';
-import { parse } from 'date-fns/parse';
 import { useState } from 'react';
 import { ChevronRightIcon, ChevronLeftIcon } from '@chakra-ui/icons';
 

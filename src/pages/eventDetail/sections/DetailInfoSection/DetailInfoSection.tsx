@@ -2,20 +2,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import styled from '@emotion/styled';
 
-import {
-  useFetchEventDetailImageQuery,
-  useFetchEventDetailQuery
-} from '../../network/eventDetailQueries';
-import EventMap from '../../components/EventMap/EventMap';
+import { useFetchEventDetailQuery } from '../../network/eventDetailQueries';
+// import EventMap from '../../components/EventMap/EventMap';
 
 const DetailInfoSection = () => {
   const { contentid } = useParams<{ contentid: string }>();
   const navigate = useNavigate();
 
-  const { data: eventDetail } = useFetchEventDetailQuery(contentid || '');
-  const { data: eventDetailImage } = useFetchEventDetailImageQuery(
-    contentid || ''
-  );
+  const { data: eventDetail } = useFetchEventDetailQuery(Number(contentid));
 
   const handleClickBackToList = () => {
     if (window.history.length > 1) {
@@ -27,15 +21,15 @@ const DetailInfoSection = () => {
 
   return (
     <DetailInfoContainer>
-      {eventDetailImage?.map((image, index) => (
-        <ImageWrapper key={`${image.contentid}-${index}`}>
-          <Image src={image.originimgurl} />
+      {eventDetail?.img?.map((image, index) => (
+        <ImageWrapper key={`${image.sort_order}-${index}`}>
+          <Image src={image.url} />
         </ImageWrapper>
       ))}
       {/* TODO: 접기 / 더보기 */}
       <Description
         dangerouslySetInnerHTML={{
-          __html: eventDetail?.overview || ''
+          __html: eventDetail?.description || ''
         }}
       />
 

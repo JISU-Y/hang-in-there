@@ -17,6 +17,12 @@ export interface ApiDataResponseType<T> {
   };
 }
 
+export interface ApiDataResponseTypeNew<T> {
+  data: T;
+  message: string;
+  timeStamp: string;
+}
+
 export interface ApiPaginationDataResponseType<T> {
   data: T;
   pagination: {

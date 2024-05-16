@@ -1,5 +1,8 @@
 import { MobileOSType, StringBoolean } from '@src/common/types';
-import { ApiDataResponseType } from '@src/common/types/utilType';
+import {
+  ApiDataResponseType,
+  ApiDataResponseTypeNew
+} from '@src/common/types/utilType';
 
 export type ContentTypeUnionType = 12 | 14 | 15 | 25 | 28 | 32 | 38 | 39;
 
@@ -63,9 +66,44 @@ export interface EventDetailIntroRequestDto {
   serviceKey: string;
 }
 
-export type EventDetailIntroResponseDto = ApiDataResponseType<
-  EventDetailIntroDataType[]
->;
+export type EventDetailResponseDto =
+  ApiDataResponseTypeNew<EventDetailDataType>;
+
+export interface EventDetailDataType {
+  event_id: number;
+  content_id: string;
+  title: string;
+  addr: string;
+  addr_detail: string;
+  area_cd: number;
+  sigungu_cd: number;
+  content_type: number;
+  category: number;
+  sub_category: number;
+  detail_sub_category: number;
+  tel: string;
+  event_st: string;
+  event_ed: string;
+  map_x: number;
+  map_y: number;
+  costInfo: string;
+  host: string;
+  sponsor: string;
+  homepage_url: string;
+  description: string;
+  create_dt: string;
+  up_dt: string | null;
+  use_yn: string;
+  top_yn: string;
+  like: number;
+  ticket_yn: string;
+  img: Image[];
+}
+
+export interface Image {
+  url: string;
+  sort_order: number;
+}
 
 export interface EventDetailIntroDataType {
   chkcreditcardculture: string;
