@@ -7,20 +7,49 @@ import {
   EventListResponseDtoNew
 } from '@src/pages/category/types';
 
-export const useFetchEventListQuery = (
+export const useFetchOngoingEventListQuery = (
+  options?: Omit<UseQueryOptionsType<EventListResponseDto>, 'select'>
+) => {
+  return useQuery({
+    queryKey: `getEventList/ongoingEvents`,
+    queryFn: async ({ pageParam = 1 }) => {
+      const data = await axios.get<EventListResponseDtoNew>(
+        `${import.meta.env.VITE_HANGINTHERE_API_END_POINT}/v1/admin/event` ||
+          '',
+        {
+          params: {
+            category: '264', // A02
+            // NOTE: on_going event 파라미터 고정
+            size: 10,
+            page: pageParam,
+            status: 'on_going'
+          }
+        }
+      );
+      return data;
+    },
+
+    ...options,
+    select: ({ data }) => ({
+      list: data.data,
+      pageInfo: {
+        currentPage: data.pagination.page,
+        totalPage: data.pagination.totalPage,
+        totalCount: data.pagination.totalItem
+      }
+    })
+  });
+};
+
+export const useFetchUpcomingEventListQuery = (
   params: {
-    area_cd?: string;
-    sigungu_cd?: string;
-    sub_category?: string;
-    detail_sub_category?: string;
     size: number;
     page: number;
-    status: string;
   },
   options?: Omit<UseQueryOptionsType<EventListResponseDto>, 'select'>
 ) => {
   return useQuery({
-    queryKey: `getEventList/${params.status}`,
+    queryKey: `getEventList/upcomingEvents/${params.size}/${params.page}`,
     queryFn: async ({ pageParam = params.page }) => {
       const data = await axios.get<EventListResponseDtoNew>(
         `${import.meta.env.VITE_HANGINTHERE_API_END_POINT}/v1/admin/event` ||
@@ -28,9 +57,10 @@ export const useFetchEventListQuery = (
         {
           params: {
             ...params,
+            status: 'up_comming',
             category: '264', // A02
             page: pageParam
-          } as EventListRequestDtoNew
+          }
         }
       );
       return data;

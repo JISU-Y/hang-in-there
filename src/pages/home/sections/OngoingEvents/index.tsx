@@ -14,7 +14,7 @@ import { useBooleanState } from '@toss/react';
 import { formatDate } from '@src/logics/utils/dateFormat';
 import { formatISO } from 'date-fns/formatISO';
 
-import { useFetchEventListQuery } from '../../network/eventListQueries';
+import { useFetchOngoingEventListQuery } from '../../network/eventListQueries';
 
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -61,11 +61,7 @@ const OngoingEvents = () => {
   const [isMouseMoving, setIsMouseMoving, unsetIsMouseMoving] =
     useBooleanState();
 
-  const { data: eventData } = useFetchEventListQuery({
-    size: 10,
-    page: 1,
-    status: 'on_going'
-  });
+  const { data: eventData } = useFetchOngoingEventListQuery();
 
   const getFormattedDate = (date: string) => {
     const formattedDate = formatDate({

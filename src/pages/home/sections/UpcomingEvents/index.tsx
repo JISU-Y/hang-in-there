@@ -8,7 +8,7 @@ import {
   Text
 } from '@chakra-ui/react';
 
-import { useFetchEventListQuery } from '../../network/eventListQueries';
+import { useFetchUpcomingEventListQuery } from '../../network/eventListQueries';
 
 import { Link } from 'react-router-dom';
 import { css } from '@emotion/react';
@@ -23,10 +23,9 @@ const UpcomingEvents = () => {
     data: eventData,
     isLoading,
     isError
-  } = useFetchEventListQuery({
-    page: 1,
-    size: 30,
-    status: 'up_comming'
+  } = useFetchUpcomingEventListQuery({
+    page: pageNo,
+    size: 30
   });
 
   if (isLoading) return <div>로딩 중...</div>;
