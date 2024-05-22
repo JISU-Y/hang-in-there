@@ -1,7 +1,8 @@
 import { MobileOSType, StringBoolean } from '@src/common/types';
 import {
   ApiDataResponseType,
-  ApiDataResponseTypeNew
+  ApiDataResponseTypeNew,
+  ApiPaginationDataResponseType
 } from '@src/common/types/utilType';
 
 export type ContentTypeUnionType = 12 | 14 | 15 | 25 | 28 | 32 | 38 | 39;
@@ -103,6 +104,27 @@ export interface EventDetailDataType {
 export interface Image {
   url: string;
   sort_order: number;
+}
+
+export type EventListResponseDtoNew = ApiPaginationDataResponseType<
+  EventDataTypeNew[]
+>;
+
+export interface EventDataTypeNew {
+  event_id: number;
+  image: string;
+  title: string;
+  event_st: string;
+  event_ed: string;
+  content_type: number;
+  area_cd: number;
+  sigungu_cd: number;
+  category: number;
+  sub_category: number;
+  detail_sub_category: number;
+  reg_dt: string;
+  addr: string;
+  addr_detail: string;
 }
 
 export interface EventDetailIntroDataType {

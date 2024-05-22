@@ -17,6 +17,7 @@ import ShareIcon from '@src/styles/icons/ShareIcon';
 import copyToClipboard from '@src/logics/utils/copyToClipboardHandler';
 import usePreventScrollRestoration from '@src/logics/hooks/usePreventScrollRestoration';
 import { formatDate } from '@src/logics/utils/dateFormat';
+import OtherEventListSection from './sections/OtherEventListSection/OtherEventListSection';
 
 const EventDetailPage = () => {
   const { contentid } = useParams<{ contentid: string }>();
@@ -127,6 +128,8 @@ const EventDetailPage = () => {
       </ContentWrapper>
 
       <DetailInfoSection />
+
+      <OtherEventListSection />
     </Container>
   );
 };

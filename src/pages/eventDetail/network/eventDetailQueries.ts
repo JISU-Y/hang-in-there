@@ -1,6 +1,9 @@
 import axios from 'axios';
 import { useQuery } from 'react-query';
-import { EventDetailResponseDto } from '../types/detail';
+import {
+  EventDetailResponseDto,
+  EventListResponseDtoNew
+} from '../types/detail';
 import { UseQueryOptionsType } from '@src/common/types/utilType';
 
 export const useFetchEventDetailQuery = (
@@ -20,5 +23,39 @@ export const useFetchEventDetailQuery = (
     },
     ...options,
     select: ({ data }) => data.data
+  });
+};
+
+export const useFetchOtherEventListQuery = (
+  options?: Omit<UseQueryOptionsType<EventListResponseDtoNew>, 'select'>
+) => {
+  return useQuery({
+    queryKey: `getEventList/ongoingEvents`,
+    queryFn: async ({ pageParam = 1 }) => {
+      const data = await axios.get<EventListResponseDtoNew>(
+        `${import.meta.env.VITE_HANGINTHERE_API_END_POINT}/v1/admin/event` ||
+          '',
+        {
+          params: {
+            category: '264', // A02
+            // NOTE: 이 주변 event 파라미터 고정
+            size: 10,
+            page: pageParam,
+            status: 'on_going,up_comming'
+          }
+        }
+      );
+      return data;
+    },
+
+    ...options,
+    select: ({ data }) => ({
+      list: data.data,
+      pageInfo: {
+        currentPage: data.pagination.page,
+        totalPage: data.pagination.totalPage,
+        totalCount: data.pagination.totalItem
+      }
+    })
   });
 };
