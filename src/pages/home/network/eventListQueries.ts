@@ -2,10 +2,7 @@ import axios from 'axios';
 import { useQuery } from 'react-query';
 import { EventListResponseDto } from '../types';
 import { UseQueryOptionsType } from '@src/common/types/utilType';
-import {
-  EventListRequestDtoNew,
-  EventListResponseDtoNew
-} from '@src/pages/category/types';
+import { EventListResponseDtoNew } from '@src/pages/category/types';
 
 export const useFetchOngoingEventListQuery = (
   options?: Omit<UseQueryOptionsType<EventListResponseDto>, 'select'>

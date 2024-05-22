@@ -1,5 +1,6 @@
 import { format, isValid } from 'date-fns';
 import { FormatOptions } from 'date-fns/format';
+import { ko } from 'date-fns/locale/ko';
 
 // -------------------------------------------------------------------------------
 
@@ -63,6 +64,7 @@ const formatDate = ({
   const formatType = customType ?? DATE_FORMAT_TYPE[type];
 
   return format(new Date(date), formatType, {
+    locale: ko,
     ...options
   });
 };

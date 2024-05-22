@@ -2,6 +2,7 @@ import { defineConfig, loadEnv } from 'vite';
 import { resolve } from 'path';
 import react from '@vitejs/plugin-react';
 import viteTsconfigPaths from 'vite-tsconfig-paths';
+import { createHtmlPlugin } from 'vite-plugin-html';
 
 export default ({ mode }) => {
   // 현재 작업 디렉터리의 `mode`를 기반으로 env 파일을 불러옴
@@ -27,6 +28,17 @@ export default ({ mode }) => {
         }
       ]
     },
-    plugins: [react(), viteTsconfigPaths()]
+    plugins: [
+      react(),
+      viteTsconfigPaths(),
+      createHtmlPlugin({
+        minify: true,
+        inject: {
+          data: {
+            naverMapsClientId: env.VITE_NAVER_MAPS_CLIENT_ID
+          }
+        }
+      })
+    ]
   });
 };
