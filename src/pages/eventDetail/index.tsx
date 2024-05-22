@@ -16,6 +16,7 @@ import CallOutgoingIcon from '@src/styles/icons/CallOutgoingIcon';
 import ShareIcon from '@src/styles/icons/ShareIcon';
 import copyToClipboard from '@src/logics/utils/copyToClipboardHandler';
 import usePreventScrollRestoration from '@src/logics/hooks/usePreventScrollRestoration';
+import { formatDate } from '@src/logics/utils/dateFormat';
 
 const EventDetailPage = () => {
   const { contentid } = useParams<{ contentid: string }>();
@@ -32,8 +33,16 @@ const EventDetailPage = () => {
       !isSameDay(eventDetail.event_st, eventDetail.event_ed);
 
     return {
-      period: `${eventDetail.event_st}${
-        hasPeriod ? ` ~ ${eventDetail.event_ed}` : ''
+      period: `${formatDate({
+        date: eventDetail.event_st,
+        customType: 'yyyy. MM. dd.(EEE)'
+      })}${
+        hasPeriod
+          ? ` ~ ${formatDate({
+              date: eventDetail.event_ed,
+              customType: 'yyyy. MM. dd.(EEE)'
+            })}`
+          : ''
       }`,
       place: `${eventDetail.addr} ${eventDetail.addr_detail}`,
       time: eventDetail.costInfo, // TODO: playtime 없음.

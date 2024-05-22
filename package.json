@@ -28,7 +28,8 @@
     "react-dom": "^18.2.0",
     "react-query": "^3.39.3",
     "react-router-dom": "^6.18.0",
-    "react-slick": "^0.29.0"
+    "react-slick": "^0.29.0",
+    "vite-plugin-html": "^3.2.2"
   },
   "devDependencies": {
     "@types/navermaps": "^3.7.5",

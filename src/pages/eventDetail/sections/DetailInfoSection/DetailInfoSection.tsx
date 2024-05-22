@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 
 import { useFetchEventDetailQuery } from '../../network/eventDetailQueries';
-// import EventMap from '../../components/EventMap/EventMap';
+import EventMap from '../../components/EventMap/EventMap';
 
 const DetailInfoSection = () => {
   const { contentid } = useParams<{ contentid: string }>();
@@ -26,14 +26,18 @@ const DetailInfoSection = () => {
           <Image src={image.url} />
         </ImageWrapper>
       ))}
-      {/* TODO: 접기 / 더보기 */}
       <Description
         dangerouslySetInnerHTML={{
           __html: eventDetail?.description || ''
         }}
       />
 
-      {/* <EventMap /> */}
+      <EventMap
+        position={{
+          lat: eventDetail?.map_y || 0,
+          lng: eventDetail?.map_x || 0
+        }}
+      />
 
       <BackToListButton type="button" onClick={handleClickBackToList}>
         목록으로
@@ -74,6 +78,6 @@ const BackToListButton = styled.button`
   color: #ffffff;
   padding: 8px 74px;
   background-color: #ff6917;
-  margin: 0 auto;
+  margin: 39px auto 0;
   display: block;
 `;
