@@ -129,7 +129,12 @@ const EventDetailPage = () => {
 
       <DetailInfoSection />
 
-      <OtherEventListSection />
+      {eventDetail && (
+        <OtherEventListSection
+          areaCode={eventDetail.area_cd}
+          eventId={eventDetail.event_id}
+        />
+      )}
     </Container>
   );
 };

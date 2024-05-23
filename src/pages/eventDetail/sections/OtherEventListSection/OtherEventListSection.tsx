@@ -54,14 +54,21 @@ const settings: Settings = {
   ]
 };
 
-const OtherEventListSection = () => {
+interface OtherEventListSectionProps {
+  eventId: number;
+  areaCode: number;
+}
+
+const OtherEventListSection = ({
+  eventId,
+  areaCode
+}: OtherEventListSectionProps) => {
   const navigate = useNavigate();
 
   const [isMouseMoving, setIsMouseMoving, unsetIsMouseMoving] =
     useBooleanState();
 
-  // TODO: 지역코드 전달해서 그 지역 행사만 불러오기 + 리스트 없는 경우 분기 처리
-  const { data: eventData } = useFetchOtherEventListQuery();
+  const { data: eventData } = useFetchOtherEventListQuery(eventId, areaCode);
 
   const getFormattedDate = (date: string) => {
     const formattedDate = formatDate({
@@ -77,6 +84,8 @@ const OtherEventListSection = () => {
 
     navigate(`/eventDetail/${contentId}`);
   };
+
+  if (eventData && eventData.list.length < 1) return null;
 
   return (
     <Container>

@@ -130,8 +130,7 @@ export const useFetchEventListInfiniteQuery = (params: {
     ],
     queryFn: async ({ pageParam = params.page }) => {
       const data = await axios.get<EventListResponseDtoNew>(
-        `${import.meta.env.VITE_HANGINTHERE_API_END_POINT}/v1/admin/event` ||
-          '',
+        `${import.meta.env.VITE_HANGINTHERE_API_END_POINT}/v1/user/event` || '',
         {
           params: {
             ...params,

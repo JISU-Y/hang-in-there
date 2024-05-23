@@ -26,33 +26,34 @@ const settings: Settings = {
   slidesToScroll: 1,
   swipeToSlide: true,
   touchThreshold: 100,
-  initialSlide: 0,
-  responsive: [
-    {
-      breakpoint: 1200,
-      settings: {
-        slidesToShow: 4
-      }
-    },
-    {
-      breakpoint: 992,
-      settings: {
-        slidesToShow: 3
-      }
-    },
-    {
-      breakpoint: 768,
-      settings: {
-        slidesToShow: 2
-      }
-    },
-    {
-      breakpoint: 576,
-      settings: {
-        slidesToShow: 1
-      }
-    }
-  ]
+  initialSlide: 0
+  // HACK: responsive 추가하면 breakpoint 1200 이하에서 왼쪽에 blank가 생김
+  // responsive: [
+  //   {
+  //     breakpoint: 1200,
+  //     settings: {
+  //       slidesToShow: 4
+  //     }
+  //   },
+  //   {
+  //     breakpoint: 992,
+  //     settings: {
+  //       slidesToShow: 3
+  //     }
+  //   },
+  //   {
+  //     breakpoint: 768,
+  //     settings: {
+  //       slidesToShow: 2
+  //     }
+  //   },
+  //   {
+  //     breakpoint: 576,
+  //     settings: {
+  //       slidesToShow: 1
+  //     }
+  //   }
+  // ]
 };
 
 const OngoingEvents = () => {

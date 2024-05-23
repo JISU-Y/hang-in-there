@@ -11,8 +11,7 @@ export const useFetchOngoingEventListQuery = (
     queryKey: `getEventList/ongoingEvents`,
     queryFn: async ({ pageParam = 1 }) => {
       const data = await axios.get<EventListResponseDtoNew>(
-        `${import.meta.env.VITE_HANGINTHERE_API_END_POINT}/v1/admin/event` ||
-          '',
+        `${import.meta.env.VITE_HANGINTHERE_API_END_POINT}/v1/user/event` || '',
         {
           params: {
             category: '264', // A02
@@ -49,8 +48,7 @@ export const useFetchUpcomingEventListQuery = (
     queryKey: `getEventList/upcomingEvents/${params.size}/${params.page}`,
     queryFn: async ({ pageParam = params.page }) => {
       const data = await axios.get<EventListResponseDtoNew>(
-        `${import.meta.env.VITE_HANGINTHERE_API_END_POINT}/v1/admin/event` ||
-          '',
+        `${import.meta.env.VITE_HANGINTHERE_API_END_POINT}/v1/user/event` || '',
         {
           params: {
             ...params,
