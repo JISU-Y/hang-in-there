@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react';
 import { ImpressionArea } from '@toss/impression-area';
 import styled from '@emotion/styled';
-import { useFetchNearEventListInfiniteQuery } from '../../network/eventListQueries';
+import { useFetchNearEventListQuery } from '../../network/eventListQueries';
 import EventCard from '../../components/EventCard';
 
 // const DEFAULT_GEO_LOCATION = { mapX: '127.0016985', mapY: '37.5642135' }; // 서울 시청
@@ -29,14 +29,7 @@ const NearEventListModal = ({
   isOpen,
   onClose
 }: NearEventListModalProps) => {
-  const {
-    data: nearEventList,
-    fetchNextPage,
-    isLoading,
-    isFetchingNextPage
-  } = useFetchNearEventListInfiniteQuery({
-    numOfRows: 10,
-    pageNo: 1,
+  const { data: nearEventList, isLoading } = useFetchNearEventListQuery({
     mapX,
     mapY
   });
@@ -57,32 +50,32 @@ const NearEventListModal = ({
           {isLoading || isLocationLoading ? (
             <div>내 주변 행사 로딩 중...</div>
           ) : (
-            (!nearEventList || nearEventList?.pages.length === 0) && (
+            (!nearEventList || nearEventList?.length === 0) && (
               <div>권한 재설정해주세요</div>
             )
           )}
           <SimpleGrid minChildWidth="232px" spacing="32px">
             {nearEventList &&
-              nearEventList.pages.map(event => (
+              nearEventList.map(event => (
                 <EventCard
-                  key={event.contentid}
-                  eventId={event.contentid}
-                  imageUrl={event.firstimage}
+                  key={event.event_id}
+                  eventId={String(event.event_id)}
+                  imageUrl={event.image}
                   title={event.title}
                   status="always"
-                  location={event.addr1}
+                  location={event.addr}
                 />
               ))}
-            {isFetchingNextPage && <div>...</div>}
           </SimpleGrid>
-          <HeightImpressionArea
+          {/* TODO: 페이지네이션(무한 스크롤) 추가되면 주석 제거 */}
+          {/* <HeightImpressionArea
             onImpressionStart={() => {
               if (!!mapX && !!mapY) {
                 fetchNextPage();
               }
             }}
             areaThreshold={0.5}
-          />
+          /> */}
         </ModalBody>
       </ModalContent>
     </Modal>
