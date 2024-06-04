@@ -22,7 +22,7 @@ import 'slick-carousel/slick/slick-theme.css';
 const settings: Settings = {
   dots: false,
   infinite: false,
-  slidesToShow: 5.5,
+  slidesToShow: 5,
   slidesToScroll: 1,
   swipeToSlide: true,
   touchThreshold: 100,

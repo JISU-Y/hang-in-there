@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import Slider, { Settings } from 'react-slick';
 
 import styled from '@emotion/styled';
-import { ChevronRightIcon } from '@chakra-ui/icons';
+import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { getOpacityColor } from '@src/styles/mixins';
 
 import 'slick-carousel/slick/slick.css';
@@ -61,7 +61,9 @@ const settings: Settings = {
   autoplay: true,
   autoplaySpeed: 4800,
   arrows: false,
-  touchThreshold: 100
+  touchThreshold: 100,
+  nextArrow: <ChevronRightIcon w={6} h={6} strokeWidth={1} color="#ffffff" />,
+  prevArrow: <ChevronLeftIcon w={6} h={6} strokeWidth={1} color="#ffffff" />
 };
 
 const Collections = () => {
