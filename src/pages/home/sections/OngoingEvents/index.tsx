@@ -1,4 +1,3 @@
-import { HTMLAttributes } from 'react';
 import styled from '@emotion/styled';
 import {
   Card,
@@ -29,7 +28,7 @@ const CustomNextArrow = styled.button`
   top: 50%;
   right: -3%;
   z-index: 3;
-  background-color: rgba(128, 128, 128, 0.5);
+  background-color: rgba(128, 128, 128, 0.3);
   border-radius: 50%;
   transform: translateY(-150%);
   transition: all 0.3s ease-in-out;
@@ -46,7 +45,7 @@ const CustomPrevArrow = styled.button`
   top: 50%;
   left: -3%;
   z-index: 3;
-  background-color: rgba(128, 128, 128, 0.5);
+  background-color: rgba(128, 128, 128, 0.3);
   border-radius: 50%;
   transform: translateY(-150%);
   transition: all 0.3s ease-in-out;
