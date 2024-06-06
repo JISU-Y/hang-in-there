@@ -69,65 +69,67 @@ const EventDetailPage = () => {
         <Breadcrumbs />
       </BreadcrumWrapper> */}
 
-      <ContentWrapper>
-        <ImageWrapper>
-          <Image
-            src={eventDetail?.img[0].url}
-            alt={`festival-${eventDetail?.img[0].url}`}
-          />
-        </ImageWrapper>
-
-        <DetailWrapper>
-          <Title>{eventDetail?.title}</Title>
-          <EventTimeWrapper>
-            <EventTime
-              dangerouslySetInnerHTML={{
-                __html: eventDetailInfo?.period || ''
-              }}
+      <DetailContainer>
+        <ContentWrapper>
+          <ImageWrapper>
+            <Image
+              src={eventDetail?.img[0].url}
+              alt={`festival-${eventDetail?.img[0].url}`}
             />
-            <EventTime
-              dangerouslySetInnerHTML={{
-                __html: eventDetailInfo?.time || ''
-              }}
-            />
-          </EventTimeWrapper>
+          </ImageWrapper>
 
-          <EventInfoWrapper>
-            <EventPlace>
-              <LocationIcon color="#000000" />
-              <span>{eventDetailInfo?.place}</span>
-            </EventPlace>
-            {eventDetailInfo?.hostPhone && (
-              <EventHostPhone>
-                <CallOutgoingIcon color="#000000" />
-                <span>{eventDetailInfo?.hostPhone}</span>
-              </EventHostPhone>
-            )}
-            <IconButton type="button" onClick={handleClickShare}>
-              <ShareIcon color="#000000" />
-            </IconButton>
-          </EventInfoWrapper>
+          <DetailWrapper>
+            <Title>{eventDetail?.title}</Title>
+            <EventTimeWrapper>
+              <EventTime
+                dangerouslySetInnerHTML={{
+                  __html: eventDetailInfo?.period || ''
+                }}
+              />
+              <EventTime
+                dangerouslySetInnerHTML={{
+                  __html: eventDetailInfo?.time || ''
+                }}
+              />
+            </EventTimeWrapper>
 
-          <EventHostInfoWrapper>
-            <HostInfoKey>주관</HostInfoKey>
-            <HostInfoValue>{eventDetailInfo?.sponsorName}</HostInfoValue>
-          </EventHostInfoWrapper>
-          <EventHostInfoWrapper>
-            <HostInfoKey>주최</HostInfoKey>
-            <HostInfoValue>
-              {eventDetailInfo?.homePageLink ? (
-                <a href={eventDetailInfo?.homePageLink} target="_blank">
-                  {eventDetailInfo?.hostName || eventDetailInfo?.homePageLink}
-                </a>
-              ) : (
-                <span>{eventDetailInfo?.hostName}</span>
+            <EventInfoWrapper>
+              <EventPlace>
+                <LocationIcon color="#000000" />
+                <span>{eventDetailInfo?.place}</span>
+              </EventPlace>
+              {eventDetailInfo?.hostPhone && (
+                <EventHostPhone>
+                  <CallOutgoingIcon color="#000000" />
+                  <span>{eventDetailInfo?.hostPhone}</span>
+                </EventHostPhone>
               )}
-            </HostInfoValue>
-          </EventHostInfoWrapper>
-        </DetailWrapper>
-      </ContentWrapper>
+              <IconButton type="button" onClick={handleClickShare}>
+                <ShareIcon color="#000000" />
+              </IconButton>
+            </EventInfoWrapper>
 
-      <DetailInfoSection />
+            <EventHostInfoWrapper>
+              <HostInfoKey>주관</HostInfoKey>
+              <HostInfoValue>{eventDetailInfo?.sponsorName}</HostInfoValue>
+            </EventHostInfoWrapper>
+            <EventHostInfoWrapper>
+              <HostInfoKey>주최</HostInfoKey>
+              <HostInfoValue>
+                {eventDetailInfo?.homePageLink ? (
+                  <a href={eventDetailInfo?.homePageLink} target="_blank">
+                    {eventDetailInfo?.hostName || eventDetailInfo?.homePageLink}
+                  </a>
+                ) : (
+                  <span>{eventDetailInfo?.hostName}</span>
+                )}
+              </HostInfoValue>
+            </EventHostInfoWrapper>
+          </DetailWrapper>
+        </ContentWrapper>
+
+        <DetailInfoSection />
+      </DetailContainer>
 
       {eventDetail && (
         <OtherEventListSection
@@ -140,15 +142,20 @@ const EventDetailPage = () => {
 };
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 72px;
   padding: 32px 48px 64px;
 `;
 
 const BreadcrumWrapper = styled.div`
   width: 100%;
   margin-bottom: -27px;
+`;
+
+const DetailContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  max-width: 808px;
+  gap: 72px;
+  margin: auto;
 `;
 
 const ContentWrapper = styled.section`

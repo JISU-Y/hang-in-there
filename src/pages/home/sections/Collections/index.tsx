@@ -51,6 +51,44 @@ const bannerList = [
   }
 ];
 
+const CustomNextArrow = styled.button`
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 50%;
+  right: 3%;
+  z-index: 3;
+  border-radius: 50%;
+  transition: all 0.3s ease-in-out;
+
+  & svg {
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      transform: translateX(5px);
+    }
+  }
+`;
+
+const CustomPrevArrow = styled.button`
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 50%;
+  left: 3%;
+  z-index: 3;
+  border-radius: 50%;
+  transition: all 0.3s ease-in-out;
+
+  & svg {
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      transform: translateX(-5px);
+    }
+  }
+`;
+
 const settings: Settings = {
   dots: true,
   dotsClass: 'custom-dots',
@@ -60,10 +98,17 @@ const settings: Settings = {
   slidesToScroll: 1,
   autoplay: true,
   autoplaySpeed: 4800,
-  arrows: false,
   touchThreshold: 100,
-  nextArrow: <ChevronRightIcon w={6} h={6} strokeWidth={1} color="#ffffff" />,
-  prevArrow: <ChevronLeftIcon w={6} h={6} strokeWidth={1} color="#ffffff" />
+  nextArrow: (
+    <CustomNextArrow>
+      <ChevronRightIcon w={10} h={10} strokeWidth={1} color="#ffffff" />
+    </CustomNextArrow>
+  ),
+  prevArrow: (
+    <CustomPrevArrow>
+      <ChevronLeftIcon w={10} h={10} strokeWidth={1} color="#ffffff" />
+    </CustomPrevArrow>
+  )
 };
 
 const Collections = () => {
@@ -165,7 +210,7 @@ const TitleWrapper = styled.div`
 
 const Title = styled.h2`
   font-size: 52px;
-  font-weight: 600;
+  font-weight: 800;
   color: #ffffff;
   margin-bottom: 16px;
   white-space: pre-line;

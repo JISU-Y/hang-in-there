@@ -18,42 +18,62 @@ import { useFetchOngoingEventListQuery } from '../../network/eventListQueries';
 
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import './custom-slick.css';
+import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
+
+const CustomNextArrow = styled.button`
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 50%;
+  right: -3%;
+  z-index: 3;
+  background-color: rgba(128, 128, 128, 0.3);
+  border-radius: 50%;
+  transform: translateY(-150%);
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    background-color: gray;
+  }
+`;
+
+const CustomPrevArrow = styled.button`
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 50%;
+  left: -3%;
+  z-index: 3;
+  background-color: rgba(128, 128, 128, 0.3);
+  border-radius: 50%;
+  transform: translateY(-150%);
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    background-color: gray;
+  }
+`;
 
 const settings: Settings = {
+  // HACK: responsive 추가하면 breakpoint 1200 이하에서 왼쪽에 blank가 생김
   dots: false,
   infinite: false,
   slidesToShow: 5,
   slidesToScroll: 1,
   swipeToSlide: true,
   touchThreshold: 100,
-  initialSlide: 0
-  // HACK: responsive 추가하면 breakpoint 1200 이하에서 왼쪽에 blank가 생김
-  // responsive: [
-  //   {
-  //     breakpoint: 1200,
-  //     settings: {
-  //       slidesToShow: 4
-  //     }
-  //   },
-  //   {
-  //     breakpoint: 992,
-  //     settings: {
-  //       slidesToShow: 3
-  //     }
-  //   },
-  //   {
-  //     breakpoint: 768,
-  //     settings: {
-  //       slidesToShow: 2
-  //     }
-  //   },
-  //   {
-  //     breakpoint: 576,
-  //     settings: {
-  //       slidesToShow: 1
-  //     }
-  //   }
-  // ]
+  initialSlide: 0,
+  nextArrow: (
+    <CustomNextArrow>
+      <ChevronRightIcon w={10} h={10} strokeWidth={1} color="#ffffff" />
+    </CustomNextArrow>
+  ),
+  prevArrow: (
+    <CustomPrevArrow>
+      <ChevronLeftIcon w={10} h={10} strokeWidth={1} color="#ffffff" />
+    </CustomPrevArrow>
+  )
 };
 
 const OngoingEvents = () => {

@@ -7,6 +7,7 @@ import {
   createBrowserRouter
 } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import ReactGA from 'react-ga';
 
 import { ChakraProvider } from '@chakra-ui/react';
 
@@ -64,6 +65,9 @@ const router = createBrowserRouter(
 );
 
 const queryClient = new QueryClient();
+
+const gaTrackingId = import.meta.env.VITE_GOOGLE_ANALYTICS_ID;
+ReactGA.initialize(gaTrackingId);
 
 function App() {
   return (
