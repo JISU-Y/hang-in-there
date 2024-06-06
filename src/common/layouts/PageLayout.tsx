@@ -35,7 +35,7 @@ const PageLayout = ({
         <LineBannerWrapper>
           <Collapse in={isOpen}>
             <BannerLink
-              to="/" // TODO: 소개 노션 링크 추가
+              to="https://twisty-foxtrot-858.notion.site/07448186998848468ded361d3935d220"
               target="_blank"
             >
               <span>
