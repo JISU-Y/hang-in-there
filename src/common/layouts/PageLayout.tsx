@@ -42,7 +42,10 @@ const PageLayout = ({
                 <strong>무료함</strong>은 행인들에서 <strong>무료</strong>{' '}
                 문화로 해결
               </span>
-              <Image src="/logo/hanginthere-logo-white.png" alt="logo-white" />
+              <Image
+                src="/logo/hanginthere-text-logo-white.png"
+                alt="logo-white"
+              />
             </BannerLink>
           </Collapse>
         </LineBannerWrapper>
@@ -51,7 +54,13 @@ const PageLayout = ({
         {withNavbar && (
           <Navbar>
             <Link to="/">
-              <Image src="/logo/hanginthere-logo.png" alt="logo" />
+              <Image
+                src="/logo/hanginthere-full-logo.svg"
+                alt="logo"
+                style={{
+                  height: '35px'
+                }}
+              />
             </Link>
             <CategoryMenu />
           </Navbar>
@@ -61,7 +70,7 @@ const PageLayout = ({
           <Footer>
             <CopyRightWrapper>
               <FooterLogoImage
-                src="/logo/hanginthere-logo-light.png"
+                src="/logo/hanginthere-text-logo-light.png"
                 alt="hanginthere-footer-logo"
               />
               <div>
