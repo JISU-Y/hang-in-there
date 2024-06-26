@@ -73,8 +73,8 @@ const EventDetailPage = () => {
         <ContentWrapper>
           <ImageWrapper>
             <Image
-              src={eventDetail?.img[0].url}
-              alt={`festival-${eventDetail?.img[0].url}`}
+              src={eventDetail?.img[0]?.url || '/logo/poster-fallback.png'}
+              alt={`festival-${eventDetail?.title}`}
             />
           </ImageWrapper>
 
