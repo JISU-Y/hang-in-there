@@ -125,7 +125,7 @@ const OngoingEvents = () => {
               <CardBody padding="0">
                 <ImageWrapper>
                   <Img
-                    src={el.image}
+                    src={el?.image || '/logo/poster-fallback.png'}
                     alt={`festival-${el.title}`}
                     objectFit="cover"
                   />
