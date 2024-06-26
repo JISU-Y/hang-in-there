@@ -2,7 +2,7 @@ import { useEffect, PropsWithChildren } from 'react';
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 import CategoryMenu from '../components/CategoryMenu/CategoryMenu';
-import { Collapse, Slide, useDisclosure } from '@chakra-ui/react';
+import { Collapse, useDisclosure } from '@chakra-ui/react';
 
 const EXTERNAL_DOCUMENT_LINKS = {
   SERVICE: { NAME: '이용약관', LINK: '' },

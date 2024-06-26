@@ -14,6 +14,7 @@ import {
   CATEGORY_CODE,
   CategoryCodeType
 } from '@src/common/constants/categories';
+import Loader from '@src/common/components/Loader/Loader';
 
 const CategoryPage = () => {
   const [searchParams] = useSearchParams();
@@ -46,6 +47,16 @@ const CategoryPage = () => {
   const handleSetGeoLocation = (param: { mapX: string; mapY: string }) => {
     setGeoLocation(param);
   };
+
+  if (isLoading) {
+    return (
+      <LoaderWrapper>
+        <Loader
+          description={`홈 화면에서 진행 예정인 행사를\n확인할 수 있어요`}
+        />
+      </LoaderWrapper>
+    );
+  }
 
   return (
     <ContentWrapper>
@@ -116,6 +127,14 @@ const CardListContainer = styled.div`
 
 const HeightImpressionArea = styled(ImpressionArea)`
   height: 40px;
+`;
+
+const LoaderWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 112px;
+  height: calc(100vh - 116px);
 `;
 
 export default CategoryPage;
