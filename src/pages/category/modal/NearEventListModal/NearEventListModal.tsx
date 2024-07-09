@@ -11,6 +11,7 @@ import { ImpressionArea } from '@toss/impression-area';
 import styled from '@emotion/styled';
 import { useFetchNearEventListQuery } from '../../network/eventListQueries';
 import EventCard from '../../components/EventCard';
+import Loader from '@src/common/components/Loader/Loader';
 
 // const DEFAULT_GEO_LOCATION = { mapX: '127.0016985', mapY: '37.5642135' }; // 서울 시청
 
@@ -47,8 +48,11 @@ const NearEventListModal = ({
         <ModalHeader>내 주변 행사</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          {isLoading || isLocationLoading ? (
-            <div>내 주변 행사 로딩 중...</div>
+          {(!nearEventList && isLoading) || isLocationLoading ? (
+            <Loader
+              spinnerSize="l"
+              description="내 주변 행사를 불러오고 있어요"
+            />
           ) : (
             (!nearEventList || nearEventList?.length === 0) && (
               <div>권한 재설정해주세요</div>

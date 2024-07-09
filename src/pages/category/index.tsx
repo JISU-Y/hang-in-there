@@ -52,6 +52,7 @@ const CategoryPage = () => {
     return (
       <LoaderWrapper>
         <Loader
+          spinnerSize="l"
           description={`홈 화면에서 진행 예정인 행사를\n확인할 수 있어요`}
         />
       </LoaderWrapper>
