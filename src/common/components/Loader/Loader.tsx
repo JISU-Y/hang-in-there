@@ -1,14 +1,15 @@
 import styled from '@emotion/styled';
-import LoadingSpinner from './LoadingSpinner';
+import LoadingSpinner, { LoadingSpinnerProps } from './LoadingSpinner';
 
 interface LoaderProps {
+  spinnerSize: LoadingSpinnerProps['size'];
   description?: string;
 }
 
-const Loader = ({ description }: LoaderProps) => {
+const Loader = ({ spinnerSize, description }: LoaderProps) => {
   return (
     <Container>
-      <LoadingSpinner />
+      <LoadingSpinner size={spinnerSize} />
       <WaitingText>잠시만 기다려주세요...</WaitingText>
       {description && <Text>{description}</Text>}
     </Container>
@@ -21,21 +22,21 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
+  gap: 16px;
 
-  width: fit-content;
+  width: 100%;
 
   padding: 10px;
 `;
 
 const WaitingText = styled.h4`
-  font-size: 24px;
+  font-size: 18px;
   font-weight: 400;
   color: #999999;
 `;
 
 const Text = styled.h3`
-  font-size: 36px;
+  font-size: 24px;
   font-weight: 700;
   color: #999999;
 
