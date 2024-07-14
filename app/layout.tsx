@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import ReactQueryProviders from '../logics/providers/ReactQueryProvider';
+import ReactQueryProviders from '@logics/providers/ReactQueryProvider';
 
 export const metadata: Metadata = {
   title: 'Hang-in-there 🚶‍♂️',
