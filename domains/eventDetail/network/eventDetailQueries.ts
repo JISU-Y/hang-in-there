@@ -1,10 +1,12 @@
 import axios from 'axios';
 import { useQuery } from 'react-query';
+
+import { UseQueryOptionsType } from '@domains/common/types/utilType';
+
 import {
   EventDetailResponseDto,
   EventListResponseDtoNew
 } from '../types/detail';
-import { UseQueryOptionsType } from '@src/common/types/utilType';
 
 export const useFetchEventDetailQuery = (
   contentId: number,

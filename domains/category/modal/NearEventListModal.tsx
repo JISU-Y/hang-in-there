@@ -9,8 +9,8 @@ import {
 } from '@chakra-ui/react';
 import Loader from '@domains/common/components/Loader/Loader';
 
-import { useFetchNearEventListQuery } from '../../network/eventListQueries';
-import EventCard from '../../components/EventCard';
+import { useFetchNearEventListQuery } from '../network/eventListQueries';
+import EventCard from '../components/EventCard';
 
 // const DEFAULT_GEO_LOCATION = { mapX: '127.0016985', mapY: '37.5642135' }; // 서울 시청
 

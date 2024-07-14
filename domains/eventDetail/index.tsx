@@ -1,30 +1,32 @@
-import { useMemo } from 'react';
+'use client';
 
-import { useParams } from 'react-router-dom';
+import { useMemo } from 'react';
+import { useParams } from 'next/navigation';
+import Image from 'next/image';
+
 import { isSameDay } from 'date-fns';
 
 import styled from '@emotion/styled';
 import '@styles/custom-slick.css';
+import LocationIcon from '@styles/icons/LocationIcon';
+import CallOutgoingIcon from '@styles/icons/CallOutgoingIcon';
+import ShareIcon from '@styles/icons/ShareIcon';
+import { extractUrl } from '@logics/utils/extractUrl';
+import { formatDate } from '@logics/utils/dateFormat';
+import copyToClipboard from '@logics/utils/copyToClipboardHandler';
+import usePreventScrollRestoration from '@logics/hooks/usePreventScrollRestoration';
 
+import DetailInfoSection from './sections/DetailInfoSection/DetailInfoSection';
+import OtherEventListSection from './sections/OtherEventListSection/OtherEventListSection';
 import { useFetchEventDetailQuery } from './network/eventDetailQueries';
 import { DetailInfoType } from './types/detail';
 
-import { extractUrl } from '@src/logics/utils/extractUrl';
-import DetailInfoSection from './sections/DetailInfoSection/DetailInfoSection';
-import LocationIcon from '@src/styles/icons/LocationIcon';
-import CallOutgoingIcon from '@src/styles/icons/CallOutgoingIcon';
-import ShareIcon from '@src/styles/icons/ShareIcon';
-import copyToClipboard from '@src/logics/utils/copyToClipboardHandler';
-import usePreventScrollRestoration from '@src/logics/hooks/usePreventScrollRestoration';
-import { formatDate } from '@src/logics/utils/dateFormat';
-import OtherEventListSection from './sections/OtherEventListSection/OtherEventListSection';
-
 const EventDetailPage = () => {
-  const { contentid } = useParams<{ contentid: string }>();
+  const { contentId } = useParams<{ contentId: string }>();
 
   usePreventScrollRestoration();
 
-  const { data: eventDetail } = useFetchEventDetailQuery(Number(contentid));
+  const { data: eventDetail } = useFetchEventDetailQuery(Number(contentId));
 
   const eventDetailInfo: DetailInfoType | null = useMemo(() => {
     if (!eventDetail) return null;
@@ -73,8 +75,15 @@ const EventDetailPage = () => {
         <ContentWrapper>
           <ImageWrapper>
             <Image
+              width={100}
+              height={100}
               src={eventDetail?.img[0]?.url || '/logo/poster-fallback.png'}
               alt={`festival-${eventDetail?.title}`}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover'
+              }}
             />
           </ImageWrapper>
 
@@ -167,14 +176,9 @@ const ContentWrapper = styled.section`
 
 const ImageWrapper = styled.div`
   width: 60%;
-  max-width: 760px;
+  max-width: 394px;
   height: auto;
-`;
-
-const Image = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  max-height: 563px;
 `;
 
 const DetailWrapper = styled.div`

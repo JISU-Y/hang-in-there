@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+
 import { DetailInfoUnionType } from '../../types/detail';
 import { InfoKeyMapper } from '../../constants/detail';
 

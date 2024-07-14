@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams, useRouter } from 'next/navigation';
 
 import styled from '@emotion/styled';
 
@@ -6,16 +6,16 @@ import { useFetchEventDetailQuery } from '../../network/eventDetailQueries';
 import EventMap from '../../components/EventMap/EventMap';
 
 const DetailInfoSection = () => {
-  const { contentid } = useParams<{ contentid: string }>();
-  const navigate = useNavigate();
+  const { contentId } = useParams<{ contentId: string }>();
+  const { push, back } = useRouter();
 
-  const { data: eventDetail } = useFetchEventDetailQuery(Number(contentid));
+  const { data: eventDetail } = useFetchEventDetailQuery(Number(contentId));
 
   const handleClickBackToList = () => {
     if (window.history.length > 1) {
-      navigate(-1);
+      back();
     } else {
-      navigate('/category?=축제'); // TODO: 행사에 해당하는 category로 보내주기
+      push('/category?=축제'); // TODO: 행사에 해당하는 category로 보내주기
     }
   };
 
@@ -32,12 +32,14 @@ const DetailInfoSection = () => {
         }}
       />
 
-      <EventMap
-        position={{
-          lat: eventDetail?.map_y || 0,
-          lng: eventDetail?.map_x || 0
-        }}
-      />
+      {eventDetail && (
+        <EventMap
+          position={{
+            lat: eventDetail?.map_y || 37.3595704,
+            lng: eventDetail?.map_x || 127.105399
+          }}
+        />
+      )}
 
       <BackToListButton type="button" onClick={handleClickBackToList}>
         목록으로

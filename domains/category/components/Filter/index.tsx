@@ -21,7 +21,7 @@ import LocationIcon from '@styles/icons/LocationIcon';
 
 import { AREA_CODE } from '../../constants/categories';
 import { AreaCodeType, EventStatusEnumType } from '../../types';
-import NearEventListModal from '../../modal/NearEventListModal/NearEventListModal';
+import NearEventListModal from '../../modal/NearEventListModal';
 
 const EVENT_STATUS = {
   on_going: '진행 중',

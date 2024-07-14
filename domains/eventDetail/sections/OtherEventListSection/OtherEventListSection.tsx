@@ -1,3 +1,8 @@
+import { useRouter } from 'next/navigation';
+
+import Slider, { Settings } from 'react-slick';
+import { formatISO } from 'date-fns/formatISO';
+
 import styled from '@emotion/styled';
 import {
   Card,
@@ -7,16 +12,14 @@ import {
   Image,
   Text
 } from '@chakra-ui/react';
-import Slider, { Settings } from 'react-slick';
-import { useNavigate } from 'react-router-dom';
 import { css } from '@emotion/react';
 import { useBooleanState } from '@toss/react';
-import { formatDate } from '@src/logics/utils/dateFormat';
-import { formatISO } from 'date-fns/formatISO';
+import { formatDate } from '@logics/utils/dateFormat';
+
+import { useFetchOtherEventListQuery } from '../../network/eventDetailQueries';
 
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { useFetchOtherEventListQuery } from '../../network/eventDetailQueries';
 
 const settings: Settings = {
   dots: false,
@@ -63,7 +66,7 @@ const OtherEventListSection = ({
   eventId,
   areaCode
 }: OtherEventListSectionProps) => {
-  const navigate = useNavigate();
+  const { push } = useRouter();
 
   const [isMouseMoving, setIsMouseMoving, unsetIsMouseMoving] =
     useBooleanState();
@@ -82,7 +85,7 @@ const OtherEventListSection = ({
   const handleClickCard = (contentId: number) => {
     if (isMouseMoving || !contentId) return;
 
-    navigate(`/eventDetail/${contentId}`);
+    push(`/eventDetail/${contentId}`);
   };
 
   if (eventData && eventData.list.length < 1) return null;

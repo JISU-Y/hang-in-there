@@ -1,12 +1,12 @@
 import { useLayoutEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { usePathname } from 'next/navigation';
 
 const usePreventScrollRestoration = () => {
-  const location = useLocation();
+  const pathname = usePathname();
 
   useLayoutEffect(() => {
     document.documentElement.scrollTo(0, 0);
-  }, [location.pathname]);
+  }, [pathname]);
 };
 
 export default usePreventScrollRestoration;

@@ -1,9 +1,9 @@
-import { MobileOSType, StringBoolean } from '@src/common/types';
+import { MobileOSType, StringBoolean } from '@domains/common/types';
 import {
   ApiDataResponseType,
   ApiDataResponseTypeNew,
   ApiPaginationDataResponseType
-} from '@src/common/types/utilType';
+} from '@domains/common/types/utilType';
 
 export type ContentTypeUnionType = 12 | 14 | 15 | 25 | 28 | 32 | 38 | 39;
 

@@ -1,4 +1,14 @@
-import styled from '@emotion/styled';
+import { useEffect, useRef, useState } from 'react';
+
+function loadNaverMapsScript(callback: () => void) {
+  const script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${process.env.NEXT_PUBLIC_NAVER_MAPS_CLIENT_ID}`;
+  script.async = true;
+  script.onload = () => callback();
+
+  document.head.appendChild(script);
+}
 
 interface EventMapProps {
   position: {
@@ -8,63 +18,51 @@ interface EventMapProps {
 }
 
 const EventMap = ({ position }: EventMapProps) => {
-  // useEffect(() => {
-  //   function loadNaverMapsScript() {
-  //     const script = document.createElement('script');
-  //     script.type = 'text/javascript';
-  //     script.src = `https://naveropenapi.apigw.ntruss.com/map-static/v2/raster?w=300&h=300&center=127.1054221,37.3591614&level=16=${
-  //       process.env.NEXT_PUBLIC_NAVER_MAPS_CLIENT_ID
-  //     }`;
-  //     script.async = true;
+  const mapElement = useRef<HTMLDivElement | null>(null);
 
-  //     document.body.appendChild(script);
-  //   }
+  const [, setMapLoaded] = useState(false);
+  const [newMap, setNewMap] = useState<naver.maps.Map | null>(null);
 
-  //   loadNaverMapsScript();
-  // }, []);
+  const initMap = () => {
+    // 추가 옵션 설정
+    const mapOptions = {
+      zoomControl: true,
+      center: new naver.maps.LatLng(position.lat, position.lng),
+      zoom: 16
+    };
 
-  // useEffect(() => {
-  //   if (!window.naver) return;
+    // 지도 초기화 확인
+    if (document.getElementById('map')) {
+      const map = new naver.maps.Map('map', mapOptions);
+      setNewMap(map);
+    }
 
-  //   const location = new naver.maps.LatLng(37.5656, 126.9769);
-  //   const mapOptions = {
-  //     center: location,
-  //     zoom: 17,
-  //     zoomControl: true
-  //   };
+    // 지도 로드 완료
+    setMapLoaded(true);
+  };
 
-  //   const mapDiv = document.getElementById('map');
-  //   const map = new naver.maps.Map(mapDiv, {
-  //     center: new naver.maps.LatLng(37.3595704, 127.105399),
-  //     zoom: 15
-  //   });
+  useEffect(() => {
+    // 스크립트 로딩 확인
+    if (typeof naver === 'undefined') {
+      loadNaverMapsScript(initMap);
+    } else {
+      initMap();
+    }
+  }, []);
 
-  //   const marker = new naver.maps.Marker({
-  //     position: new naver.maps.LatLng(37.3595704, 127.105399),
-  //     map: map
-  //   });
-  // }, []);
+  useEffect(() => {
+    if (!newMap) return;
+
+    // Marker 생성
+    const marker = new naver.maps.Marker({
+      position: new naver.maps.LatLng(position.lat, position.lng),
+      map: newMap
+    });
+  }, [newMap, position]);
 
   return (
-    <>
-      <ImageWrapper>
-        <img
-          src={`https://naveropenapi.apigw.ntruss.com/map-static/v2/raster-cors?w=1024&h=406&scale=2&center=${position.lng},${position.lat}&markers=type:d|size:mid|color:orange|pos:${position.lng}%20${position.lat}&level=12&X-NCP-APIGW-API-KEY-ID=${process.env.NEXT_PUBLIC_NAVER_MAPS_CLIENT_ID}`}
-        />
-      </ImageWrapper>
-
-      {/* TODO: Map 띄우면 계속 naver maps net::ERR_CERT_COMMON_NAME_INVALID 이 에러 뜸. 그러면서 RAM 엄청 돌아감. */}
-      {/* <div id="map" style={{ width: '400px', minHeight: '400px' }} /> */}
-    </>
+    <div id="map" ref={mapElement} style={{ width: '100%', height: '400px' }} />
   );
 };
 
 export default EventMap;
-
-const ImageWrapper = styled.div`
-  width: 100%;
-
-  img {
-    width: 100%;
-  }
-`;
