@@ -1,6 +1,7 @@
+import { useRouter } from 'next/navigation';
+
 import styled from '@emotion/styled';
 import { Menu, MenuButton, MenuList, MenuItem, Button } from '@chakra-ui/react';
-import { useNavigate } from 'react-router';
 
 // 축제 공연 전시 교육/체험 아동/청소년
 const categoryList = {
@@ -12,10 +13,10 @@ const categoryList = {
 };
 
 const Categories = () => {
-  const navigate = useNavigate();
+  const { push } = useRouter();
 
   const handleCategoryClick = () => {
-    navigate('/category');
+    push('/category');
   };
 
   return (

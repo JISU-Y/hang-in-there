@@ -1,23 +1,23 @@
-import { Link, useLocation, useSearchParams } from 'react-router-dom';
+import Link from 'next/link';
+import { useParams, useSearchParams } from 'next/navigation';
+
 import styled from '@emotion/styled';
-import queryString from 'query-string';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import {
   CATEGORY_CODE,
   CategoryCodeType
-} from '@src/common/constants/categories';
+} from '@domains/common/constants/categories';
 
 const Breadcrumbs = () => {
-  const [searchParams] = useSearchParams();
+  const searchParams = useSearchParams();
   const categoryCode = searchParams.get('category') as CategoryCodeType;
 
-  const location = useLocation();
-  const queryParams = queryString.parse(location.search);
-  const category = queryParams.category as string;
+  const params = useParams<{ category: string }>();
+  const category = params?.category as string;
 
   // TODO: 이벤트 디테일에서 카테고리 빼와서 추가해주기
   const breadcrumbItems = [
-    <BreadcrumbLink key="home" to="/">
+    <BreadcrumbLink key="home" href="/">
       홈
     </BreadcrumbLink>
   ];
@@ -27,7 +27,7 @@ const Breadcrumbs = () => {
       <Separator key="separator">
         <ChevronRightIcon w={6} h={6} strokeWidth={1} color="#8B8B8B" />
       </Separator>,
-      <BreadcrumbLink key="category" to={`/category?category=${category}`}>
+      <BreadcrumbLink key="category" href={`/category?category=${category}`}>
         {CATEGORY_CODE[categoryCode].name}
       </BreadcrumbLink>
     );

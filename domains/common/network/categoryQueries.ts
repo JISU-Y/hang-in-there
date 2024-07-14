@@ -19,14 +19,14 @@ export const useFetchCategoriesQuery = (params: {
     queryKey: `getEventList/${params.eventStartDate}/${params.areaCode}`,
     queryFn: async () => {
       const data = await axios.get<ApiDataResponseType<CategoryType>>(
-        `${process.envVITE_TOUR_API_END_POINT}/searchFestival1` || '',
+        `${process.env.NEXT_PUBLIC_TOUR_API_END_POINT}/searchFestival1` || '',
         {
           params: {
             ...params,
             _type: 'json',
             MobileOS: 'ETC',
             MobileApp: 'hanginthere',
-            serviceKey: process.envVITE_TOUR_API_KEY
+            serviceKey: process.env.NEXT_PUBLIC_TOUR_API_KEY
           }
         }
       );

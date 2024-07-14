@@ -13,7 +13,7 @@ const EventMap = ({ position }: EventMapProps) => {
   //     const script = document.createElement('script');
   //     script.type = 'text/javascript';
   //     script.src = `https://naveropenapi.apigw.ntruss.com/map-static/v2/raster?w=300&h=300&center=127.1054221,37.3591614&level=16=${
-  //       process.envVITE_NAVER_MAPS_CLIENT_ID
+  //       process.env.NEXT_PUBLIC_NAVER_MAPS_CLIENT_ID
   //     }`;
   //     script.async = true;
 
@@ -49,7 +49,7 @@ const EventMap = ({ position }: EventMapProps) => {
     <>
       <ImageWrapper>
         <img
-          src={`https://naveropenapi.apigw.ntruss.com/map-static/v2/raster-cors?w=1024&h=406&scale=2&center=${position.lng},${position.lat}&markers=type:d|size:mid|color:orange|pos:${position.lng}%20${position.lat}&level=12&X-NCP-APIGW-API-KEY-ID=${process.envVITE_NAVER_MAPS_CLIENT_ID}`}
+          src={`https://naveropenapi.apigw.ntruss.com/map-static/v2/raster-cors?w=1024&h=406&scale=2&center=${position.lng},${position.lat}&markers=type:d|size:mid|color:orange|pos:${position.lng}%20${position.lat}&level=12&X-NCP-APIGW-API-KEY-ID=${process.env.NEXT_PUBLIC_NAVER_MAPS_CLIENT_ID}`}
         />
       </ImageWrapper>
 

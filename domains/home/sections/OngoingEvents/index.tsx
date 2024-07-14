@@ -1,3 +1,5 @@
+import { useRouter } from 'next/navigation';
+
 import styled from '@emotion/styled';
 import {
   Card,
@@ -7,19 +9,17 @@ import {
   Image,
   Text
 } from '@chakra-ui/react';
-import Slider, { Settings } from 'react-slick';
-import { useNavigate } from 'react-router-dom';
+import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { css } from '@emotion/react';
 import { useBooleanState } from '@toss/react';
-import { formatDate } from '@src/logics/utils/dateFormat';
+import { formatDate } from '@logics/utils/dateFormat';
+import Slider, { Settings } from 'react-slick';
 import { formatISO } from 'date-fns/formatISO';
 
 import { useFetchOngoingEventListQuery } from '../../network/eventListQueries';
 
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import './custom-slick.css';
-import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 
 const CustomNextArrow = styled.button`
   width: 40px;
@@ -77,7 +77,7 @@ const settings: Settings = {
 };
 
 const OngoingEvents = () => {
-  const navigate = useNavigate();
+  const { push } = useRouter();
 
   const [isMouseMoving, setIsMouseMoving, unsetIsMouseMoving] =
     useBooleanState();
@@ -96,7 +96,7 @@ const OngoingEvents = () => {
   const handleClickCard = (contentId: number) => {
     if (isMouseMoving || !contentId) return;
 
-    navigate(`/eventDetail/${contentId}`);
+    push(`/eventDetail/${contentId}`);
   };
 
   return (
@@ -174,6 +174,28 @@ const Container = styled.section`
 
   @media (max-width: 1400px) {
     padding: 16px;
+  }
+
+  .slick-arrow {
+    width: 40px;
+    height: 40px;
+    z-index: 1;
+    border-radius: 50%;
+  }
+
+  .slick-arrow::before {
+    width: 100%;
+    height: 100%;
+    display: none;
+  }
+
+  .slick-prev,
+  .slick-next {
+    .slick-prev::before,
+    .slick-next::before {
+      opacity: 0;
+      display: none;
+    }
   }
 `;
 

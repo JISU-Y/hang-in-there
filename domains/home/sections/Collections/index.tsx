@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+
 import Slider, { Settings } from 'react-slick';
 
 import styled from '@emotion/styled';
@@ -8,7 +10,6 @@ import { getOpacityColor } from '@styles/mixins';
 
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import Link from 'next/link';
 
 const bannerList = [
   {
@@ -155,6 +156,61 @@ const Container = styled.section`
 
   .slick-list {
     margin: 0 -7px;
+  }
+
+  .custom-dots {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .custom-dots li {
+    list-style: none;
+    cursor: pointer;
+    display: inline-block;
+    margin: 0 6px;
+    padding: 0;
+  }
+
+  .custom-dots li button {
+    border: none;
+    background: rgba(255, 255, 255, 0.5);
+    color: transparent;
+    cursor: pointer;
+    display: block;
+    height: 8px;
+    width: 8px;
+    border-radius: 100%;
+    padding: 0;
+  }
+
+  .custom-dots li.slick-active button {
+    background-color: #ffffff;
+  }
+
+  .slick-arrow {
+    width: 40px;
+    height: 40px;
+    z-index: 1;
+    border-radius: 50%;
+  }
+
+  .slick-arrow::before {
+    width: 100%;
+    height: 100%;
+    display: none;
+  }
+
+  .slick-prev,
+  .slick-next {
+    .slick-prev::before,
+    .slick-next::before {
+      opacity: 0;
+      display: none;
+    }
   }
 `;
 

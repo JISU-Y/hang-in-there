@@ -133,8 +133,8 @@ const style = css`
   }
 `;
 
-function GlobalStyle() {
+function GlobalStyles() {
   return <Global styles={style} />;
 }
 
-export default GlobalStyle;
+export default GlobalStyles;

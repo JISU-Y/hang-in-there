@@ -11,8 +11,8 @@ export default function HomePage() {
     <ContentWrapper>
       <Collections />
       <EventListWrapper>
-        {/* <OngoingEvents />
-        <UpcomingEvents /> */}
+        <OngoingEvents />
+        <UpcomingEvents />
       </EventListWrapper>
     </ContentWrapper>
   );

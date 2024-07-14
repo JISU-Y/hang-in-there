@@ -19,7 +19,7 @@ export const useFetchNearEventListQuery = (
     queryKey: `getNearEventList/${params.mapX}/${params.mapY}`,
     queryFn: async () => {
       const data = await axios.get<EventListResponseDto>(
-        `${process.envVITE_HANGINTHERE_API_END_POINT}/v1/user/event/local` ||
+        `${process.env.NEXT_PUBLIC_HANGINTHERE_API_END_POINT}/v1/user/event/local` ||
           '',
         {
           params: {
@@ -52,7 +52,8 @@ export const useFetchEventListInfiniteQuery = (params: {
     ],
     queryFn: async ({ pageParam = params.page }) => {
       const data = await axios.get<EventListResponseDtoNew>(
-        `${process.envVITE_HANGINTHERE_API_END_POINT}/v1/user/event` || '',
+        `${process.env.NEXT_PUBLIC_HANGINTHERE_API_END_POINT}/v1/user/event` ||
+          '',
         {
           params: {
             ...params,
@@ -84,13 +85,13 @@ export const useFetchEventListInfiniteQuery = (params: {
 //     queryKey: `getNearEventList/${params.mapX}/${params.mapY}`,
 //     queryFn: async ({ pageParam = params.pageNo }) => {
 //       const data = await axios.get<EventListResponseDto>(
-//         `${process.envVITE_TOUR_API_END_POINT}/locationBasedList1` || '',
+//         `${process.env.NEXT_PUBLIC_TOUR_API_END_POINT}/locationBasedList1` || '',
 //         {
 //           params: {
 //             ...params,
 //             pageNo: pageParam,
 //             _type: 'json',
-//             serviceKey: process.envVITE_TOUR_API_KEY,
+//             serviceKey: process.env.NEXT_PUBLIC_TOUR_API_KEY,
 //             contentTypeId: 15,
 //             MobileOS: 'ETC',
 //             MobileApp: 'hanginthere',

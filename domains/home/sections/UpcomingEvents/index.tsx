@@ -11,7 +11,7 @@ import {
 import { useFetchUpcomingEventListQuery } from '../../network/eventListQueries';
 
 import { css } from '@emotion/react';
-import { formatDate } from '@src/logics/utils/dateFormat';
+import { formatDate } from '@logics/utils/dateFormat';
 import { formatISO } from 'date-fns/formatISO';
 import { useState } from 'react';
 import { ChevronRightIcon, ChevronLeftIcon } from '@chakra-ui/icons';
@@ -47,7 +47,7 @@ const UpcomingEvents = () => {
         {eventData?.list?.map(el => (
           <Card
             as={Link}
-            to={`/eventDetail/${el.event_id}`}
+            href={`/eventDetail/${el.event_id}`}
             key={el.title}
             w="100%"
             h="auto"

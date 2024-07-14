@@ -32,7 +32,7 @@ export default function PageLayout({
 
   useEffect(() => {
     onOpen();
-  }, []);
+  }, [onOpen]);
 
   return (
     <>

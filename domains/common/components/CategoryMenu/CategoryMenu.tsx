@@ -1,10 +1,11 @@
 import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+
 import styled from '@emotion/styled';
 import {
   CategoryCodeType,
   categories
-} from '../../../common/constants/categories';
-import { useRouter, useSearchParams } from 'next/navigation';
+} from '@domains/common/constants/categories';
 
 const CategoryMenu = () => {
   const [, setMenuEl] = useState<HTMLDivElement | null>(null);

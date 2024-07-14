@@ -1,5 +1,5 @@
-import { MobileOSType, StringBoolean } from '@src/common/types';
-import { ApiDataResponseType } from '@src/common/types/utilType';
+import { MobileOSType, StringBoolean } from '@domains/common/types';
+import { ApiDataResponseType } from '@domains/common/types/utilType';
 
 export interface EventListRequestDto {
   MobileOS: MobileOSType;

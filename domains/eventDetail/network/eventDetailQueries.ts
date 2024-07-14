@@ -14,7 +14,7 @@ export const useFetchEventDetailQuery = (
     queryKey: `getEventDetail/${contentId}`,
     queryFn: async () => {
       const data = await axios.get<EventDetailResponseDto>(
-        `${process.envVITE_HANGINTHERE_API_END_POINT}/v1/user/event/${contentId}` ||
+        `${process.env.NEXT_PUBLIC_HANGINTHERE_API_END_POINT}/v1/user/event/${contentId}` ||
           ''
       );
 
@@ -34,7 +34,8 @@ export const useFetchOtherEventListQuery = (
     queryKey: `getEventList/ongoingEvents`,
     queryFn: async ({ pageParam = 1 }) => {
       const data = await axios.get<EventListResponseDtoNew>(
-        `${process.envVITE_HANGINTHERE_API_END_POINT}/v1/user/event` || '',
+        `${process.env.NEXT_PUBLIC_HANGINTHERE_API_END_POINT}/v1/user/event` ||
+          '',
         {
           params: {
             category: '264', // A02
