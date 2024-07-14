@@ -7,11 +7,10 @@ import {
   ModalOverlay,
   SimpleGrid
 } from '@chakra-ui/react';
-import { ImpressionArea } from '@toss/impression-area';
-import styled from '@emotion/styled';
+import Loader from '@domains/common/components/Loader/Loader';
+
 import { useFetchNearEventListQuery } from '../../network/eventListQueries';
 import EventCard from '../../components/EventCard';
-import Loader from '@src/common/components/Loader/Loader';
 
 // const DEFAULT_GEO_LOCATION = { mapX: '127.0016985', mapY: '37.5642135' }; // 서울 시청
 
@@ -86,8 +85,8 @@ const NearEventListModal = ({
   );
 };
 
-const HeightImpressionArea = styled(ImpressionArea)`
-  height: 40px;
-`;
+// const HeightImpressionArea = styled(ImpressionArea)`
+//   height: 40px;
+// `;
 
 export default NearEventListModal;

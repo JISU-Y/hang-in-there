@@ -1,4 +1,7 @@
+import { useRouter } from 'next/navigation';
+
 import { omit } from 'lodash';
+import queryString from 'query-string';
 
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
@@ -13,15 +16,12 @@ import {
   useDisclosure
 } from '@chakra-ui/react';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
-
-import useGeoLocationPoint from '@src/logics/hooks/useGeoLocation';
+import useGeoLocationPoint from '@logics/hooks/useGeoLocation';
+import LocationIcon from '@styles/icons/LocationIcon';
 
 import { AREA_CODE } from '../../constants/categories';
 import { AreaCodeType, EventStatusEnumType } from '../../types';
 import NearEventListModal from '../../modal/NearEventListModal/NearEventListModal';
-import LocationIcon from '@src/styles/icons/LocationIcon';
-import queryString from 'query-string';
-import { useRouter } from 'next/navigation';
 
 const EVENT_STATUS = {
   on_going: '진행 중',
@@ -36,7 +36,7 @@ interface FilterProps {
 }
 
 const Filter = ({ mapX, mapY, handleSetGeoLocation }: FilterProps) => {
-  const router = useRouter();
+  const { push } = useRouter();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -69,7 +69,7 @@ const Filter = ({ mapX, mapY, handleSetGeoLocation }: FilterProps) => {
           };
 
     // 새로운 쿼리 파라미터로 URL 업데이트
-    navigate(`${location.pathname}?${queryString.stringify(newQueryParams)}`);
+    push(`${location.pathname}?${queryString.stringify(newQueryParams)}`, {});
   };
 
   const handleStatusClick = (status: EventStatusEnumType) => {
@@ -97,7 +97,7 @@ const Filter = ({ mapX, mapY, handleSetGeoLocation }: FilterProps) => {
           };
 
     // 새로운 쿼리 파라미터로 URL 업데이트
-    navigate(`${location.pathname}?${queryString.stringify(newQueryParams)}`);
+    push(`${location.pathname}?${queryString.stringify(newQueryParams)}`);
   };
 
   const handleClickFindNearEvent = async () => {
@@ -135,6 +135,7 @@ const Filter = ({ mapX, mapY, handleSetGeoLocation }: FilterProps) => {
       />
 
       <Accordion
+        defaultIndex={[0, 1]}
         allowMultiple
         css={css`
           width: 237px;
@@ -318,8 +319,11 @@ const AreaListPanel = styled.ul`
 const AreaListButton = styled.li`
   font-size: 16px;
   padding: 4px;
-  display: inline-block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: fit-content;
+  height: 32px;
   background-color: transparent;
   transition: all 0.5 ease-in-out;
   flex-shrink: 0;

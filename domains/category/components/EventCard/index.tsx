@@ -1,9 +1,10 @@
+import Link from 'next/link';
+import Image from 'next/image';
+
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { Card, CardBody, CardFooter, Heading, Text } from '@chakra-ui/react';
-import { formatDate } from '@src/logics/utils/dateFormat';
-import Link from 'next/link';
-import Image from 'next/image';
+import { formatDate } from '@logics/utils/dateFormat';
 
 interface EventCardProps {
   eventId: string;
@@ -36,7 +37,7 @@ const EventCard = ({
   return (
     <Card
       as={Link}
-      to={`/eventDetail/${eventId}`}
+      href={`/eventDetail/${eventId}`}
       key={title}
       w="233px"
       h="auto"
@@ -51,7 +52,16 @@ const EventCard = ({
     >
       <CardBody padding="0">
         <ImageWrapper>
-          <Img src={imageUrl} alt={`festival-${title}`} objectFit="cover" />
+          <Image
+            fill
+            src={imageUrl}
+            alt={`festival-${title}`}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover'
+            }}
+          />
         </ImageWrapper>
       </CardBody>
       <CardFooter
@@ -93,13 +103,8 @@ const HeadingCSS = css`
 `;
 
 const ImageWrapper = styled.div`
+  position: relative;
   width: 100%;
   height: auto;
   aspect-ratio: 2/3;
-`;
-
-const Img = styled(Image)`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 `;

@@ -5,18 +5,18 @@ import { useSearchParams } from 'next/navigation';
 
 import styled from '@emotion/styled';
 import { SimpleGrid } from '@chakra-ui/react';
+import { ImpressionArea } from '@toss/impression-area';
+import Breadcrumbs from '@domains/common/components/Breadcrums/Breadcrums';
+import {
+  CATEGORY_CODE,
+  CategoryCodeType
+} from '@domains/common/constants/categories';
+import Loader from '@domains/common/components/Loader/Loader';
 
 import { useFetchEventListInfiniteQuery } from './network/eventListQueries';
 import Filter from './components/Filter';
 import EventCard from './components/EventCard';
-import { ImpressionArea } from '@toss/impression-area';
 import EmptyResult from './components/EmptyResult/EmptyResult';
-import Breadcrumbs from '@src/common/components/Breadcrums/Breadcrums';
-import {
-  CATEGORY_CODE,
-  CategoryCodeType
-} from '@src/common/constants/categories';
-import Loader from '@src/common/components/Loader/Loader';
 
 const CategoryPage = () => {
   const searchParams = useSearchParams();

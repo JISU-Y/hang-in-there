@@ -6,7 +6,7 @@ import {
   EventListResponseDtoNew,
   NearEventListRequestDto
 } from '../types';
-import { UseQueryOptionsType } from '@src/common/types/utilType';
+import { UseQueryOptionsType } from '@domains/common/types/utilType';
 
 export const useFetchNearEventListQuery = (
   params: {
