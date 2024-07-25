@@ -8,6 +8,7 @@ import styled from '@emotion/styled';
 import { Collapse, useDisclosure } from '@chakra-ui/react';
 
 import CategoryMenu from '../components/CategoryMenu/CategoryMenu';
+import AuthMenu from '../components/AuthMenu/AuthMenu';
 
 const EXTERNAL_DOCUMENT_LINKS = {
   SERVICE: { NAME: '이용약관', LINK: '' },
@@ -57,6 +58,7 @@ export default function PageLayout({
           </Collapse>
         </LineBannerWrapper>
       )}
+
       <PageContainer>
         {withNavbar && (
           <Navbar>
@@ -72,6 +74,8 @@ export default function PageLayout({
               />
             </Link>
             <CategoryMenu />
+
+            <AuthMenu />
           </Navbar>
         )}
         <Content>{children}</Content>
@@ -218,4 +222,8 @@ const ExternalLinksWrapper = styled.div`
 const FooterLogoImage = styled(Image)`
   width: 98px;
   height: 32px;
+`;
+
+const KakaoLoginButton = styled.button`
+  background-color: yellow;
 `;
