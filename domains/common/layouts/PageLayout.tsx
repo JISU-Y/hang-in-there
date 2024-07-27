@@ -6,9 +6,10 @@ import Image from 'next/image';
 
 import styled from '@emotion/styled';
 import { Collapse, useDisclosure } from '@chakra-ui/react';
+import AuthMenu from '@domains/auth/components/AuthMenu/AuthMenu';
 
 import CategoryMenu from '../components/CategoryMenu/CategoryMenu';
-import AuthMenu from '../components/AuthMenu/AuthMenu';
+import { useAuthSession } from '@domains/auth/hooks/useAuthSession';
 
 const EXTERNAL_DOCUMENT_LINKS = {
   SERVICE: { NAME: '이용약관', LINK: '' },
@@ -29,6 +30,8 @@ export default function PageLayout({
   withFooter = true,
   children
 }: PropsWithChildren<PageLayoutProps>) {
+  const { isUserLoggedIn } = useAuthSession();
+
   const { isOpen, onOpen } = useDisclosure();
 
   useEffect(() => {
@@ -75,7 +78,7 @@ export default function PageLayout({
             </Link>
             <CategoryMenu />
 
-            <AuthMenu />
+            {!isUserLoggedIn ? <AuthMenu /> : <div>로그인 되었습니다!</div>}
           </Navbar>
         )}
         <Content>{children}</Content>
