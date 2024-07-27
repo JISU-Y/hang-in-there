@@ -6,6 +6,9 @@ const nextConfig = {
   distDir: './dist', // Changes the build output directory to `./dist/`.
   images: {
     unoptimized: isDevelopment
+  },
+  experimental: {
+    missingSuspenseWithCSRBailout: false
   }
 };
 
