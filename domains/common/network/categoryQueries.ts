@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useQuery } from 'react-query';
-import { ApiDataResponseType } from '@src/common/types/utilType';
+import { ApiDataResponseType } from '../types/utilType';
 
 export interface CategoryType {
   code: string;
