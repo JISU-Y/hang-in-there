@@ -3,7 +3,6 @@
 const isDevelopment = process.env.NODE_ENV === 'development';
 
 const nextConfig = {
-  distDir: './dist', // Changes the build output directory to `./dist/`.
   images: {
     unoptimized: isDevelopment
   },
