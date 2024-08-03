@@ -90,7 +90,7 @@ const CategoryPage = () => {
                     startDate: event.event_st,
                     endDate: event.event_ed
                   }}
-                  location={event.title}
+                  location={event.addr}
                 />
               ))
             )}
