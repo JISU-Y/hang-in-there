@@ -2,7 +2,10 @@ import { useEffect } from 'react';
 import Image from 'next/image';
 
 import styled from '@emotion/styled';
+import { Tooltip } from '@chakra-ui/react';
+import UserIcon from '@styles/icons/UserIcon';
 import { useReissueTokenQuery } from '@domains/auth/network/authQueries';
+import { useAuthSession } from '@domains/auth/hooks/useAuthSession';
 
 const getCookie = (name: string) => {
   const parts = document.cookie.split(name + '=');
@@ -12,6 +15,8 @@ const getCookie = (name: string) => {
 };
 
 const AuthMenu = () => {
+  const { isUserLoggedIn } = useAuthSession();
+
   const { refetch: reissueToken } = useReissueTokenQuery();
 
   const kakaoLoginHandler = () => {
@@ -35,14 +40,22 @@ const AuthMenu = () => {
 
   return (
     <Container>
-      <KakaoLoginButton type="button" onClick={kakaoLoginHandler}>
-        <KakaoIcon
-          width={60}
-          height={30}
-          src="/assets/kakao_login_small.png"
-          alt="kakao-login"
-        />
-      </KakaoLoginButton>
+      {isUserLoggedIn ? (
+        <Tooltip label="로그인 상태입니다. 마이페이지는 준비 중입니다. 🙇‍♂️">
+          <UserMy type="button">
+            <UserIcon />
+          </UserMy>
+        </Tooltip>
+      ) : (
+        <KakaoLoginButton type="button" onClick={kakaoLoginHandler}>
+          <KakaoIcon
+            width={60}
+            height={30}
+            src="/assets/kakao_login_small.png"
+            alt="kakao-login"
+          />
+        </KakaoLoginButton>
+      )}
     </Container>
   );
 };
@@ -62,4 +75,8 @@ const KakaoIcon = styled(Image)`
   width: 100%;
   height: 100%;
   object-fit: cover;
+`;
+
+const UserMy = styled.button`
+  cursor: pointer;
 `;
