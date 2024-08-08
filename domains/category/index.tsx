@@ -17,10 +17,7 @@ import { useFetchEventListInfiniteQuery } from './network/eventListQueries';
 import Filter from './components/Filter';
 import EventCard from './components/EventCard';
 import EmptyResult from './components/EmptyResult/EmptyResult';
-import {
-  ApiPaginationDataResponseType,
-  PaginationType
-} from '@domains/common/types/utilType';
+import { PaginationType } from '@domains/common/types/utilType';
 
 const CategoryPage = () => {
   const searchParams = useSearchParams();
