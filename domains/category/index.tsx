@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 import styled from '@emotion/styled';
@@ -17,10 +17,12 @@ import { useFetchEventListInfiniteQuery } from './network/eventListQueries';
 import Filter from './components/Filter';
 import EventCard from './components/EventCard';
 import EmptyResult from './components/EmptyResult/EmptyResult';
+import { PaginationType } from '@domains/common/types/utilType';
 
 const CategoryPage = () => {
   const searchParams = useSearchParams();
   const categoryCode = searchParams.get('category') as CategoryCodeType;
+  const searchKeyword = searchParams.get('search');
   const areaCode = searchParams.getAll('areaCode')?.[0];
   const status = searchParams.getAll('status')?.[0];
 
@@ -32,12 +34,16 @@ const CategoryPage = () => {
   const {
     data: eventListPageData,
     fetchNextPage: fetchNextPageEventList,
-    isLoading
+    isLoading,
+    refetch
   } = useFetchEventListInfiniteQuery({
     size: 10,
     page: 1,
     area_cd: areaCode,
     status,
+    ...(searchKeyword && {
+      title: searchKeyword
+    }),
     ...(categoryCode && {
       sub_category: String(CATEGORY_CODE[categoryCode].code) || undefined
     }),
@@ -49,6 +55,10 @@ const CategoryPage = () => {
   const handleSetGeoLocation = (param: { mapX: string; mapY: string }) => {
     setGeoLocation(param);
   };
+
+  useEffect(() => {
+    refetch();
+  }, [searchParams]);
 
   if (isLoading) {
     return (
@@ -63,9 +73,21 @@ const CategoryPage = () => {
 
   return (
     <ContentWrapper>
-      <BreadcrumWrapper>
+      <StatusWrapper>
         <Breadcrumbs />
-      </BreadcrumWrapper>
+
+        {searchKeyword && (
+          <SearchResultPhrase>
+            {/* TODO: typing 필요 */}
+            <strong>
+              {(eventListPageData as { total?: PaginationType })?.total
+                ?.totalItem || 0}
+              개
+            </strong>{' '}
+            검색 결과
+          </SearchResultPhrase>
+        )}
+      </StatusWrapper>
 
       <ContainerWrapper>
         <Filter
@@ -114,9 +136,21 @@ const ContentWrapper = styled.div`
   padding: 40px 112px;
 `;
 
-const BreadcrumWrapper = styled.div`
+const StatusWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
   width: 100%;
   margin-bottom: 27px;
+`;
+
+const SearchResultPhrase = styled.span`
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+
+  & > strong {
+    color: #ff6917;
+  }
 `;
 
 const ContainerWrapper = styled.div`

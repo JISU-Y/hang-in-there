@@ -65,8 +65,6 @@ export default AuthMenu;
 const Container = styled.div`
   display: flex;
   gap: 40px;
-  margin-left: auto;
-  margin-bottom: 36px;
 `;
 
 const KakaoLoginButton = styled.button``;

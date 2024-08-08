@@ -10,6 +10,7 @@ import AuthMenu from '@domains/auth/components/AuthMenu/AuthMenu';
 
 import CategoryMenu from '../components/CategoryMenu/CategoryMenu';
 import { useAuthSession } from '@domains/auth/hooks/useAuthSession';
+import SearchBox from '../components/SearchBox/SearchBox';
 
 const EXTERNAL_DOCUMENT_LINKS = {
   SERVICE: { NAME: '이용약관', LINK: '' },
@@ -78,7 +79,10 @@ export default function PageLayout({
             </Link>
             <CategoryMenu />
 
-            {!isUserLoggedIn ? <AuthMenu /> : <div>로그인 되었습니다!</div>}
+            <MenuContainer>
+              <SearchBox />
+              {!isUserLoggedIn ? <AuthMenu /> : <div>로그인 되었습니다!</div>}
+            </MenuContainer>
           </Navbar>
         )}
         <Content>{children}</Content>
@@ -164,6 +168,13 @@ const Navbar = styled.nav`
   & > a {
     margin-bottom: 36px;
   }
+`;
+
+const MenuContainer = styled.div`
+  display: flex;
+  gap: 16px;
+  margin-left: auto;
+  margin-bottom: 36px;
 `;
 
 const ImageWrapper = styled(Image)`
