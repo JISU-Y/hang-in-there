@@ -42,6 +42,7 @@ export const useFetchEventListInfiniteQuery = (params: {
   sigungu_cd?: string;
   sub_category?: string;
   detail_sub_category?: string;
+  title?: string;
   size: number;
   page: number;
   status: string;
@@ -62,12 +63,14 @@ export const useFetchEventListInfiniteQuery = (params: {
           } as EventListRequestDtoNew
         }
       );
+
       return data;
     },
     getNextPageParam: lastPage => lastPage.data.pagination?.page + 1,
     select: ({ pages, pageParams }) => ({
       pages: pages.flatMap(({ data }) => data.data).filter(el => el),
-      pageParams
+      pageParams,
+      total: pages[0].data.pagination
     })
   });
 };

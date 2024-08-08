@@ -1,27 +1,36 @@
-import { ChangeEventHandler, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { ChangeEventHandler, FormEventHandler, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 import styled from '@emotion/styled';
 import { SearchIcon } from '@chakra-ui/icons';
 
 const SearchBox = () => {
+  const { push } = useRouter();
+
   const [keyword, setKeyword] = useState('');
 
   const handleChangeKeyword: ChangeEventHandler<HTMLInputElement> = e => {
-    console.log(e.target.value);
     setKeyword(e.target.value);
+  };
+
+  const handleSubmitSearch: FormEventHandler<HTMLFormElement> = e => {
+    e.preventDefault();
+
+    if (!keyword) return;
+
+    push(`/category?search=${keyword}`);
   };
 
   return (
     <Container>
-      <InputWrapper>
+      <InputForm onSubmit={handleSubmitSearch}>
         <SearchIcon />
         <Input
           value={keyword}
           onChange={handleChangeKeyword}
           placeholder="원하시는 행사를 검색해보세요."
         />
-      </InputWrapper>
+      </InputForm>
     </Container>
   );
 };
@@ -30,7 +39,7 @@ const Container = styled.div`
   position: relative;
 `;
 
-const InputWrapper = styled.div`
+const InputForm = styled.form`
   display: flex;
   justify-content: flex-end;
   align-items: center;
