@@ -35,6 +35,7 @@ const CategoryPage = () => {
     data: eventListPageData,
     fetchNextPage: fetchNextPageEventList,
     isLoading,
+    hasNextPage,
     refetch
   } = useFetchEventListInfiniteQuery({
     size: 10,
@@ -58,7 +59,7 @@ const CategoryPage = () => {
 
   useEffect(() => {
     refetch();
-  }, [searchParams]);
+  }, [categoryCode, searchKeyword, areaCode, status]);
 
   if (isLoading) {
     return (
@@ -121,7 +122,11 @@ const CategoryPage = () => {
             )}
           </SimpleGrid>
           <HeightImpressionArea
-            onImpressionStart={() => fetchNextPageEventList()}
+            onImpressionStart={() => {
+              if (!hasNextPage) return;
+
+              fetchNextPageEventList();
+            }}
             areaThreshold={0.5}
           />
         </CardListContainer>
