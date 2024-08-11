@@ -1,11 +1,23 @@
-import { ChangeEventHandler, FormEventHandler, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import {
+  ChangeEventHandler,
+  FormEventHandler,
+  useEffect,
+  useState
+} from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import styled from '@emotion/styled';
 import { SearchIcon } from '@chakra-ui/icons';
+import {
+  categories,
+  CategoryCodeType
+} from '@domains/common/constants/categories';
 
 const SearchBox = () => {
   const { push } = useRouter();
+  const searchParams = useSearchParams();
+  const categoryCode = searchParams.get('category') as CategoryCodeType;
+  const searchKeyword = searchParams.get('search');
 
   const [keyword, setKeyword] = useState('');
 
@@ -16,10 +28,18 @@ const SearchBox = () => {
   const handleSubmitSearch: FormEventHandler<HTMLFormElement> = e => {
     e.preventDefault();
 
-    if (!keyword) return;
+    if (!keyword) {
+      push(`/category?category=${categoryCode || categories[0].code}`); // NOTE: default category -> 축제 (A0207)
+
+      return;
+    }
 
     push(`/category?search=${keyword}`);
   };
+
+  useEffect(() => {
+    setKeyword(searchKeyword || '');
+  }, [searchKeyword, categoryCode]);
 
   return (
     <Container>

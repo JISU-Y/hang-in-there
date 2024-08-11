@@ -49,7 +49,7 @@ export const useFetchEventListInfiniteQuery = (params: {
 }) => {
   return useInfiniteQuery({
     queryKey: [
-      `event/${params.area_cd}/${params.status}/${params.sigungu_cd}/${params.sub_category}/${params.detail_sub_category}`
+      `event/${params.area_cd}/${params.status}/${params.sigungu_cd}/${params.sub_category}/${params.detail_sub_category}/${params.title}`
     ],
     queryFn: async ({ pageParam = params.page }) => {
       const data = await axios.get<EventListResponseDtoNew>(
@@ -66,7 +66,13 @@ export const useFetchEventListInfiniteQuery = (params: {
 
       return data;
     },
-    getNextPageParam: lastPage => lastPage.data.pagination?.page + 1,
+    getNextPageParam: lastPage => {
+      const { totalPage, page: currentPage } = lastPage.data.pagination;
+
+      if (currentPage >= totalPage) return null;
+
+      return currentPage + 1;
+    },
     select: ({ pages, pageParams }) => ({
       pages: pages.flatMap(({ data }) => data.data).filter(el => el),
       pageParams,
