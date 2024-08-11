@@ -91,8 +91,8 @@ export default function PageLayout({
           <Footer>
             <CopyRightWrapper>
               <FooterLogoImage
-                width={0}
-                height={0}
+                width={98}
+                height={32}
                 src="/logo/hanginthere-text-logo-light.png"
                 alt="hanginthere-footer-logo"
                 style={{
@@ -246,8 +246,4 @@ const ExternalLinksWrapper = styled.div`
 const FooterLogoImage = styled(Image)`
   width: 98px;
   height: 32px;
-`;
-
-const KakaoLoginButton = styled.button`
-  background-color: yellow;
 `;
