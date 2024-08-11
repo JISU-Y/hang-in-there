@@ -83,8 +83,8 @@ const EventDetailPage = () => {
         <ContentWrapper>
           <ImageWrapper>
             <Image
-              width={100}
-              height={100}
+              width={394}
+              height={557}
               src={eventDetail?.img[0]?.url || '/logo/poster-fallback.png'}
               alt={`festival-${eventDetail?.title}`}
               style={{
@@ -160,11 +160,6 @@ const EventDetailPage = () => {
 
 const Container = styled.div`
   padding: 32px 48px 64px;
-`;
-
-const BreadcrumWrapper = styled.div`
-  width: 100%;
-  margin-bottom: -27px;
 `;
 
 const DetailContainer = styled.div`
