@@ -26,6 +26,6 @@ const ContentWrapper = styled.div`
 
 const EventListWrapper = styled.section`
   width: 100%;
-  max-width: 1280px;
+  max-width: 1127px;
   margin: auto;
 `;

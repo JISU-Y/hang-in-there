@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 
 import { useFetchEventDetailQuery } from '../../network/eventDetailQueries';
 import EventMap from '../../components/EventMap/EventMap';
+import Image from 'next/image';
 
 const DetailInfoSection = () => {
   const { contentId } = useParams<{ contentId: string }>();
@@ -23,7 +24,12 @@ const DetailInfoSection = () => {
     <DetailInfoContainer>
       {eventDetail?.img?.map((image, index) => (
         <ImageWrapper key={`${image.sort_order}-${index}`}>
-          <Image src={image.url} />
+          <EventDetailImage
+            width={394}
+            height={557}
+            src={image.url}
+            alt="event-detail"
+          />
         </ImageWrapper>
       ))}
       <Description
@@ -59,7 +65,7 @@ const ImageWrapper = styled.div`
   height: auto;
 `;
 
-const Image = styled.img`
+const EventDetailImage = styled(Image)`
   width: 100%;
   height: 100%;
   object-fit: cover;

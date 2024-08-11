@@ -1,8 +1,15 @@
 import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { useQuery, UseQueryOptions } from 'react-query';
 
 export const useReissueTokenQuery = (options?: UseQueryOptions) => {
-  const accessToken = localStorage.getItem('accessToken');
+  const [accessToken, setAccessToken] = useState('');
+
+  useEffect(() => {
+    const storageAccessToken = localStorage.getItem('accessToken');
+
+    setAccessToken(storageAccessToken || '');
+  }, []);
 
   return useQuery({
     queryKey: 'token-reissue',

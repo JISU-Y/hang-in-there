@@ -59,7 +59,7 @@ const settings: Settings = {
   // HACK: responsive 추가하면 breakpoint 1200 이하에서 왼쪽에 blank가 생김
   dots: false,
   infinite: false,
-  slidesToShow: 5,
+  slidesToShow: 4,
   slidesToScroll: 1,
   swipeToSlide: true,
   touchThreshold: 100,
@@ -171,6 +171,7 @@ const HeadingCSS = css`
 
 const Container = styled.section`
   width: 100%;
+  margin-bottom: 64px;
 
   @media (max-width: 1400px) {
     padding: 16px;
