@@ -65,25 +65,26 @@ export default function PageLayout({
 
       <PageContainer>
         {withNavbar && (
-          <Navbar>
-            <Link href="/">
-              <ImageWrapper
-                width={100}
-                height={35}
-                src="/logo/hanginthere-full-logo.svg"
-                alt="logo"
-                style={{
-                  height: '35px'
-                }}
-              />
-            </Link>
+          <NavbarContainer>
+            <Navbar>
+              <Link href="/">
+                <ImageWrapper
+                  width={100}
+                  height={35}
+                  src="/logo/hanginthere-full-logo.svg"
+                  alt="logo"
+                  style={{
+                    height: '35px'
+                  }}
+                />
+              </Link>
+              <MenuContainer>
+                <SearchBox />
+                {!isUserLoggedIn ? <AuthMenu /> : <div>로그인 되었습니다!</div>}
+              </MenuContainer>
+            </Navbar>
             <CategoryMenu />
-
-            <MenuContainer>
-              <SearchBox />
-              {!isUserLoggedIn ? <AuthMenu /> : <div>로그인 되었습니다!</div>}
-            </MenuContainer>
-          </Navbar>
+          </NavbarContainer>
         )}
         <Content>{children}</Content>
         {withFooter && (
@@ -158,23 +159,32 @@ const PageContainer = styled.div`
   min-height: 100vh;
 `;
 
+const NavbarContainer = styled.header`
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  padding: 38px 112px 0;
+`;
+
 const Navbar = styled.nav`
   display: flex;
+  justify-content: space-between;
   align-items: center;
+  gap: 24px;
   width: 100%;
-  padding: 45px 112px 0;
   background-color: #ffffff;
 
   & > a {
-    margin-bottom: 36px;
+    flex-shrink: 0;
   }
 `;
 
 const MenuContainer = styled.div`
   display: flex;
   gap: 16px;
-  margin-left: auto;
-  margin-bottom: 36px;
+  width: 100%;
+  max-width: 616px;
 `;
 
 const ImageWrapper = styled(Image)`

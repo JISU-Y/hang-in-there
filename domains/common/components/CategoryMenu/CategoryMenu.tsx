@@ -39,7 +39,6 @@ const CategoryMenu = () => {
 
 const MenuContainer = styled.ul`
   display: flex;
-  margin: -10px 32px 0;
   gap: 40px;
 `;
 
@@ -53,7 +52,7 @@ const MenuItem = styled.li<{ $isActive: boolean }>`
     ${({ $isActive }) => ($isActive ? 'black' : 'transparent')};
   padding: 0 8px 16px;
 
-  transition: all 0.3s ease-in-out;
+  transition: border-bottom 0.3s ease-in-out;
 
   &:hover {
     border-bottom: 3px solid black;
@@ -69,7 +68,7 @@ const MenuName = styled.span<{ $isActive: boolean }>`
   font-weight: ${({ $isActive }) => ($isActive ? 'bold' : 'normal')};
   color: ${({ $isActive }) => ($isActive ? '#191919' : '#767676')};
 
-  transition: all 0.3s ease-in-out;
+  transition: color 0.3s ease-in-out;
 `;
 
 export default CategoryMenu;

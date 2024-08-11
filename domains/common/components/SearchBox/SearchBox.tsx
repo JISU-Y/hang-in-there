@@ -24,7 +24,7 @@ const SearchBox = () => {
   return (
     <Container>
       <InputForm onSubmit={handleSubmitSearch}>
-        <SearchIcon />
+        <SearchIcon width="24px" height="24px" />
         <Input
           value={keyword}
           onChange={handleChangeKeyword}
@@ -37,13 +37,14 @@ const SearchBox = () => {
 
 const Container = styled.div`
   position: relative;
+  width: 100%;
 `;
 
 const InputForm = styled.form`
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   align-items: center;
-  width: 212px;
+  width: 100%;
   height: 36px;
   border-bottom: 1px solid #999999;
 
@@ -54,7 +55,6 @@ const InputForm = styled.form`
 
 const Input = styled.input`
   width: 100%;
-  max-width: 196px;
   font-size: 14px;
   line-height: 20px;
   padding: 6px 12px;

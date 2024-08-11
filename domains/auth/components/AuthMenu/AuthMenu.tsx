@@ -19,6 +19,10 @@ const AuthMenu = () => {
 
   const { refetch: reissueToken } = useReissueTokenQuery();
 
+  const handleLoginButtonClick = () => {
+    // modal open
+  };
+
   const kakaoLoginHandler = () => {
     window.Kakao.Auth.authorize({
       redirectUri: `${process.env.NEXT_PUBLIC_HANGINTHERE_API_END_POINT}/v1/user/kakao-login`,
@@ -47,14 +51,15 @@ const AuthMenu = () => {
           </UserMy>
         </Tooltip>
       ) : (
-        <KakaoLoginButton type="button" onClick={kakaoLoginHandler}>
-          <KakaoIcon
+        <LoginButton type="button" onClick={handleLoginButtonClick}>
+          로그인
+          {/* <KakaoIcon
             width={60}
             height={30}
             src="/assets/kakao_login_small.png"
             alt="kakao-login"
-          />
-        </KakaoLoginButton>
+          /> */}
+        </LoginButton>
       )}
     </Container>
   );
@@ -64,10 +69,18 @@ export default AuthMenu;
 
 const Container = styled.div`
   display: flex;
+  align-items: center;
   gap: 40px;
 `;
 
-const KakaoLoginButton = styled.button``;
+const LoginButton = styled.button`
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 18px;
+  font-weight: 500;
+  width: 42px;
+  flex-shrink: 0;
+`;
 
 const KakaoIcon = styled(Image)`
   width: 100%;
