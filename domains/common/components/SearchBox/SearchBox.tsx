@@ -8,7 +8,10 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 import styled from '@emotion/styled';
 import { SearchIcon } from '@chakra-ui/icons';
-import { CategoryCodeType } from '@domains/common/constants/categories';
+import {
+  categories,
+  CategoryCodeType
+} from '@domains/common/constants/categories';
 
 const SearchBox = () => {
   const { push } = useRouter();
@@ -26,7 +29,7 @@ const SearchBox = () => {
     e.preventDefault();
 
     if (!keyword) {
-      push(`/category?category=${categoryCode || 'A0207'}`);
+      push(`/category?category=${categoryCode || categories[0].code}`); // NOTE: default category -> 축제 (A0207)
 
       return;
     }
@@ -35,10 +38,8 @@ const SearchBox = () => {
   };
 
   useEffect(() => {
-    if (!searchKeyword) return;
-
-    setKeyword(searchKeyword);
-  }, [searchKeyword]);
+    setKeyword(searchKeyword || '');
+  }, [searchKeyword, categoryCode]);
 
   return (
     <Container>
