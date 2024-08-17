@@ -4,7 +4,7 @@ import ReactQueryProviders from '@logics/providers/ReactQueryProvider';
 import StyledProviders from '@logics/providers/StyledProvider';
 
 export const metadata: Metadata = {
-  title: 'Hang-in-there 🚶‍♂️',
+  title: 'Hang-in-there 🚶',
   description: '행사를 즐기는 인싸들'
 };
 
