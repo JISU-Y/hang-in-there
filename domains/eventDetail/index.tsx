@@ -20,7 +20,6 @@ import DetailInfoSection from './sections/DetailInfoSection/DetailInfoSection';
 import OtherEventListSection from './sections/OtherEventListSection/OtherEventListSection';
 import { useFetchEventDetailQuery } from './network/eventDetailQueries';
 import { DetailInfoType } from './types/detail';
-import { useCreateViewCountMutation } from './network/eventDetailMutations';
 
 const EventDetailPage = () => {
   const { contentId } = useParams<{ contentId: string }>();
@@ -28,7 +27,6 @@ const EventDetailPage = () => {
   usePreventScrollRestoration();
 
   const { data: eventDetail } = useFetchEventDetailQuery(Number(contentId));
-  const viewCountMutation = useCreateViewCountMutation();
 
   const eventDetailInfo: DetailInfoType | null = useMemo(() => {
     if (!eventDetail) return null;
@@ -66,12 +64,6 @@ const EventDetailPage = () => {
       }
     });
   };
-
-  useEffect(() => {
-    if (!contentId) return;
-
-    viewCountMutation.mutate({ eventId: Number(contentId) });
-  }, [contentId]);
 
   return (
     <Container>
