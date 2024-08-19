@@ -16,6 +16,30 @@ import {
 import { useBooleanState } from '@toss/react';
 import { useOutsideClick } from '@chakra-ui/react';
 
+const getHighlightedText = (
+  text: string,
+  highlight: string,
+  highlightColor?: string
+) => {
+  const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
+  return (
+    <span>
+      {parts.map((part, i) => (
+        <span
+          key={i}
+          style={
+            part.toLowerCase() === highlight.toLowerCase()
+              ? { color: highlightColor || 'red' }
+              : {}
+          }
+        >
+          {part}
+        </span>
+      ))}
+    </span>
+  );
+};
+
 const SearchBox = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -68,7 +92,9 @@ const SearchBox = () => {
         <SearchDropdown ref={dropdownRef}>
           {/* <PopularTitle>인기행사</PopularTitle> */}
           <ResultListWrapper>
-            <SearchResultEvent>안산 국제 거리극 축제</SearchResultEvent>
+            <SearchResultEvent>
+              {getHighlightedText('안산 국제 거리극 축제', keyword, '#FF6917')}
+            </SearchResultEvent>
             {/* <PopularCard>
               <RankNumber>1</RankNumber>
               <EventInfo>
