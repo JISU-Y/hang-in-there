@@ -66,9 +66,10 @@ const SearchBox = () => {
       </InputForm>
       {isOpenDropdown && (
         <SearchDropdown ref={dropdownRef}>
-          <PopularTitle>인기행사</PopularTitle>
+          {/* <PopularTitle>인기행사</PopularTitle> */}
           <ResultListWrapper>
-            <PopularCard>
+            <SearchResultEvent>안산 국제 거리극 축제</SearchResultEvent>
+            {/* <PopularCard>
               <RankNumber>1</RankNumber>
               <EventInfo>
                 <EventTitle>경복궁 생과방</EventTitle>
@@ -102,7 +103,7 @@ const SearchBox = () => {
                 <EventTitle>경복궁 생과방</EventTitle>
                 <EventAddress>서울시 종로구</EventAddress>
               </EventInfo>
-            </PopularCard>
+            </PopularCard> */}
           </ResultListWrapper>
         </SearchDropdown>
       )}
@@ -210,6 +211,20 @@ const EventAddress = styled.span`
   font-size: 16px;
   font-weight: 400;
   line-height: 24px;
+`;
+
+const SearchResultEvent = styled.p`
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  cursor: pointer;
+  padding: 0 32px;
+
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    background-color: #ededed;
+  }
 `;
 
 export default SearchBox;
