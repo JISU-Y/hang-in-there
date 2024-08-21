@@ -76,6 +76,12 @@ const SearchBox = () => {
     push(`/category?search=${keyword}`);
   };
 
+  const goToEventDetail = (eventId: number) => {
+    push(`/eventDetail/${eventId}`);
+
+    setKeyword('');
+  };
+
   useEffect(() => {
     setKeyword(searchKeyword || '');
   }, [searchKeyword, categoryCode]);
@@ -102,7 +108,10 @@ const SearchBox = () => {
               <SearchResultContainer>
                 {searchResultList &&
                   searchResultList.map(result => (
-                    <SearchResultEvent key={result.event_id}>
+                    <SearchResultEvent
+                      key={result.event_id}
+                      onClick={() => goToEventDetail(result.event_id)}
+                    >
                       {getHighlightedText(result.title, keyword, '#FF6917')}
                     </SearchResultEvent>
                   ))}
@@ -112,7 +121,10 @@ const SearchBox = () => {
                 <PopularTitle>인기행사</PopularTitle>
                 {popularEventList &&
                   popularEventList.map(event => (
-                    <PopularCard key={event.event_id}>
+                    <PopularCard
+                      key={event.event_id}
+                      onClick={() => goToEventDetail(event.event_id)}
+                    >
                       <RankNumber>{event.rank}</RankNumber>
                       <EventInfo>
                         <EventTitle>{event.title}</EventTitle>
