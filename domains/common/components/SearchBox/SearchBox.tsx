@@ -15,7 +15,10 @@ import {
 } from '@domains/common/constants/categories';
 import { useBooleanState } from '@toss/react';
 import { useOutsideClick } from '@chakra-ui/react';
-import { useFetchPopularEventListQuery } from '@domains/common/network/searchQueries';
+import {
+  useFetchPopularEventListQuery,
+  useFetchSearchEventResultQuery
+} from '@domains/common/network/searchQueries';
 
 const getHighlightedText = (
   text: string,
@@ -55,6 +58,7 @@ const SearchBox = () => {
   const [isOpenDropdown, openDropdown, closeDropdown] = useBooleanState();
 
   const { data: popularEventList } = useFetchPopularEventListQuery();
+  const { data: searchResultList } = useFetchSearchEventResultQuery(keyword); // TODO: debounce 추가 필요
 
   const handleChangeKeyword: ChangeEventHandler<HTMLInputElement> = e => {
     setKeyword(e.target.value);
@@ -95,13 +99,14 @@ const SearchBox = () => {
         <SearchDropdown ref={dropdownRef}>
           <ResultListWrapper>
             {keyword ? (
-              <SearchResultEvent>
-                {getHighlightedText(
-                  '안산 국제 거리극 축제',
-                  keyword,
-                  '#FF6917'
-                )}
-              </SearchResultEvent>
+              <SearchResultContainer>
+                {searchResultList &&
+                  searchResultList.map(result => (
+                    <SearchResultEvent key={result.event_id}>
+                      {getHighlightedText(result.title, keyword, '#FF6917')}
+                    </SearchResultEvent>
+                  ))}
+              </SearchResultContainer>
             ) : (
               <>
                 <PopularTitle>인기행사</PopularTitle>
@@ -228,6 +233,12 @@ const EventAddress = styled.span`
   font-size: 16px;
   font-weight: 400;
   line-height: 24px;
+`;
+
+const SearchResultContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 `;
 
 const SearchResultEvent = styled.p`
