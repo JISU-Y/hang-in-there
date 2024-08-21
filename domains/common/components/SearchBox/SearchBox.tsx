@@ -15,6 +15,7 @@ import {
 } from '@domains/common/constants/categories';
 import { useBooleanState } from '@toss/react';
 import { useOutsideClick } from '@chakra-ui/react';
+import { useFetchPopularEventListQuery } from '@domains/common/network/searchQueries';
 
 const getHighlightedText = (
   text: string,
@@ -53,6 +54,8 @@ const SearchBox = () => {
 
   const [isOpenDropdown, openDropdown, closeDropdown] = useBooleanState();
 
+  const { data: popularEventList } = useFetchPopularEventListQuery();
+
   const handleChangeKeyword: ChangeEventHandler<HTMLInputElement> = e => {
     setKeyword(e.target.value);
   };
@@ -90,46 +93,34 @@ const SearchBox = () => {
       </InputForm>
       {isOpenDropdown && (
         <SearchDropdown ref={dropdownRef}>
-          {/* <PopularTitle>인기행사</PopularTitle> */}
           <ResultListWrapper>
-            <SearchResultEvent>
-              {getHighlightedText('안산 국제 거리극 축제', keyword, '#FF6917')}
-            </SearchResultEvent>
-            {/* <PopularCard>
-              <RankNumber>1</RankNumber>
-              <EventInfo>
-                <EventTitle>경복궁 생과방</EventTitle>
-                <EventAddress>서울시 종로구</EventAddress>
-              </EventInfo>
-            </PopularCard>
-            <PopularCard>
-              <RankNumber>2</RankNumber>
-              <EventInfo>
-                <EventTitle>경복궁 생과방</EventTitle>
-                <EventAddress>서울시 종로구</EventAddress>
-              </EventInfo>
-            </PopularCard>
-            <PopularCard>
-              <RankNumber>3</RankNumber>
-              <EventInfo>
-                <EventTitle>경복궁 생과방</EventTitle>
-                <EventAddress>서울시 종로구</EventAddress>
-              </EventInfo>
-            </PopularCard>
-            <PopularCard>
-              <RankNumber>4</RankNumber>
-              <EventInfo>
-                <EventTitle>경복궁 생과방</EventTitle>
-                <EventAddress>서울시 종로구</EventAddress>
-              </EventInfo>
-            </PopularCard>
-            <PopularCard>
-              <RankNumber>5</RankNumber>
-              <EventInfo>
-                <EventTitle>경복궁 생과방</EventTitle>
-                <EventAddress>서울시 종로구</EventAddress>
-              </EventInfo>
-            </PopularCard> */}
+            {keyword ? (
+              <SearchResultEvent>
+                {getHighlightedText(
+                  '안산 국제 거리극 축제',
+                  keyword,
+                  '#FF6917'
+                )}
+              </SearchResultEvent>
+            ) : (
+              <>
+                <PopularTitle>인기행사</PopularTitle>
+                {popularEventList &&
+                  popularEventList.map(event => (
+                    <PopularCard key={event.event_id}>
+                      <RankNumber>{event.rank}</RankNumber>
+                      <EventInfo>
+                        <EventTitle>{event.title}</EventTitle>
+                        <EventAddress>
+                          {event.address
+                            ? event.address.split(' ').slice(0, 2).join(' ')
+                            : '미정'}
+                        </EventAddress>
+                      </EventInfo>
+                    </PopularCard>
+                  ))}
+              </>
+            )}
           </ResultListWrapper>
         </SearchDropdown>
       )}
