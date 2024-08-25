@@ -1,12 +1,21 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { getAccessToken, removeAuthTokens } from '../utils/authTokenHandler';
+import {
+  getAccessToken,
+  removeAuthTokens,
+  setAuthData
+} from '../utils/authTokenHandler';
 
 export const useAuthSession = () => {
   const router = useRouter();
 
-  const [token, setToken] = useState<string>('');
+  const [token, setToken] = useState('');
+
+  const initAuth = () => {
+    // NOTE: token을 받아 해당 데이터를 다시 cookie에 저장하는 유틸
+    setAuthData();
+  };
 
   const logout = () => {
     setToken('');
@@ -27,12 +36,12 @@ export const useAuthSession = () => {
   );
 
   useEffect(() => {
-    const token = getAccessToken();
+    const accessToken = getAccessToken();
 
-    if (!token) return;
+    if (!accessToken) return;
 
     try {
-      setToken(token);
+      setToken(accessToken);
     } catch (error) {
       console.error('Error decoding token:', error);
     }
@@ -40,6 +49,7 @@ export const useAuthSession = () => {
 
   return {
     isUserLoggedIn: !!token,
+    initAuth,
     logout,
     guardRoute
   };

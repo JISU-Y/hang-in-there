@@ -1,20 +1,22 @@
 'use client';
 
+import { Suspense } from 'react';
+import Script from 'next/script';
+
 import PageLayout from '@domains/common/layouts/PageLayout';
 import HomePage from '@domains/home';
-import Script from 'next/script';
-import { Suspense } from 'react';
-
-// export function generateStaticParams() {
-//   return [{ slug: [''] }];
-// }
+import { useAuthSession } from '@domains/auth/hooks/useAuthSession';
 
 export default function Page() {
+  const { initAuth } = useAuthSession();
+
   const initKakaoScript = () => {
     if (window.Kakao) {
       window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JS_KEY);
     }
   };
+
+  initAuth();
 
   return (
     <PageLayout withLineBanner>

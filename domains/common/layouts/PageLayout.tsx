@@ -9,7 +9,6 @@ import { Collapse, useDisclosure } from '@chakra-ui/react';
 import AuthMenu from '@domains/auth/components/AuthMenu/AuthMenu';
 
 import CategoryMenu from '../components/CategoryMenu/CategoryMenu';
-import { useAuthSession } from '@domains/auth/hooks/useAuthSession';
 import SearchBox from '../components/SearchBox/SearchBox';
 
 const EXTERNAL_DOCUMENT_LINKS = {
@@ -31,8 +30,6 @@ export default function PageLayout({
   withFooter = true,
   children
 }: PropsWithChildren<PageLayoutProps>) {
-  const { isUserLoggedIn } = useAuthSession();
-
   const { isOpen, onOpen } = useDisclosure();
 
   useEffect(() => {
@@ -80,7 +77,7 @@ export default function PageLayout({
               </Link>
               <MenuContainer>
                 <SearchBox />
-                {!isUserLoggedIn ? <AuthMenu /> : <div>로그인 되었습니다!</div>}
+                <AuthMenu />
               </MenuContainer>
             </Navbar>
             <CategoryMenu />
@@ -182,6 +179,7 @@ const Navbar = styled.nav`
 
 const MenuContainer = styled.div`
   display: flex;
+  align-items: center;
   gap: 16px;
   width: 100%;
   max-width: 616px;

@@ -169,6 +169,10 @@ const Input = styled.input`
   line-height: 20px;
   padding: 6px 12px;
 
+  &:focus {
+    outline: none;
+  }
+
   &::placeholder {
     color: #adadad;
   }

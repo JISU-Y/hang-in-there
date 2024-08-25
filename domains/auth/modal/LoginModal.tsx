@@ -18,7 +18,7 @@ interface LoginModalProps {
 const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
   const kakaoLoginHandler = () => {
     window.Kakao.Auth.authorize({
-      redirectUri: `${process.env.NEXT_PUBLIC_HANGINTHERE_API_END_POINT}/v1/user/kakao-login`,
+      redirectUri: `${process.env.NEXT_PUBLIC_PROD_HANGINTHERE_API_END_POINT}/v1/user/kakao-login`,
       scope: 'profile_nickname,profile_image'
     });
   };
