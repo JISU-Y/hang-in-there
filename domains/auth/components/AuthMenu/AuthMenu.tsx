@@ -1,11 +1,20 @@
 import styled from '@emotion/styled';
-import { Avatar, Tooltip, useDisclosure } from '@chakra-ui/react';
+import {
+  Avatar,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Tooltip,
+  useDisclosure
+} from '@chakra-ui/react';
 import { useFetchUserProfileQuery } from '@domains/auth/network/authQueries';
 import { useAuthSession } from '@domains/auth/hooks/useAuthSession';
 import LoginModal from '@domains/auth/modal/LoginModal';
+import { ChevronRightIcon } from '@chakra-ui/icons';
 
 const AuthMenu = () => {
-  const { isUserLoggedIn } = useAuthSession();
+  const { isUserLoggedIn, logout } = useAuthSession();
 
   const { isOpen, onOpen: handleLoginButtonClick, onClose } = useDisclosure();
 
@@ -17,15 +26,29 @@ const AuthMenu = () => {
     <>
       <Container>
         {isUserLoggedIn && userProfile ? (
-          <Tooltip label="로그인 상태입니다. 마이페이지는 준비 중입니다. 🙇‍♂️">
-            <UserMy type="button">
+          <MenuBox autoSelect={false}>
+            <UserMy>
               <Avatar
                 size="sm"
                 name={userProfile.nickname || 'Name'}
                 src={userProfile.img || ''}
               />
             </UserMy>
-          </Tooltip>
+            <MenuList>
+              <Tooltip label="로그인 상태입니다. 마이페이지는 준비 중입니다. 🙇‍♂️">
+                <UserMenuMyPage>
+                  <Avatar
+                    size="sm"
+                    name={userProfile.nickname || 'Name'}
+                    src={userProfile.img || ''}
+                  />
+                  <UserName>{userProfile.nickname || 'Name'}</UserName>
+                  <ChevronRightIcon w={6} h={6} />
+                </UserMenuMyPage>
+              </Tooltip>
+              <LogoutButton onClick={logout}>로그아웃</LogoutButton>
+            </MenuList>
+          </MenuBox>
         ) : (
           <LoginButton type="button" onClick={handleLoginButtonClick}>
             로그인
@@ -55,6 +78,35 @@ const LoginButton = styled.button`
   flex-shrink: 0;
 `;
 
-const UserMy = styled.button`
+const MenuBox = styled(Menu)`
+  max-width: 200px;
+`;
+
+const UserMy = styled(MenuButton)`
   cursor: pointer;
+`;
+
+const UserMenuMyPage = styled(MenuItem)`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+`;
+
+const UserName = styled.span`
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 36px;
+`;
+
+const LogoutButton = styled(MenuItem)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ff0000;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+  text-align: center;
 `;

@@ -32,6 +32,12 @@ export const setAuthData = (options?: OptionsType) => {
   deleteCookie('pk');
 };
 
+export const removeAuthData = () => {
+  Object.values(COOKIE_KEY).forEach(key => {
+    deleteCookie(key);
+  });
+};
+
 // -------------------------------------------------------------------------------
 
 /* Access Token: api 인가 시 필요한 token */
@@ -61,6 +67,8 @@ export function removeRefreshToken() {
 // -------------------------------------------------------------------------------
 
 export function removeAuthTokens() {
+  removeAuthData();
+
   removeAccessToken();
   removeRefreshToken();
 }

@@ -8,7 +8,7 @@ import {
 } from '../utils/authTokenHandler';
 
 export const useAuthSession = () => {
-  const router = useRouter();
+  const { push } = useRouter();
 
   const [token, setToken] = useState('');
 
@@ -25,14 +25,14 @@ export const useAuthSession = () => {
   const guardRoute = useCallback(
     (callback: () => void) => {
       if (!token) {
-        router.push('/');
+        push('/');
 
         return;
       }
 
       callback();
     },
-    [router, token]
+    [push, token]
   );
 
   useEffect(() => {
