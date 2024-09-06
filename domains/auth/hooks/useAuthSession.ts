@@ -4,9 +4,9 @@ import { useRouter } from 'next/navigation';
 import { getAccessToken, removeAuthTokens } from '../utils/authTokenHandler';
 
 export const useAuthSession = () => {
-  const router = useRouter();
+  const { push } = useRouter();
 
-  const [token, setToken] = useState<string>('');
+  const [token, setToken] = useState('');
 
   const logout = () => {
     setToken('');
@@ -16,23 +16,23 @@ export const useAuthSession = () => {
   const guardRoute = useCallback(
     (callback: () => void) => {
       if (!token) {
-        router.push('/');
+        push('/');
 
         return;
       }
 
       callback();
     },
-    [router, token]
+    [push, token]
   );
 
   useEffect(() => {
-    const token = getAccessToken();
+    const accessToken = getAccessToken();
 
-    if (!token) return;
+    if (!accessToken) return;
 
     try {
-      setToken(token);
+      setToken(accessToken);
     } catch (error) {
       console.error('Error decoding token:', error);
     }

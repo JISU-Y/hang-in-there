@@ -5,7 +5,7 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 const nextConfig = {
   images: {
     unoptimized: isDevelopment,
-    domains: ['tong.visitkorea.or.kr']
+    domains: ['tong.visitkorea.or.kr', 'k.kakaocdn.net', 't1.kakaocdn.net']
   },
   experimental: {
     missingSuspenseWithCSRBailout: false

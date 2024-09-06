@@ -9,6 +9,7 @@ import {
   ModalOverlay
 } from '@chakra-ui/react';
 import styled from '@emotion/styled';
+import { setRedirectPath } from '../utils/authTokenHandler';
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -17,8 +18,12 @@ interface LoginModalProps {
 
 const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
   const kakaoLoginHandler = () => {
+    if (!window.Kakao) return;
+
+    setRedirectPath(`${window.location.pathname}${window.location.search}`);
+
     window.Kakao.Auth.authorize({
-      redirectUri: `${process.env.NEXT_PUBLIC_HANGINTHERE_API_END_POINT}/v1/user/kakao-login`,
+      redirectUri: `${process.env.NEXT_PUBLIC_PROD_HANGINTHERE_API_END_POINT}/v1/user/kakao-login`,
       scope: 'profile_nickname,profile_image'
     });
   };

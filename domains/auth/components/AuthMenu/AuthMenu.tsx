@@ -1,54 +1,54 @@
-import { useEffect } from 'react';
-import Image from 'next/image';
-
 import styled from '@emotion/styled';
-import { Tooltip, useDisclosure } from '@chakra-ui/react';
-import UserIcon from '@styles/icons/UserIcon';
-import { useReissueTokenQuery } from '@domains/auth/network/authQueries';
+import {
+  Avatar,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Tooltip,
+  useDisclosure
+} from '@chakra-ui/react';
+import { useFetchUserProfileQuery } from '@domains/auth/network/authQueries';
 import { useAuthSession } from '@domains/auth/hooks/useAuthSession';
 import LoginModal from '@domains/auth/modal/LoginModal';
-
-const getCookie = (name: string) => {
-  const parts = document.cookie.split(name + '=');
-  if (parts.length === 2) {
-    return parts[1].split(';')[0];
-  }
-};
+import { ChevronRightIcon } from '@chakra-ui/icons';
 
 const AuthMenu = () => {
-  const { isUserLoggedIn } = useAuthSession();
+  const { isUserLoggedIn, logout } = useAuthSession();
 
   const { isOpen, onOpen: handleLoginButtonClick, onClose } = useDisclosure();
 
-  const { refetch: reissueToken } = useReissueTokenQuery();
-
-  useEffect(() => {
-    const cookiePk = getCookie('pk');
-
-    if (cookiePk) {
-      const pk = JSON.parse(cookiePk);
-
-      Object.entries(pk).map(([key, value]) => {
-        localStorage.setItem(key, value as string);
-      });
-    }
-  }, []);
+  const { data: userProfile } = useFetchUserProfileQuery({
+    enabled: isUserLoggedIn
+  });
 
   return (
     <>
       <Container>
-        {isUserLoggedIn ? (
-          <Tooltip label="로그인 상태입니다. 마이페이지는 준비 중입니다. 🙇‍♂️">
-            <UserMy type="button">
-              <UserIcon />
-              {/* <ProfileImage
-            width={60}
-            height={30}
-            src="/assets/kakao_login_small.png"
-            alt="profile"
-            /> */}
+        {isUserLoggedIn && userProfile ? (
+          <MenuBox autoSelect={false}>
+            <UserMy>
+              <Avatar
+                size="sm"
+                name={userProfile.nickname || 'Name'}
+                src={userProfile.img || ''}
+              />
             </UserMy>
-          </Tooltip>
+            <MenuList>
+              <Tooltip label="로그인 상태입니다. 마이페이지는 준비 중입니다. 🙇‍♂️">
+                <UserMenuMyPage>
+                  <Avatar
+                    size="sm"
+                    name={userProfile.nickname || 'Name'}
+                    src={userProfile.img || ''}
+                  />
+                  <UserName>{userProfile.nickname || 'Name'}</UserName>
+                  <ChevronRightIcon w={6} h={6} />
+                </UserMenuMyPage>
+              </Tooltip>
+              <LogoutButton onClick={logout}>로그아웃</LogoutButton>
+            </MenuList>
+          </MenuBox>
         ) : (
           <LoginButton type="button" onClick={handleLoginButtonClick}>
             로그인
@@ -77,12 +77,36 @@ const LoginButton = styled.button`
   width: 42px;
   flex-shrink: 0;
 `;
-const ProfileImage = styled(Image)`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+
+const MenuBox = styled(Menu)`
+  max-width: 200px;
 `;
 
-const UserMy = styled.button`
+const UserMy = styled(MenuButton)`
   cursor: pointer;
+`;
+
+const UserMenuMyPage = styled(MenuItem)`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+`;
+
+const UserName = styled.span`
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 36px;
+`;
+
+const LogoutButton = styled(MenuItem)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ff0000;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+  text-align: center;
 `;
