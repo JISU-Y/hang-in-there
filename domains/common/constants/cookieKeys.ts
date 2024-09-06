@@ -3,5 +3,6 @@ export const COOKIE_KEY = {
   REFRESH_TOKEN: '@auth/refreshToken',
   ACCESS_TOKEN_EXPIRE: '@auth/expiresIn',
   REFRESH_TOKEN_EXPIRE: '@auth/refreshTokenExpiresIn',
-  FIRST_LOGIN: '@auth/firstLogin'
+  FIRST_LOGIN: '@auth/firstLogin',
+  REDIRECT_PATH: '@auth/redirectPath'
 } as const;

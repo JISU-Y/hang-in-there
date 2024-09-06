@@ -2,12 +2,6 @@ import { COOKIE_KEY } from '@domains/common/constants/cookieKeys';
 import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import { OptionsType } from 'cookies-next/lib/types';
 
-// MEMO
-// 생각해보니까 redirect를 api/after/login 여기로 떨궈달라고 하고, 로그인 클릭하기 전에 쿠키에 이전 url 저장하고
-// 이후에 저기 api에 떨궈졌을 때 쿠키에 저장된 url을 가지고 redirect 시켜주면 되지 않을까?
-// 그리고 쿠키도 api에서 set / delete 처리해버리고
-// -------------------------------------------------------------------------------
-
 interface AuthDataType {
   accessToken: string;
   refreshToken: string;
@@ -24,12 +18,12 @@ export const setAuthData = (options?: OptionsType) => {
 
     Object.entries(authData).forEach(
       ([key, value]: [string, string | number]) => {
-        setCookie(`@auth/${key}`, value);
+        setCookie(`@auth/${key}`, value, options);
       }
     );
   }
 
-  deleteCookie('pk');
+  deleteCookie('pk', options);
 };
 
 export const removeAuthData = () => {
@@ -43,8 +37,8 @@ export const removeAuthData = () => {
 /* Access Token: api 인가 시 필요한 token */
 /* 유효 기간: 1시간 */
 
-export function getAccessToken() {
-  return getCookie(COOKIE_KEY.ACCESS_TOKEN);
+export function getAccessToken(options?: OptionsType) {
+  return getCookie(COOKIE_KEY.ACCESS_TOKEN, options);
 }
 
 export function removeAccessToken() {
@@ -71,4 +65,16 @@ export function removeAuthTokens() {
 
   removeAccessToken();
   removeRefreshToken();
+}
+
+// -------------------------------------------------------------------------------
+
+/* Redirect Path: 로그인 후 redirect 되어야 하는 path */
+
+export function getRedirectPath(options?: OptionsType) {
+  return getCookie(COOKIE_KEY.REDIRECT_PATH, options);
+}
+
+export function setRedirectPath(path: string, options?: OptionsType) {
+  return setCookie(COOKIE_KEY.REDIRECT_PATH, path, options);
 }
