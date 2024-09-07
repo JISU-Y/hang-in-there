@@ -1,8 +1,8 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { redirect } from 'next/navigation';
+import { getCookie } from 'cookies-next';
 import { AuthDataType } from '@domains/auth/types/auth';
 import { getRedirectPath } from '@domains/auth/utils/authTokenHandler';
-import { getCookie } from 'cookies-next';
-import { redirect } from 'next/navigation';
-import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
   const redirectPath = getRedirectPath({
@@ -25,9 +25,7 @@ export async function GET(request: NextRequest) {
 
   Object.entries(authData).forEach(
     ([key, value]: [string, string | number]) => {
-      response.cookies.set(`@auth/${key}`, String(value), {
-        httpOnly: true
-      });
+      response.cookies.set(`@auth/${key}`, String(value));
     }
   );
 
