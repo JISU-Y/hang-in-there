@@ -2,30 +2,6 @@ import { COOKIE_KEY } from '@domains/common/constants/cookieKeys';
 import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import { OptionsType } from 'cookies-next/lib/types';
 
-interface AuthDataType {
-  accessToken: string;
-  refreshToken: string;
-  refreshTokenExpiresIn: number;
-  expiresIn: number;
-  firstLogin: boolean;
-}
-
-export const setAuthData = (options?: OptionsType) => {
-  const pkData = getCookie('pk', options);
-
-  if (pkData) {
-    const authData: AuthDataType = JSON.parse(pkData);
-
-    Object.entries(authData).forEach(
-      ([key, value]: [string, string | number]) => {
-        setCookie(`@auth/${key}`, value, options);
-      }
-    );
-  }
-
-  deleteCookie('pk', options);
-};
-
 export const removeAuthData = () => {
   Object.values(COOKIE_KEY).forEach(key => {
     deleteCookie(key);
