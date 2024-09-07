@@ -21,7 +21,7 @@ export const useFetchUserProfileQuery = (
     queryKey: 'user-profile',
     queryFn: async () => {
       const data = await axios.get<ApiDataResponseTypeNew<UserProfileDataType>>(
-        `${process.env.NEXT_PUBLIC_PROD_HANGINTHERE_API_END_POINT}/v1/user/data` ||
+        `${process.env.NEXT_PUBLIC_HANGINTHERE_API_END_POINT}/v1/user/data` ||
           '',
         {
           headers: {
@@ -50,7 +50,7 @@ export const useReissueTokenQuery = (options?: UseQueryOptions) => {
     queryKey: 'token-reissue',
     queryFn: async () => {
       const data = await axios.get(
-        `${process.env.NEXT_PUBLIC_PROD_HANGINTHERE_API_END_POINT}/v1/user/reissue` ||
+        `${process.env.NEXT_PUBLIC_HANGINTHERE_API_END_POINT}/v1/user/reissue` ||
           '',
         {
           headers: {

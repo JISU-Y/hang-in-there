@@ -24,5 +24,7 @@ export async function GET(request: NextRequest) {
   });
   console.log(redirectPath);
 
-  redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/${redirectPath}`);
+  redirect(
+    `${process.env.NEXT_PUBLIC_BASE_URL || 'https://hang-in-there-sigma.vercel.app'}/${redirectPath}`
+  );
 }
