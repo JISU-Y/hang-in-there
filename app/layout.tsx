@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 
 import ReactQueryProviders from '@logics/providers/ReactQueryProvider';
 import StyledProviders from '@logics/providers/StyledProvider';
+import KakaoScriptProvider from '@logics/providers/KakaoScriptProvider';
 
 export const metadata: Metadata = {
   title: 'Hang-in-there 🚶',
@@ -18,7 +19,9 @@ export default function RootLayout({
       <body>
         <ReactQueryProviders>
           <StyledProviders>
-            <div id="root">{children}</div>
+            <KakaoScriptProvider>
+              <div id="root">{children}</div>
+            </KakaoScriptProvider>
           </StyledProviders>
         </ReactQueryProviders>
       </body>
