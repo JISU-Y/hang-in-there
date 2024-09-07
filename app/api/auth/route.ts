@@ -1,30 +1,37 @@
-import {
-  getAccessToken,
-  getRedirectPath,
-  setAuthData
-} from '@domains/auth/utils/authTokenHandler';
+import { AuthDataType } from '@domains/auth/types/auth';
+import { getRedirectPath } from '@domains/auth/utils/authTokenHandler';
+import { getCookie } from 'cookies-next';
 import { redirect } from 'next/navigation';
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
-  setAuthData({
-    req: request
-  });
-
-  const token = getAccessToken({
-    req: request
-  });
-
-  if (!token) {
-    redirect(process.env.NEXT_PUBLIC_BASE_URL || ''); // 로그인 실패
-  }
-
   const redirectPath = getRedirectPath({
     req: request
   });
-  console.log(redirectPath);
-
-  redirect(
-    `${process.env.NEXT_PUBLIC_BASE_URL || 'https://hang-in-there-sigma.vercel.app'}/${redirectPath}`
+  const response = NextResponse.redirect(
+    `${process.env.NEXT_PUBLIC_BASE_URL}${redirectPath || ''}`,
+    { status: 302 }
   );
+
+  const pkData = getCookie('pk', {
+    req: request
+  });
+
+  if (!pkData) {
+    return redirect('/');
+  }
+
+  const authData: AuthDataType = JSON.parse(pkData);
+
+  Object.entries(authData).forEach(
+    ([key, value]: [string, string | number]) => {
+      response.cookies.set(`@auth/${key}`, String(value), {
+        httpOnly: true
+      });
+    }
+  );
+
+  response.cookies.delete('pk');
+
+  return response;
 }
