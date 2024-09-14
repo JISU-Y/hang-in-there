@@ -37,6 +37,30 @@ export const useFetchUserProfileQuery = (
   });
 };
 
+export const useFetchUserUnlinkQuery = (
+  options?: Omit<UseQueryOptionsType<void>, 'select'>
+) => {
+  const accessToken = getAccessToken();
+
+  return useQuery({
+    queryKey: 'user-unlink',
+    queryFn: async () => {
+      const data = await axios.get<void>(
+        `${process.env.NEXT_PUBLIC_HANGINTHERE_API_END_POINT}/v1/user/unlink` ||
+          '',
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      return data;
+    },
+    ...options
+  });
+};
+
 export const useReissueTokenQuery = (options?: UseQueryOptions) => {
   const [accessToken, setAccessToken] = useState('');
 

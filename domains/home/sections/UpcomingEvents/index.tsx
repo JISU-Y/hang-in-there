@@ -25,7 +25,7 @@ const UpcomingEvents = () => {
     isError
   } = useFetchUpcomingEventListQuery({
     page: pageNo,
-    size: 30
+    size: 28
   });
 
   if (isLoading) return <div>로딩 중...</div>;
