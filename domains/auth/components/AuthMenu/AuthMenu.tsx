@@ -8,7 +8,10 @@ import {
   Tooltip,
   useDisclosure
 } from '@chakra-ui/react';
-import { useFetchUserProfileQuery } from '@domains/auth/network/authQueries';
+import {
+  useFetchUserProfileQuery,
+  useFetchUserUnlinkQuery
+} from '@domains/auth/network/authQueries';
 import { useAuthSession } from '@domains/auth/hooks/useAuthSession';
 import LoginModal from '@domains/auth/modal/LoginModal';
 import { ChevronRightIcon } from '@chakra-ui/icons';
@@ -20,6 +23,9 @@ const AuthMenu = () => {
 
   const { data: userProfile } = useFetchUserProfileQuery({
     enabled: isUserLoggedIn
+  });
+  const { refetch: withdraw } = useFetchUserUnlinkQuery({
+    enabled: false
   });
 
   return (
@@ -47,6 +53,7 @@ const AuthMenu = () => {
                 </UserMenuMyPage>
               </Tooltip>
               <LogoutButton onClick={logout}>로그아웃</LogoutButton>
+              <UnlinkButton onClick={() => withdraw()}>회원탈퇴</UnlinkButton>
             </MenuList>
           </MenuBox>
         ) : (
@@ -108,5 +115,16 @@ const LogoutButton = styled(MenuItem)`
   font-size: 14px;
   font-weight: 400;
   line-height: 18px;
+  text-align: center;
+`;
+
+const UnlinkButton = styled(MenuItem)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8b8b8b;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
   text-align: center;
 `;

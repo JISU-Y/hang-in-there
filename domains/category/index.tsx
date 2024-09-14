@@ -6,7 +6,6 @@ import { useSearchParams } from 'next/navigation';
 import styled from '@emotion/styled';
 import { SimpleGrid } from '@chakra-ui/react';
 import { ImpressionArea } from '@toss/impression-area';
-import Breadcrumbs from '@domains/common/components/Breadcrums/Breadcrums';
 import {
   CATEGORY_CODE,
   CategoryCodeType
@@ -75,8 +74,6 @@ const CategoryPage = () => {
   return (
     <ContentWrapper>
       <StatusWrapper>
-        <Breadcrumbs />
-
         {searchKeyword && (
           <SearchResultPhrase>
             {/* TODO: typing 필요 */}

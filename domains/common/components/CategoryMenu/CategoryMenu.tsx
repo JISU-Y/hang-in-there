@@ -14,8 +14,28 @@ const CategoryMenu = () => {
   const searchParams = useSearchParams();
   const categoryCode = searchParams.get('category') as CategoryCodeType;
 
+  const buildSearchParams = () => {
+    const params = new URLSearchParams();
+
+    const searchKeyword = searchParams.get('search');
+    const areaCode = searchParams.getAll('areaCode')?.[0];
+    const status = searchParams.getAll('status')?.[0];
+
+    if (searchKeyword) {
+      params.append('searchKeyword', searchKeyword);
+    }
+    if (areaCode) {
+      params.append('areaCode', areaCode);
+    }
+    if (status) {
+      params.append('status', status);
+    }
+
+    return params.toString();
+  };
+
   const handleCategoryClick = (categoryCode: string) => {
-    push(`/category?category=${categoryCode}`);
+    push(`/category?category=${categoryCode}&${buildSearchParams()}`);
   };
 
   return (
