@@ -5,7 +5,6 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-  Tooltip,
   useDisclosure
 } from '@chakra-ui/react';
 import {
@@ -15,8 +14,11 @@ import {
 import { useAuthSession } from '@domains/auth/hooks/useAuthSession';
 import LoginModal from '@domains/auth/modal/LoginModal';
 import { ChevronRightIcon } from '@chakra-ui/icons';
+import { useRouter } from 'next/navigation';
 
 const AuthMenu = () => {
+  const { push } = useRouter();
+
   const { isUserLoggedIn, logout } = useAuthSession();
 
   const { isOpen, onOpen: handleLoginButtonClick, onClose } = useDisclosure();
@@ -27,6 +29,10 @@ const AuthMenu = () => {
   const { refetch: withdraw } = useFetchUserUnlinkQuery({
     enabled: false
   });
+
+  const handleClickMyPageMenu = () => {
+    push('/myPage');
+  };
 
   return (
     <>
@@ -41,17 +47,15 @@ const AuthMenu = () => {
               />
             </UserMy>
             <MenuList>
-              <Tooltip label="로그인 상태입니다. 마이페이지는 준비 중입니다. 🙇‍♂️">
-                <UserMenuMyPage>
-                  <Avatar
-                    size="sm"
-                    name={userProfile.nickname || 'Name'}
-                    src={userProfile.img || ''}
-                  />
-                  <UserName>{userProfile.nickname || 'Name'}</UserName>
-                  <ChevronRightIcon w={6} h={6} />
-                </UserMenuMyPage>
-              </Tooltip>
+              <UserMenuMyPage onClick={handleClickMyPageMenu}>
+                <Avatar
+                  size="sm"
+                  name={userProfile.nickname || 'Name'}
+                  src={userProfile.img || ''}
+                />
+                <UserName>{userProfile.nickname || 'Name'}</UserName>
+                <ChevronRightIcon w={6} h={6} />
+              </UserMenuMyPage>
               <LogoutButton onClick={logout}>로그아웃</LogoutButton>
               <UnlinkButton onClick={() => withdraw()}>회원탈퇴</UnlinkButton>
             </MenuList>
