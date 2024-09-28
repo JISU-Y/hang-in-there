@@ -11,7 +11,7 @@ export interface ApiRequestConfig extends AxiosRequestConfig {
   isAuthRequired?: boolean;
 }
 
-const BASE_URL = process.env.NEXT_PUBLIC_FIP_API_BASE_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_HANGINTHERE_API_END_POINT;
 
 export default class BaseApi {
   client: AxiosInstance;

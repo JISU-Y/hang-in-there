@@ -7,7 +7,7 @@ import {
   setAuthTokens
 } from '@domains/auth/utils/authTokenHandler';
 
-const AUTH_BASE_URL = process.env.NEXT_PUBLIC_AUTH_API_BASE_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_HANGINTHERE_API_END_POINT;
 
 // NOTE: 토큰 재발급 요청이 여러개 일 경우, 한번만 요청하도록 처리하기 위한 변수
 let isRefreshing = false;
@@ -65,7 +65,7 @@ export function setupInterceptors(instance: AxiosInstance) {
 
           // NOTE: 토큰 재발급 요청
           axios
-            .post(`${AUTH_BASE_URL}/v1/fip/refresh`, {
+            .post(`${BASE_URL}/v1/user/reissue`, {
               accessToken,
               refreshToken
             })
