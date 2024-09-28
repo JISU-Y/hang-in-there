@@ -53,10 +53,10 @@ const UserInfo = () => {
         />
       </InputSection>
 
-      <InputSection>
+      {/* <InputSection>
         <SectionTitle>소셜 계정</SectionTitle>
         <Input disabled size="md" />
-      </InputSection>
+      </InputSection> */}
 
       <SubmitButton size="md" type="submit" disabled={!formState.isValid}>
         저장
