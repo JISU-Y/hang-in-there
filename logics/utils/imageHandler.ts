@@ -95,8 +95,6 @@ export async function uploadFile(file: File, imageType: UploadImageType) {
       }
       formData.append('Content-Type', file.type);
       formData.append('file', file);
-      console.log('🚀 ~ uploadFile ~ file:', file);
-      console.log('🚀 ~ uploadFile ~ file.type:', file.type);
 
       retryUpload(presignedData.url, formData, 3); // NOTE: aws s3 url에 요청
     } catch (error) {
@@ -107,7 +105,7 @@ export async function uploadFile(file: File, imageType: UploadImageType) {
     }
 
     // 3
-    const imageUrl = `${presignedData.url}/${presignedData.fields.key}`;
+    const imageUrl = `${presignedData.url}${presignedData.fields.key}`;
 
     return imageUrl;
   } catch (error) {

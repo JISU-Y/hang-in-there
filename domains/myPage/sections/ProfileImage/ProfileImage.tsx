@@ -36,8 +36,6 @@ const ProfileImage = () => {
       const imageUrl = await uploadFile(file, 'profile');
 
       if (imageUrl) {
-        // REMOVE: 배포 환경 확인 용 console
-        console.log('imageUrl:', imageUrl);
         setProfileImageUrl(imageUrl);
 
         await updateUserProfileImage({ imageUrl });
