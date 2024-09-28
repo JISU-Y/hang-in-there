@@ -13,6 +13,7 @@ export const useAuthSession = () => {
   const logout = () => {
     setToken('');
     removeAuthTokens();
+    push('/');
   };
 
   const guardRoute = useCallback(
