@@ -58,7 +58,14 @@ const UserInfo = () => {
         <Input disabled size="md" />
       </InputSection> */}
 
-      <SubmitButton size="md" type="submit" disabled={!formState.isValid}>
+      <SubmitButton
+        size="md"
+        type="submit"
+        _hover={{
+          backgroundColor: "rgba('#FF6917', 0.8)"
+        }}
+        disabled={!formState.isValid}
+      >
         저장
       </SubmitButton>
     </Container>
@@ -86,7 +93,8 @@ const SectionTitle = styled.h5`
 `;
 
 const SubmitButton = styled(Button)`
-  background-color: blue;
+  background-color: #ff6917;
+  color: #ffffff;
   transition: all 0.2s ease-in-out;
 
   &:disabled {
