@@ -7,17 +7,24 @@ import styled from '@emotion/styled';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useQueryClient } from 'react-query';
 
 const UserInfo = () => {
-  const { data } = useFetchUserProfileQuery(); // TODO: 흠 이메일은 token 까야하나
+  const queryClient = useQueryClient();
+
+  const { refetch } = useFetchUserProfileQuery();
   const { mutateAsync: nicknameMutate } = usePatchUserNicknameMutation();
 
   const { register, handleSubmit, formState } = useForm<UserInfoSchemaType>({
     resolver: yupResolver(userInfoSchema),
     mode: 'onChange',
     reValidateMode: 'onChange',
-    defaultValues: {
-      nickName: data?.nickname || ''
+    defaultValues: async () => {
+      const { data } = await refetch();
+
+      return {
+        nickName: data?.nickname || ''
+      };
     }
   });
 
@@ -26,8 +33,12 @@ const UserInfo = () => {
   }) => {
     try {
       await nicknameMutate({ nickName });
+
+      queryClient.invalidateQueries({
+        queryKey: 'user-profile'
+      });
     } catch (error) {
-      // Toast
+      alert('이름 변경에 실패했습니다. 다시 시도해주세요.');
     }
   };
 

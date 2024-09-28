@@ -12,3 +12,15 @@ export const usePatchUserNicknameMutation = () => {
     }
   });
 };
+
+export const usePatchUserProfileImageMutation = () => {
+  return useMutation({
+    mutationFn: async (body: { imageUrl: string }) => {
+      await axios.patch(
+        `${process.env.NEXT_PUBLIC_HANGINTHERE_API_END_POINT}/v1/user/profile` ||
+          '',
+        body
+      );
+    }
+  });
+};
