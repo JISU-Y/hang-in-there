@@ -1,12 +1,18 @@
-import axios from 'axios';
 import { useInfiniteQuery, useQuery } from 'react-query';
+import { omit } from 'lodash';
+
+import BaseApi from '@logics/api/baseApi';
+import { UseQueryOptionsType } from '@domains/common/types/utilType';
+
 import {
   EventListRequestDtoNew,
   EventListResponseDto,
   EventListResponseDtoNew,
   NearEventListRequestDto
 } from '../types';
-import { UseQueryOptionsType } from '@domains/common/types/utilType';
+import { eventListQueryKeys } from '../constants/queryKeys';
+
+const eventListApi = new BaseApi('');
 
 export const useFetchNearEventListQuery = (
   params: {
@@ -16,23 +22,22 @@ export const useFetchNearEventListQuery = (
   options?: Omit<UseQueryOptionsType<EventListResponseDto>, 'select'>
 ) => {
   return useQuery({
-    queryKey: `getNearEventList/${params.mapX}/${params.mapY}`,
+    queryKey: eventListQueryKeys.getNearEventList(params),
     queryFn: async () => {
-      const data = await axios.get<EventListResponseDto>(
-        `${process.env.NEXT_PUBLIC_HANGINTHERE_API_END_POINT}/v1/user/event/local` ||
-          '',
+      const data = await eventListApi.get<EventListResponseDto>(
+        '/event/local',
         {
           params: {
             currentLat: params.mapY,
             currentLng: params.mapX,
-            distance: 5000 // 반경 5KM 이내
+            distance: 5000 // NOTE: 반경 5KM 이내
           } as NearEventListRequestDto
         }
       );
       return data;
     },
-    select: ({ data }) => data.data, //.response.body.items.item,
     ...options,
+    select: ({ data }) => data,
     enabled: !!params.mapX && !!params.mapY
   });
 };
@@ -43,81 +48,36 @@ export const useFetchEventListInfiniteQuery = (params: {
   sub_category?: string;
   detail_sub_category?: string;
   title?: string;
+  status: string;
   size: number;
   page: number;
-  status: string;
 }) => {
   return useInfiniteQuery({
-    queryKey: [
-      `event/${params.area_cd}/${params.status}/${params.sigungu_cd}/${params.sub_category}/${params.detail_sub_category}/${params.title}`
-    ],
+    queryKey: eventListQueryKeys.getNearEventList(
+      omit(params, ['size', 'page']) // NOTE: infinite query 사용 시 size와 page 별로 query key를 구분하면 잘 동작하지 않음.
+    ),
     queryFn: async ({ pageParam = params.page }) => {
-      const data = await axios.get<EventListResponseDtoNew>(
-        `${process.env.NEXT_PUBLIC_HANGINTHERE_API_END_POINT}/v1/user/event` ||
-          '',
-        {
-          params: {
-            ...params,
-            category: '264', // A02
-            page: pageParam
-          } as EventListRequestDtoNew
-        }
-      );
+      const data = await eventListApi.get<EventListResponseDtoNew>('/event', {
+        params: {
+          ...params,
+          category: '264', // A02
+          page: pageParam
+        } as EventListRequestDtoNew
+      });
 
       return data;
     },
     getNextPageParam: lastPage => {
-      const { totalPage, page: currentPage } = lastPage.data.pagination;
+      const { totalPage, page: currentPage } = lastPage.pagination;
 
       if (currentPage >= totalPage) return null;
 
       return currentPage + 1;
     },
     select: ({ pages, pageParams }) => ({
-      pages: pages.flatMap(({ data }) => data.data).filter(el => el),
+      pages: pages.flatMap(({ data }) => data).filter(el => el),
       pageParams,
-      total: pages[0].data.pagination
+      total: pages[0].pagination
     })
   });
 };
-
-// export const useFetchNearEventListInfiniteQuery = (
-//   params: {
-//     numOfRows: number;
-//     pageNo: number;
-//     mapX: string;
-//     mapY: string;
-//   },
-//   options?: Omit<UseQueryOptionsType<EventListResponseDto>, 'select'>
-// ) => {
-//   return useInfiniteQuery({
-//     queryKey: `getNearEventList/${params.mapX}/${params.mapY}`,
-//     queryFn: async ({ pageParam = params.pageNo }) => {
-//       const data = await axios.get<EventListResponseDto>(
-//         `${process.env.NEXT_PUBLIC_TOUR_API_END_POINT}/locationBasedList1` || '',
-//         {
-//           params: {
-//             ...params,
-//             pageNo: pageParam,
-//             _type: 'json',
-//             serviceKey: process.env.NEXT_PUBLIC_TOUR_API_KEY,
-//             contentTypeId: 15,
-//             MobileOS: 'ETC',
-//             MobileApp: 'hanginthere',
-//             radius: '5000' // 반경 5KM 이내
-//           } as NearEventListRequestDto
-//         }
-//       );
-//       return data;
-//     },
-//     getNextPageParam: lastPage => lastPage.data.response?.body.pageNo + 1,
-//     select: ({ pages, pageParams }) => ({
-//       pages: pages
-//         .flatMap(({ data }) => data.response?.body.items.item)
-//         .filter(el => el),
-//       pageParams
-//     }),
-//     ...options,
-//     enabled: !!params.mapX && !!params.mapY
-//   });
-// };

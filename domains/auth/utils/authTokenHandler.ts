@@ -17,6 +17,10 @@ export function getAccessToken(options?: OptionsType) {
   return getCookie(COOKIE_KEY.ACCESS_TOKEN, options);
 }
 
+export function setAccessToken(token: string, options?: OptionsType) {
+  return setCookie(COOKIE_KEY.ACCESS_TOKEN, token, options);
+}
+
 export function removeAccessToken() {
   deleteCookie(COOKIE_KEY.ACCESS_TOKEN);
 }
@@ -26,8 +30,12 @@ export function removeAccessToken() {
 /* Refresh Token: access token 만료 후 재발급 시 필요한 token */
 /* 유효 기간: 7일 */
 
-export function getRefreshToken() {
-  return getCookie(COOKIE_KEY.REFRESH_TOKEN);
+export function getRefreshToken(options?: OptionsType) {
+  return getCookie(COOKIE_KEY.REFRESH_TOKEN, options);
+}
+
+export function setRefreshToken(token: string, options?: OptionsType) {
+  return setCookie(COOKIE_KEY.REFRESH_TOKEN, token, options);
 }
 
 export function removeRefreshToken() {
@@ -35,6 +43,14 @@ export function removeRefreshToken() {
 }
 
 // -------------------------------------------------------------------------------
+
+export function setAuthTokens(
+  { accessToken, refreshToken }: { accessToken: string; refreshToken: string },
+  options?: OptionsType
+) {
+  setAccessToken(accessToken, options);
+  setRefreshToken(refreshToken, options);
+}
 
 export function removeAuthTokens() {
   removeAuthData();

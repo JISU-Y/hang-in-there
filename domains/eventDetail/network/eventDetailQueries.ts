@@ -1,29 +1,31 @@
-import axios from 'axios';
 import { useQuery } from 'react-query';
 
 import { UseQueryOptionsType } from '@domains/common/types/utilType';
+import BaseApi from '@logics/api/baseApi';
 
 import {
   EventDetailResponseDto,
   EventListResponseDtoNew
 } from '../types/detail';
+import { eventDetailQueryKeys } from '../constants/queryKeys';
+
+const eventApi = new BaseApi('');
 
 export const useFetchEventDetailQuery = (
   contentId: number,
   options?: Omit<UseQueryOptionsType<EventDetailResponseDto>, 'select'>
 ) => {
   return useQuery({
-    queryKey: `getEventDetail/${contentId}`,
+    queryKey: eventDetailQueryKeys.getEventDetail({ contentId }),
     queryFn: async () => {
-      const data = await axios.get<EventDetailResponseDto>(
-        `${process.env.NEXT_PUBLIC_HANGINTHERE_API_END_POINT}/v1/user/event/${contentId}` ||
-          ''
+      const data = await eventApi.get<EventDetailResponseDto>(
+        `/event/${contentId}`
       );
 
       return data;
     },
     ...options,
-    select: ({ data }) => data.data
+    select: ({ data }) => data
   });
 };
 
@@ -33,32 +35,28 @@ export const useFetchOtherEventListQuery = (
   options?: Omit<UseQueryOptionsType<EventListResponseDtoNew>, 'select'>
 ) => {
   return useQuery({
-    queryKey: `getEventList/ongoingEvents`,
+    queryKey: eventDetailQueryKeys.getOngoingEventList({ area_cd }),
     queryFn: async ({ pageParam = 1 }) => {
-      const data = await axios.get<EventListResponseDtoNew>(
-        `${process.env.NEXT_PUBLIC_HANGINTHERE_API_END_POINT}/v1/user/event` ||
-          '',
-        {
-          params: {
-            category: '264', // A02
-            // NOTE: 이 주변 event 파라미터 고정
-            area_cd,
-            size: 10,
-            page: pageParam,
-            status: 'on_going,up_comming'
-          }
+      const data = await eventApi.get<EventListResponseDtoNew>('/event', {
+        params: {
+          category: '264', // A02
+          // NOTE: 이 주변 event 파라미터 고정
+          area_cd,
+          size: 10,
+          page: pageParam,
+          status: 'on_going,up_comming'
         }
-      );
+      });
       return data;
     },
 
     ...options,
-    select: ({ data }) => ({
-      list: data.data.filter(el => el.event_id !== eventId),
+    select: ({ data, pagination }) => ({
+      list: data.filter(el => el.event_id !== eventId),
       pageInfo: {
-        currentPage: data.pagination.page,
-        totalPage: data.pagination.totalPage,
-        totalCount: data.pagination.totalItem
+        currentPage: pagination.page,
+        totalPage: pagination.totalPage,
+        totalCount: pagination.totalItem
       }
     })
   });
