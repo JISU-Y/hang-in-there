@@ -1,11 +1,11 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { getCookie } from 'cookies-next';
 
-import { COOKIE_KEY } from '@domains/common/constants/cookieKeys';
+import { getAccessToken } from '@domains/auth/utils/authTokenHandler';
 
 import { setupInterceptors } from './interceptors';
 
 type ApiVersionType = 'v1';
+type ApiUserType = 'user' | 'admin';
 
 export interface ApiRequestConfig extends AxiosRequestConfig {
   isAuthRequired?: boolean;
@@ -16,9 +16,13 @@ const BASE_URL = process.env.NEXT_PUBLIC_HANGINTHERE_API_END_POINT;
 export default class BaseApi {
   client: AxiosInstance;
 
-  constructor(baseUrl: string, version: ApiVersionType = 'v1') {
+  constructor(
+    baseUrl: string,
+    version: ApiVersionType = 'v1',
+    userType: ApiUserType = 'user'
+  ) {
     this.client = axios.create({
-      baseURL: `${BASE_URL}/${version}${baseUrl}`
+      baseURL: `${BASE_URL}/${version}/${userType}/${baseUrl}`
     });
 
     // NOTE: 토큰 재발급 요청을 위한 interceptor 설정
@@ -26,8 +30,9 @@ export default class BaseApi {
   }
 
   addAuthHeader(config: ApiRequestConfig = {}) {
-    const authToken = getCookie(COOKIE_KEY.ACCESS_TOKEN);
+    const authToken = getAccessToken();
     const { isAuthRequired = true, ...axiosConfig } = config;
+
     return {
       ...axiosConfig,
       headers: {

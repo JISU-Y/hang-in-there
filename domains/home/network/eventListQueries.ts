@@ -1,40 +1,38 @@
-import axios from 'axios';
 import { useQuery } from 'react-query';
 
 import { UseQueryOptionsType } from '@domains/common/types/utilType';
 import { EventListResponseDtoNew } from '@domains/category/types';
+import BaseApi from '@logics/api/baseApi';
 
 import { EventListResponseDto } from '../types';
+import { homeQueryKeys } from '../constants/queryKeys';
+
+const homeApi = new BaseApi('');
 
 export const useFetchOngoingEventListQuery = (
   options?: Omit<UseQueryOptionsType<EventListResponseDto>, 'select'>
 ) => {
   return useQuery({
-    queryKey: `getEventList/ongoingEvents`,
+    queryKey: homeQueryKeys.getOngoingEventList(),
     queryFn: async ({ pageParam = 1 }) => {
-      const data = await axios.get<EventListResponseDtoNew>(
-        `${process.env.NEXT_PUBLIC_HANGINTHERE_API_END_POINT}/v1/user/event` ||
-          '',
-        {
-          params: {
-            category: '264', // A02
-            // NOTE: on_going event 파라미터 고정
-            size: 10,
-            page: pageParam,
-            status: 'on_going'
-          }
+      const data = await homeApi.get<EventListResponseDtoNew>('/event', {
+        params: {
+          category: '264', // A02
+          // NOTE: on_going event 파라미터 고정
+          size: 10,
+          page: pageParam,
+          status: 'on_going'
         }
-      );
+      });
       return data;
     },
-
     ...options,
-    select: ({ data }) => ({
-      list: data.data,
+    select: ({ data, pagination }) => ({
+      list: data,
       pageInfo: {
-        currentPage: data.pagination.page,
-        totalPage: data.pagination.totalPage,
-        totalCount: data.pagination.totalItem
+        currentPage: pagination.page,
+        totalPage: pagination.totalPage,
+        totalCount: pagination.totalItem
       }
     })
   });
@@ -48,9 +46,9 @@ export const useFetchUpcomingEventListQuery = (
   options?: Omit<UseQueryOptionsType<EventListResponseDto>, 'select'>
 ) => {
   return useQuery({
-    queryKey: `getEventList/upcomingEvents/${params.size}/${params.page}`,
+    queryKey: homeQueryKeys.getUpcomingEventList(params),
     queryFn: async ({ pageParam = params.page }) => {
-      const data = await axios.get<EventListResponseDtoNew>(
+      const data = await homeApi.get<EventListResponseDtoNew>(
         `${process.env.NEXT_PUBLIC_HANGINTHERE_API_END_POINT}/v1/user/event` ||
           '',
         {
@@ -66,12 +64,12 @@ export const useFetchUpcomingEventListQuery = (
     },
 
     ...options,
-    select: ({ data }) => ({
-      list: data.data,
+    select: ({ data, pagination }) => ({
+      list: data,
       pageInfo: {
-        currentPage: data.pagination.page,
-        totalPage: data.pagination.totalPage,
-        totalCount: data.pagination.totalItem
+        currentPage: pagination.page,
+        totalPage: pagination.totalPage,
+        totalCount: pagination.totalItem
       }
     })
   });

@@ -7,8 +7,6 @@ import {
   setAuthTokens
 } from '@domains/auth/utils/authTokenHandler';
 
-const BASE_URL = process.env.NEXT_PUBLIC_HANGINTHERE_API_END_POINT;
-
 // NOTE: 토큰 재발급 요청이 여러개 일 경우, 한번만 요청하도록 처리하기 위한 변수
 let isRefreshing = false;
 let failedQueue: {
@@ -65,10 +63,13 @@ export function setupInterceptors(instance: AxiosInstance) {
 
           // NOTE: 토큰 재발급 요청
           axios
-            .post(`${BASE_URL}/v1/user/reissue`, {
-              accessToken,
-              refreshToken
-            })
+            .post(
+              `${process.env.NEXT_PUBLIC_HANGINTHERE_API_END_POINT}/v1/user/reissue`,
+              {
+                accessToken,
+                refreshToken
+              }
+            )
             .then(({ data }) => {
               // NOTE: 토큰 재발급 성공 시, 새로운 토큰으로 실패했던 요청들 재시도
               const {

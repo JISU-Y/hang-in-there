@@ -1,6 +1,11 @@
-import axios from 'axios';
 import { useQuery } from 'react-query';
+
+import BaseApi from '@logics/api/baseApi';
+
 import { ApiDataResponseTypeNew } from '../types/utilType';
+import { commonQueryKeys } from '../constants/queryKeys';
+
+const searchApi = new BaseApi('');
 
 export interface PopularEventDataType {
   title: string;
@@ -20,22 +25,19 @@ const SEARCH_EVENT_LIST = 5;
 
 export const useFetchPopularEventListQuery = (size?: number) => {
   return useQuery({
-    queryKey: 'getPopularEventList',
+    queryKey: commonQueryKeys.getPopularEventList(),
     queryFn: async () => {
-      const data = await axios.get<
+      const data = await searchApi.get<
         ApiDataResponseTypeNew<PopularEventDataType[]>
-      >(
-        `${process.env.NEXT_PUBLIC_HANGINTHERE_API_END_POINT}/v1/user/event/popular`,
-        {
-          params: {
-            size: size || DEFAULT_POPULAR_LIST
-          }
+      >('/event/popular', {
+        params: {
+          size: size || DEFAULT_POPULAR_LIST
         }
-      );
+      });
       return data;
     },
     select: ({ data }) =>
-      data.data.map((event, index) => ({
+      data.map((event, index) => ({
         ...event,
         rank: index + 1
       }))
@@ -44,21 +46,18 @@ export const useFetchPopularEventListQuery = (size?: number) => {
 
 export const useFetchSearchEventResultQuery = (searchWord: string) => {
   return useQuery({
-    queryKey: `getSearchEventResult/${searchWord}`,
+    queryKey: commonQueryKeys.getSearchEventResult({ searchWord }),
     queryFn: async () => {
-      const data = await axios.get<
+      const data = await searchApi.get<
         ApiDataResponseTypeNew<SearchEventResultType[]>
-      >(
-        `${process.env.NEXT_PUBLIC_HANGINTHERE_API_END_POINT}/v1/user/event/title-auto-completion`,
-        {
-          params: {
-            title: searchWord,
-            size: SEARCH_EVENT_LIST
-          }
+      >('/event/title-auto-completion', {
+        params: {
+          title: searchWord,
+          size: SEARCH_EVENT_LIST
         }
-      );
+      });
       return data;
     },
-    select: ({ data }) => data.data
+    select: ({ data }) => data
   });
 };
