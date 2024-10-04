@@ -24,37 +24,11 @@ import 'slick-carousel/slick/slick-theme.css';
 const settings: Settings = {
   dots: false,
   infinite: false,
-  slidesToShow: 5.5,
+  slidesToShow: 5,
   slidesToScroll: 1,
   swipeToSlide: true,
   touchThreshold: 100,
-  initialSlide: 0,
-  responsive: [
-    {
-      breakpoint: 1200,
-      settings: {
-        slidesToShow: 4
-      }
-    },
-    {
-      breakpoint: 992,
-      settings: {
-        slidesToShow: 3
-      }
-    },
-    {
-      breakpoint: 768,
-      settings: {
-        slidesToShow: 2
-      }
-    },
-    {
-      breakpoint: 576,
-      settings: {
-        slidesToShow: 1
-      }
-    }
-  ]
+  initialSlide: 0
 };
 
 interface OtherEventListSectionProps {

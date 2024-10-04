@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useInfiniteQuery, useQuery } from 'react-query';
 import { omit } from 'lodash';
 
@@ -58,7 +57,7 @@ export const useFetchEventListInfiniteQuery = (params: {
       omit(params, ['size', 'page']) // NOTE: infinite query 사용 시 size와 page 별로 query key를 구분하면 잘 동작하지 않음.
     ),
     queryFn: async ({ pageParam = params.page }) => {
-      const data = await axios.get<EventListResponseDtoNew>('/event', {
+      const data = await eventListApi.get<EventListResponseDtoNew>('/event', {
         params: {
           ...params,
           category: '264', // A02
@@ -69,16 +68,16 @@ export const useFetchEventListInfiniteQuery = (params: {
       return data;
     },
     getNextPageParam: lastPage => {
-      const { totalPage, page: currentPage } = lastPage.data.pagination;
+      const { totalPage, page: currentPage } = lastPage.pagination;
 
       if (currentPage >= totalPage) return null;
 
       return currentPage + 1;
     },
     select: ({ pages, pageParams }) => ({
-      pages: pages.flatMap(({ data }) => data.data).filter(el => el),
+      pages: pages.flatMap(({ data }) => data).filter(el => el),
       pageParams,
-      total: pages[0].data.pagination
+      total: pages[0].pagination
     })
   });
 };

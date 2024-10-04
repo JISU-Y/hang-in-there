@@ -35,7 +35,7 @@ export const useFetchOtherEventListQuery = (
   options?: Omit<UseQueryOptionsType<EventListResponseDtoNew>, 'select'>
 ) => {
   return useQuery({
-    queryKey: eventDetailQueryKeys.getOngoingEventList({ eventId, area_cd }),
+    queryKey: eventDetailQueryKeys.getOngoingEventList({ area_cd }),
     queryFn: async ({ pageParam = 1 }) => {
       const data = await eventApi.get<EventListResponseDtoNew>('/event', {
         params: {
