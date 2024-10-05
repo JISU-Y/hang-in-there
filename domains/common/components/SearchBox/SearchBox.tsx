@@ -9,16 +9,17 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 import styled from '@emotion/styled';
 import { SearchIcon } from '@chakra-ui/icons';
+import { useBooleanState } from '@toss/react';
+import { useOutsideClick } from '@chakra-ui/react';
 import {
   categories,
   CategoryCodeType
 } from '@domains/common/constants/categories';
-import { useBooleanState } from '@toss/react';
-import { useOutsideClick } from '@chakra-ui/react';
 import {
   useFetchPopularEventListQuery,
   useFetchSearchEventResultQuery
 } from '@domains/common/network/searchQueries';
+import useDebounceValue from '@logics/hooks/useDebounceValue';
 
 const getHighlightedText = (
   text: string,
@@ -54,11 +55,19 @@ const SearchBox = () => {
   const searchKeyword = searchParams.get('search');
 
   const [keyword, setKeyword] = useState('');
+  const debouncedKeyword = useDebounceValue(keyword, 500);
 
   const [isOpenDropdown, openDropdown, closeDropdown] = useBooleanState();
 
-  const { data: popularEventList } = useFetchPopularEventListQuery();
-  const { data: searchResultList } = useFetchSearchEventResultQuery(keyword); // TODO: debounce 추가 필요
+  const { data: popularEventList } = useFetchPopularEventListQuery(5, {
+    enabled: isOpenDropdown
+  });
+  const { data: searchResultList } = useFetchSearchEventResultQuery(
+    debouncedKeyword,
+    {
+      enabled: !!debouncedKeyword
+    }
+  );
 
   const handleChangeKeyword: ChangeEventHandler<HTMLInputElement> = e => {
     setKeyword(e.target.value);
