@@ -1,7 +1,6 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
-import { useParams } from 'next/navigation';
+import { useMemo } from 'react';
 import Image from 'next/image';
 
 import { isSameDay } from 'date-fns';
@@ -21,41 +20,43 @@ import OtherEventListSection from './sections/OtherEventListSection/OtherEventLi
 import { useFetchEventDetailQuery } from './network/eventDetailQueries';
 import { DetailInfoType } from './types/detail';
 
-const EventDetailPage = () => {
-  const { contentId } = useParams<{ contentId: string }>();
+interface EventDetailPageProps {
+  contentId?: string;
+}
 
+const EventDetailPage = ({ contentId }: EventDetailPageProps) => {
   usePreventScrollRestoration();
 
-  const { data: eventDetail } = useFetchEventDetailQuery(Number(contentId));
+  // const { data: eventDetail } = useFetchEventDetailQuery(Number(contentId));
 
-  const eventDetailInfo: DetailInfoType | null = useMemo(() => {
-    if (!eventDetail) return null;
+  // const eventDetailInfo: DetailInfoType | null = useMemo(() => {
+  //   if (!eventDetail) return null;
 
-    const hasPeriod =
-      eventDetail.event_ed &&
-      !isSameDay(eventDetail.event_st, eventDetail.event_ed);
+  //   const hasPeriod =
+  //     eventDetail.event_ed &&
+  //     !isSameDay(eventDetail.event_st, eventDetail.event_ed);
 
-    return {
-      period: `${formatDate({
-        date: eventDetail.event_st,
-        customType: 'yyyy. MM. dd.(EEE)'
-      })}${
-        hasPeriod
-          ? ` ~ ${formatDate({
-              date: eventDetail.event_ed,
-              customType: 'yyyy. MM. dd.(EEE)'
-            })}`
-          : ''
-      }`,
-      place: `${eventDetail.addr} ${eventDetail.addr_detail}`,
-      time: eventDetail.costInfo, // TODO: playtime 없음.
-      sponsorName: eventDetail.sponsor,
-      hostName: eventDetail.host,
-      hostPhone: eventDetail.tel,
-      homePageLink: extractUrl(eventDetail.homepage_url),
-      description: eventDetail.description
-    };
-  }, [eventDetail]);
+  //   return {
+  //     period: `${formatDate({
+  //       date: eventDetail.event_st,
+  //       customType: 'yyyy. MM. dd.(EEE)'
+  //     })}${
+  //       hasPeriod
+  //         ? ` ~ ${formatDate({
+  //             date: eventDetail.event_ed,
+  //             customType: 'yyyy. MM. dd.(EEE)'
+  //           })}`
+  //         : ''
+  //     }`,
+  //     place: `${eventDetail.addr} ${eventDetail.addr_detail}`,
+  //     time: eventDetail.costInfo, // TODO: playtime 없음.
+  //     sponsorName: eventDetail.sponsor,
+  //     hostName: eventDetail.host,
+  //     hostPhone: eventDetail.tel,
+  //     homePageLink: extractUrl(eventDetail.homepage_url),
+  //     description: eventDetail.description
+  //   };
+  // }, [eventDetail]);
 
   const handleClickShare = () => {
     copyToClipboard(window.location.href, {
@@ -67,11 +68,7 @@ const EventDetailPage = () => {
 
   return (
     <Container>
-      {/* <BreadcrumWrapper>
-        <Breadcrumbs />
-      </BreadcrumWrapper> */}
-
-      <DetailContainer>
+      {/* <DetailContainer>
         <ContentWrapper>
           <ImageWrapper>
             <Image
@@ -145,7 +142,7 @@ const EventDetailPage = () => {
           areaCode={eventDetail.area_cd}
           eventId={eventDetail.event_id}
         />
-      )}
+      )} */}
     </Container>
   );
 };
