@@ -1,10 +1,9 @@
 import axios, { AxiosError, AxiosInstance } from 'axios';
 
 import {
-  getAccessToken,
   getRefreshToken,
   removeAuthTokens,
-  setAuthTokens
+  setAccessToken
 } from '@domains/auth/utils/authTokenHandler';
 
 // NOTE: 토큰 재발급 요청이 여러개 일 경우, 한번만 요청하도록 처리하기 위한 변수
@@ -40,7 +39,11 @@ export function setupInterceptors(instance: AxiosInstance) {
       const originalRequest = error.config;
 
       // NOTE: 토큰 만료 에러인 경우 처리
-      if (error.response?.status === 401 && !originalRequest._retry) {
+      if (
+        (error.response?.status === 401 ||
+          error.response?.statusCode === 401) &&
+        !originalRequest._retry
+      ) {
         if (isRefreshing) {
           return new Promise((resolve, reject) => {
             failedQueue.push({ resolve, reject });
@@ -58,7 +61,6 @@ export function setupInterceptors(instance: AxiosInstance) {
         isRefreshing = true;
 
         return new Promise((resolve, reject) => {
-          const accessToken = getAccessToken();
           const refreshToken = getRefreshToken();
 
           // NOTE: 토큰 재발급 요청
@@ -66,21 +68,14 @@ export function setupInterceptors(instance: AxiosInstance) {
             .post(
               `${process.env.NEXT_PUBLIC_HANGINTHERE_API_END_POINT}/v1/user/reissue`,
               {
-                accessToken,
-                refreshToken
+                rt: refreshToken
               }
             )
             .then(({ data }) => {
               // NOTE: 토큰 재발급 성공 시, 새로운 토큰으로 실패했던 요청들 재시도
-              const {
-                accessToken: newAccessToken,
-                refreshToken: newRefreshToken
-              } = data.data;
+              const { accessToken: newAccessToken } = data.data;
 
-              setAuthTokens({
-                accessToken: newAccessToken,
-                refreshToken: newRefreshToken
-              });
+              setAccessToken(newAccessToken);
 
               originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
