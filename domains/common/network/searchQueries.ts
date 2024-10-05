@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery, UseQueryOptions } from 'react-query';
 
 import BaseApi from '@logics/api/baseApi';
 
@@ -23,7 +23,17 @@ export interface SearchEventResultType {
 const DEFAULT_POPULAR_LIST = 5;
 const SEARCH_EVENT_LIST = 5;
 
-export const useFetchPopularEventListQuery = (size?: number) => {
+export const useFetchPopularEventListQuery = (
+  size?: number,
+  options?: Omit<
+    UseQueryOptions<
+      ApiDataResponseTypeNew<PopularEventDataType[]>,
+      unknown,
+      PopularEventDataType[]
+    >,
+    'select'
+  >
+) => {
   return useQuery({
     queryKey: commonQueryKeys.getPopularEventList(),
     queryFn: async () => {
@@ -36,6 +46,7 @@ export const useFetchPopularEventListQuery = (size?: number) => {
       });
       return data;
     },
+    ...options,
     select: ({ data }) =>
       data.map((event, index) => ({
         ...event,
@@ -44,7 +55,17 @@ export const useFetchPopularEventListQuery = (size?: number) => {
   });
 };
 
-export const useFetchSearchEventResultQuery = (searchWord: string) => {
+export const useFetchSearchEventResultQuery = (
+  searchWord: string,
+  options?: Omit<
+    UseQueryOptions<
+      ApiDataResponseTypeNew<SearchEventResultType[]>,
+      unknown,
+      SearchEventResultType[]
+    >,
+    'select' | 'staleTime' | 'keepPreviousData' | 'placeholderData'
+  >
+) => {
   return useQuery({
     queryKey: commonQueryKeys.getSearchEventResult({ searchWord }),
     queryFn: async () => {
@@ -58,6 +79,8 @@ export const useFetchSearchEventResultQuery = (searchWord: string) => {
       });
       return data;
     },
+    ...options,
+    staleTime: 500,
     select: ({ data }) => data
   });
 };

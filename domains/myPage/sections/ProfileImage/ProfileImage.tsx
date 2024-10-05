@@ -1,23 +1,24 @@
 import { ChangeEventHandler, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 
-import { useQueryClient } from 'react-query';
 import { SettingsIcon } from '@chakra-ui/icons';
 import { useFetchUserProfileQuery } from '@domains/auth/network/authQueries';
 import { usePatchUserProfileImageMutation } from '@domains/myPage/network/myPageMutations';
 import styled from '@emotion/styled';
 import { uploadFile } from '@logics/utils/imageHandler';
+import useToastMessage from '@logics/hooks/useToastMessage';
 
 const ProfileImage = () => {
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const queryClient = useQueryClient();
-  const { data: userProfile } = useFetchUserProfileQuery();
+  const { data: userProfile, refetch } = useFetchUserProfileQuery();
 
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
 
   const { mutateAsync: updateUserProfileImage } =
     usePatchUserProfileImageMutation();
+
+  const { toastSuccess, toastError } = useToastMessage();
 
   const handleClickImageChange = () => {
     if (!inputRef.current) return;
@@ -37,14 +38,18 @@ const ProfileImage = () => {
       if (imageUrl) {
         await updateUserProfileImage({ imageUrl });
 
-        setTimeout(() => {
-          queryClient.invalidateQueries({
-            queryKey: 'user-profile'
-          });
-        }, 200); // HACK: S3 업로드 시간 고려 0.2초 delay / 바로 s3 업로드 요청하지 않으면 사실 필요없음.
+        const { data: newUserProfile } = await refetch();
+
+        if (!newUserProfile?.img) {
+          throw Error();
+        }
+
+        setProfileImageUrl(newUserProfile?.img);
+
+        toastSuccess({ title: '사진을 성공적으로 변경했습니다!' });
       }
     } catch (error) {
-      alert('사진 변경에 실패했습니다. 다시 시도해주세요.');
+      toastError({ title: '사진 변경에 실패했습니다. 다시 시도해주세요.' });
       setProfileImageUrl('');
     }
   };

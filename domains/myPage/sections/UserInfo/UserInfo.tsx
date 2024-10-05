@@ -1,10 +1,12 @@
 import { Button, Input } from '@chakra-ui/react';
+import { authQueryKeys } from '@domains/auth/constants/queryKeys';
 import { useFetchUserProfileQuery } from '@domains/auth/network/authQueries';
 import { userInfoSchema } from '@domains/myPage/constants/myPageSchema';
 import { usePatchUserNicknameMutation } from '@domains/myPage/network/myPageMutations';
 import { UserInfoSchemaType } from '@domains/myPage/types';
 import styled from '@emotion/styled';
 import { yupResolver } from '@hookform/resolvers/yup';
+import useToastMessage from '@logics/hooks/useToastMessage';
 
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useQueryClient } from 'react-query';
@@ -14,6 +16,8 @@ const UserInfo = () => {
 
   const { refetch } = useFetchUserProfileQuery();
   const { mutateAsync: nicknameMutate } = usePatchUserNicknameMutation();
+
+  const { toastSuccess, toastError } = useToastMessage();
 
   const { register, handleSubmit, formState } = useForm<UserInfoSchemaType>({
     resolver: yupResolver(userInfoSchema),
@@ -34,11 +38,13 @@ const UserInfo = () => {
     try {
       await nicknameMutate({ nickName });
 
+      toastSuccess({ title: '이름을 성공적으로 변경했습니다!' });
+
       queryClient.invalidateQueries({
-        queryKey: 'user-profile'
+        queryKey: authQueryKeys.getUserProfile()
       });
     } catch (error) {
-      alert('이름 변경에 실패했습니다. 다시 시도해주세요.');
+      toastError({ title: '이름 변경에 실패했습니다. 다시 시도해주세요.' });
     }
   };
 
