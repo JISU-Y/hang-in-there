@@ -1,4 +1,5 @@
 import { Button, Input } from '@chakra-ui/react';
+import { authQueryKeys } from '@domains/auth/constants/queryKeys';
 import { useFetchUserProfileQuery } from '@domains/auth/network/authQueries';
 import { userInfoSchema } from '@domains/myPage/constants/myPageSchema';
 import { usePatchUserNicknameMutation } from '@domains/myPage/network/myPageMutations';
@@ -35,7 +36,7 @@ const UserInfo = () => {
       await nicknameMutate({ nickName });
 
       queryClient.invalidateQueries({
-        queryKey: 'user-profile'
+        queryKey: authQueryKeys.getUserProfile()
       });
     } catch (error) {
       alert('이름 변경에 실패했습니다. 다시 시도해주세요.');

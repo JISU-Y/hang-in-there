@@ -7,6 +7,7 @@ import { useFetchUserProfileQuery } from '@domains/auth/network/authQueries';
 import { usePatchUserProfileImageMutation } from '@domains/myPage/network/myPageMutations';
 import styled from '@emotion/styled';
 import { uploadFile } from '@logics/utils/imageHandler';
+import { authQueryKeys } from '@domains/auth/constants/queryKeys';
 
 const ProfileImage = () => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -39,7 +40,7 @@ const ProfileImage = () => {
 
         setTimeout(() => {
           queryClient.invalidateQueries({
-            queryKey: 'user-profile'
+            queryKey: authQueryKeys.getUserProfile()
           });
         }, 200); // HACK: S3 업로드 시간 고려 0.2초 delay / 바로 s3 업로드 요청하지 않으면 사실 필요없음.
       }

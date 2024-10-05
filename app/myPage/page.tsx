@@ -2,11 +2,13 @@ import { Suspense } from 'react';
 
 import PageLayout from '@domains/common/layouts/PageLayout';
 import MyPageComponent from '@domains/myPage';
-import { getAccessToken } from '@domains/auth/utils/authTokenHandler';
 import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
+import { COOKIE_KEY } from '@domains/common/constants/cookieKeys';
 
 const MyPage = () => {
-  const accessToken = getAccessToken();
+  const cookieStore = cookies();
+  const accessToken = cookieStore.get(COOKIE_KEY.ACCESS_TOKEN)?.value;
 
   if (!accessToken) {
     redirect('/');
