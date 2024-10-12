@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import { UseQueryOptionsType } from '@domains/common/types/utilType';
 import { EventListResponseDtoNew } from '@domains/category/types';
