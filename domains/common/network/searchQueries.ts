@@ -31,7 +31,7 @@ export const useFetchPopularEventListQuery = (
       unknown,
       PopularEventDataType[]
     >,
-    'select'
+    'queryKey' | 'queryFn' | 'select'
   >
 ) => {
   return useQuery({
@@ -63,7 +63,12 @@ export const useFetchSearchEventResultQuery = (
       unknown,
       SearchEventResultType[]
     >,
-    'select' | 'staleTime' | 'keepPreviousData' | 'placeholderData'
+    | 'queryKey'
+    | 'queryFn'
+    | 'select'
+    | 'staleTime'
+    | 'keepPreviousData'
+    | 'placeholderData'
   >
 ) => {
   return useQuery({
