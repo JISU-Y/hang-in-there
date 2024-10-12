@@ -1,16 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { UseQueryOptionsType } from '@domains/common/types/utilType';
-import BaseApi from '@logics/api/baseApi';
 
 import {
   EventDetailResponseDto,
   EventListResponseDtoNew
 } from '../types/detail';
 import { eventDetailQueryKeys } from '../constants/queryKeys';
-import { getEventDetail } from './eventDetailFetchHandlers';
-
-const eventApi = new BaseApi('');
+import { getEventDetail, getOtherEventList } from './eventDetailFetchHandlers';
 
 export const useFetchEventDetailQuery = (
   contentId: string,
@@ -27,32 +24,27 @@ export const useFetchEventDetailQuery = (
 export const useFetchOtherEventListQuery = (
   eventId: number,
   area_cd?: number,
-  options?: Omit<UseQueryOptionsType<EventListResponseDtoNew>, 'select'>
+  options?: Omit<
+    UseQueryOptionsType<EventListResponseDtoNew>,
+    'select' | 'enabled'
+  >
 ) => {
   return useQuery({
     queryKey: eventDetailQueryKeys.getOngoingEventList({ area_cd }),
-    queryFn: async ({ pageParam = 1 }) => {
-      const data = await eventApi.get<EventListResponseDtoNew>('/event', {
-        params: {
-          category: '264', // A02
-          // NOTE: 이 주변 event 파라미터 고정
-          area_cd,
-          size: 10,
-          page: pageParam,
-          status: 'on_going,up_comming'
-        }
-      });
-      return data;
-    },
-
+    queryFn: async () => await getOtherEventList({ area_cd }),
     ...options,
-    select: ({ data, pagination }) => ({
-      list: data.filter(el => el.event_id !== eventId),
-      pageInfo: {
-        currentPage: pagination.page,
-        totalPage: pagination.totalPage,
-        totalCount: pagination.totalItem
-      }
-    })
+    enabled: !!area_cd,
+    select: response => {
+      const { data, pagination } = response;
+      return {
+        list: data.filter(el => el.event_id !== eventId),
+        pagination: {
+          page: pagination.page,
+          totalPage: pagination.totalPage,
+          totalItem: pagination.totalItem,
+          size: pagination.size
+        }
+      };
+    }
   });
 };
