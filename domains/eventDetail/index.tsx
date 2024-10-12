@@ -1,34 +1,33 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
-import { useParams } from 'next/navigation';
 import Image from 'next/image';
 
 import { isSameDay } from 'date-fns';
 
 import styled from '@emotion/styled';
-import '@styles/custom-slick.css';
 import LocationIcon from '@styles/icons/LocationIcon';
 import CallOutgoingIcon from '@styles/icons/CallOutgoingIcon';
 import ShareIcon from '@styles/icons/ShareIcon';
 import { extractUrl } from '@logics/utils/extractUrl';
 import { formatDate } from '@logics/utils/dateFormat';
 import copyToClipboard from '@logics/utils/copyToClipboardHandler';
-import usePreventScrollRestoration from '@logics/hooks/usePreventScrollRestoration';
 
 import DetailInfoSection from './sections/DetailInfoSection/DetailInfoSection';
 import OtherEventListSection from './sections/OtherEventListSection/OtherEventListSection';
-import { useFetchEventDetailQuery } from './network/eventDetailQueries';
 import { DetailInfoType } from './types/detail';
+import { useFetchEventDetailQuery } from './network/eventDetailQueries';
 
-const EventDetailPage = () => {
-  const { contentId } = useParams<{ contentId: string }>();
+import '@styles/custom-slick.css';
 
-  usePreventScrollRestoration();
+interface EventDetailPageProps {
+  contentId: string;
+}
 
-  const { data: eventDetail } = useFetchEventDetailQuery(Number(contentId));
+// TODO: ViewModel 만들기, emotion server side 걷어 낼지...
+const EventDetailPage = ({ contentId }: EventDetailPageProps) => {
+  const { data: eventDetail } = useFetchEventDetailQuery(contentId);
 
-  const eventDetailInfo: DetailInfoType | null = useMemo(() => {
+  const getEventDetailInfo = (): DetailInfoType | null => {
     if (!eventDetail) return null;
 
     const hasPeriod =
@@ -55,7 +54,8 @@ const EventDetailPage = () => {
       homePageLink: extractUrl(eventDetail.homepage_url),
       description: eventDetail.description
     };
-  }, [eventDetail]);
+  };
+  const eventDetailInfo = getEventDetailInfo();
 
   const handleClickShare = () => {
     copyToClipboard(window.location.href, {
@@ -67,10 +67,6 @@ const EventDetailPage = () => {
 
   return (
     <Container>
-      {/* <BreadcrumWrapper>
-        <Breadcrumbs />
-      </BreadcrumWrapper> */}
-
       <DetailContainer>
         <ContentWrapper>
           <ImageWrapper>
@@ -137,7 +133,7 @@ const EventDetailPage = () => {
           </DetailWrapper>
         </ContentWrapper>
 
-        <DetailInfoSection />
+        <DetailInfoSection contentId={contentId} />
       </DetailContainer>
 
       {eventDetail && (

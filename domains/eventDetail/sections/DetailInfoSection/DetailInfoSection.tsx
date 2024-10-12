@@ -1,16 +1,21 @@
-import { useParams, useRouter } from 'next/navigation';
+'use client';
+
+import { useRouter } from 'next/navigation';
 
 import styled from '@emotion/styled';
 
-import { useFetchEventDetailQuery } from '../../network/eventDetailQueries';
 import EventMap from '../../components/EventMap/EventMap';
 import Image from 'next/image';
+import { useFetchEventDetailQuery } from '@domains/eventDetail/network/eventDetailQueries';
 
-const DetailInfoSection = () => {
-  const { contentId } = useParams<{ contentId: string }>();
+interface DetailInfoSectionProps {
+  contentId: string;
+}
+
+const DetailInfoSection = ({ contentId }: DetailInfoSectionProps) => {
   const { push, back } = useRouter();
 
-  const { data: eventDetail } = useFetchEventDetailQuery(Number(contentId));
+  const { data: eventDetail } = useFetchEventDetailQuery(contentId);
 
   const handleClickBackToList = () => {
     if (window.history.length > 1) {

@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { UseQueryOptions } from 'react-query';
+import { UseQueryOptions } from '@tanstack/react-query';
 
 /* API 이용 데이터 요청 시 정형화된 ResponseType을 만드는 유틸 타입 */
 export interface ApiDataResponseType<T> {

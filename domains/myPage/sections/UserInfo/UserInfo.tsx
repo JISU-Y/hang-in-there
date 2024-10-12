@@ -9,7 +9,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import useToastMessage from '@logics/hooks/useToastMessage';
 
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 
 const UserInfo = () => {
   const queryClient = useQueryClient();

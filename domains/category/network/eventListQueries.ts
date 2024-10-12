@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useQuery } from 'react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { omit } from 'lodash';
 
 import BaseApi from '@logics/api/baseApi';
@@ -74,6 +74,7 @@ export const useFetchEventListInfiniteQuery = (params: {
 
       return currentPage + 1;
     },
+    initialPageParam: 0,
     select: ({ pages, pageParams }) => ({
       pages: pages.flatMap(({ data }) => data).filter(el => el),
       pageParams,
