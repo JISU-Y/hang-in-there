@@ -21,6 +21,8 @@ export default class BaseApi {
     version: ApiVersionType = 'v1',
     userType: ApiUserType = 'user'
   ) {
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
     this.client = axios.create({
       baseURL: `${BASE_URL}/${version}/${userType}/${baseUrl}`
     });

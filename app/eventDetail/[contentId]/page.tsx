@@ -1,39 +1,26 @@
 import { Suspense } from 'react';
-import { QueryClient } from 'react-query';
 
 import PageLayout from '@domains/common/layouts/PageLayout';
-import EventDetailPage from '@domains/eventDetail';
 import { PageParamProps } from '@domains/common/types';
 import { eventDetailQueryKeys } from '@domains/eventDetail/constants/queryKeys';
-import axios, { AxiosResponse } from 'axios';
-import { EventDetailResponseDto } from '@domains/eventDetail/types/detail';
+import { getEventDetail } from '@domains/eventDetail/network/eventDetailFetchHandlers';
+import { getDehydratedQuery, Hydrate } from '@logics/utils/reactQuery';
+import EventDetailPage from '@domains/eventDetail';
 
 const Detail = async ({ params }: PageParamProps<{ contentId: string }>) => {
-  const queryClient = new QueryClient();
-
-  await queryClient.prefetchQuery({
+  const query = await getDehydratedQuery({
     queryKey: eventDetailQueryKeys.getEventDetail({
       contentId: params.contentId
     }),
-    queryFn: async () => {
-      const data = await axios.get<AxiosResponse<EventDetailResponseDto>>(
-        `/event/${params.contentId}`
-      );
-
-      return data;
-    },
-    retry: 0
+    queryFn: async () => await getEventDetail(params.contentId)
   });
-
-  const detailData = queryClient.getQueryData<
-    AxiosResponse<EventDetailResponseDto>
-  >(eventDetailQueryKeys.getEventDetail({ contentId: params.contentId }));
-  console.log('🚀 ~ Detail ~ detailData:', detailData);
 
   return (
     <PageLayout>
       <Suspense fallback={<div>fallback</div>}>
-        <EventDetailPage contentId={params.contentId} />
+        <Hydrate state={{ queries: [query] }}>
+          <EventDetailPage contentId={params.contentId} />
+        </Hydrate>
       </Suspense>
     </PageLayout>
   );

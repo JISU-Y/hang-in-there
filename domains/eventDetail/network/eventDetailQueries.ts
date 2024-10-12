@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import { UseQueryOptionsType } from '@domains/common/types/utilType';
 import BaseApi from '@logics/api/baseApi';
@@ -8,22 +8,17 @@ import {
   EventListResponseDtoNew
 } from '../types/detail';
 import { eventDetailQueryKeys } from '../constants/queryKeys';
+import { getEventDetail } from './eventDetailFetchHandlers';
 
 const eventApi = new BaseApi('');
 
 export const useFetchEventDetailQuery = (
-  contentId: number,
+  contentId: string,
   options?: Omit<UseQueryOptionsType<EventDetailResponseDto>, 'select'>
 ) => {
   return useQuery({
     queryKey: eventDetailQueryKeys.getEventDetail({ contentId }),
-    queryFn: async () => {
-      const data = await eventApi.get<EventDetailResponseDto>(
-        `/event/${contentId}`
-      );
-
-      return data;
-    },
+    queryFn: async () => await getEventDetail(contentId),
     ...options,
     select: ({ data }) => data
   });

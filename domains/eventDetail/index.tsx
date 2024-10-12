@@ -1,62 +1,60 @@
 'use client';
 
-import { useMemo } from 'react';
 import Image from 'next/image';
 
 import { isSameDay } from 'date-fns';
 
 import styled from '@emotion/styled';
-import '@styles/custom-slick.css';
 import LocationIcon from '@styles/icons/LocationIcon';
 import CallOutgoingIcon from '@styles/icons/CallOutgoingIcon';
 import ShareIcon from '@styles/icons/ShareIcon';
 import { extractUrl } from '@logics/utils/extractUrl';
 import { formatDate } from '@logics/utils/dateFormat';
 import copyToClipboard from '@logics/utils/copyToClipboardHandler';
-import usePreventScrollRestoration from '@logics/hooks/usePreventScrollRestoration';
 
 import DetailInfoSection from './sections/DetailInfoSection/DetailInfoSection';
 import OtherEventListSection from './sections/OtherEventListSection/OtherEventListSection';
-import { useFetchEventDetailQuery } from './network/eventDetailQueries';
 import { DetailInfoType } from './types/detail';
+import { useFetchEventDetailQuery } from './network/eventDetailQueries';
+
+import '@styles/custom-slick.css';
 
 interface EventDetailPageProps {
-  contentId?: string;
+  contentId: string;
 }
 
 const EventDetailPage = ({ contentId }: EventDetailPageProps) => {
-  usePreventScrollRestoration();
+  const { data: eventDetail } = useFetchEventDetailQuery(contentId);
 
-  // const { data: eventDetail } = useFetchEventDetailQuery(Number(contentId));
+  const getEventDetailInfo = (): DetailInfoType | null => {
+    if (!eventDetail) return null;
 
-  // const eventDetailInfo: DetailInfoType | null = useMemo(() => {
-  //   if (!eventDetail) return null;
+    const hasPeriod =
+      eventDetail.event_ed &&
+      !isSameDay(eventDetail.event_st, eventDetail.event_ed);
 
-  //   const hasPeriod =
-  //     eventDetail.event_ed &&
-  //     !isSameDay(eventDetail.event_st, eventDetail.event_ed);
-
-  //   return {
-  //     period: `${formatDate({
-  //       date: eventDetail.event_st,
-  //       customType: 'yyyy. MM. dd.(EEE)'
-  //     })}${
-  //       hasPeriod
-  //         ? ` ~ ${formatDate({
-  //             date: eventDetail.event_ed,
-  //             customType: 'yyyy. MM. dd.(EEE)'
-  //           })}`
-  //         : ''
-  //     }`,
-  //     place: `${eventDetail.addr} ${eventDetail.addr_detail}`,
-  //     time: eventDetail.costInfo, // TODO: playtime 없음.
-  //     sponsorName: eventDetail.sponsor,
-  //     hostName: eventDetail.host,
-  //     hostPhone: eventDetail.tel,
-  //     homePageLink: extractUrl(eventDetail.homepage_url),
-  //     description: eventDetail.description
-  //   };
-  // }, [eventDetail]);
+    return {
+      period: `${formatDate({
+        date: eventDetail.event_st,
+        customType: 'yyyy. MM. dd.(EEE)'
+      })}${
+        hasPeriod
+          ? ` ~ ${formatDate({
+              date: eventDetail.event_ed,
+              customType: 'yyyy. MM. dd.(EEE)'
+            })}`
+          : ''
+      }`,
+      place: `${eventDetail.addr} ${eventDetail.addr_detail}`,
+      time: eventDetail.costInfo, // TODO: playtime 없음.
+      sponsorName: eventDetail.sponsor,
+      hostName: eventDetail.host,
+      hostPhone: eventDetail.tel,
+      homePageLink: extractUrl(eventDetail.homepage_url),
+      description: eventDetail.description
+    };
+  };
+  const eventDetailInfo = getEventDetailInfo();
 
   const handleClickShare = () => {
     copyToClipboard(window.location.href, {
@@ -68,7 +66,7 @@ const EventDetailPage = ({ contentId }: EventDetailPageProps) => {
 
   return (
     <Container>
-      {/* <DetailContainer>
+      <DetailContainer>
         <ContentWrapper>
           <ImageWrapper>
             <Image
@@ -134,7 +132,7 @@ const EventDetailPage = ({ contentId }: EventDetailPageProps) => {
           </DetailWrapper>
         </ContentWrapper>
 
-        <DetailInfoSection />
+        <DetailInfoSection contentId={contentId} />
       </DetailContainer>
 
       {eventDetail && (
@@ -142,7 +140,7 @@ const EventDetailPage = ({ contentId }: EventDetailPageProps) => {
           areaCode={eventDetail.area_cd}
           eventId={eventDetail.event_id}
         />
-      )} */}
+      )}
     </Container>
   );
 };
