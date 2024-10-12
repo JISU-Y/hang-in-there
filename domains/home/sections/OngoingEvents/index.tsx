@@ -1,3 +1,5 @@
+'use client';
+
 import { useRouter } from 'next/navigation';
 
 import styled from '@emotion/styled';
@@ -104,7 +106,7 @@ const OngoingEvents = () => {
       <SectionTitle>진행 중인 행사</SectionTitle>
       <SliderWrapper>
         <Slider {...settings}>
-          {eventData?.list?.map(el => (
+          {eventData?.map(el => (
             <Card
               key={el.title}
               w="100%"

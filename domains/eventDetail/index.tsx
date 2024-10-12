@@ -23,6 +23,7 @@ interface EventDetailPageProps {
   contentId: string;
 }
 
+// TODO: ViewModel 만들기, emotion server side 걷어 낼지...
 const EventDetailPage = ({ contentId }: EventDetailPageProps) => {
   const { data: eventDetail } = useFetchEventDetailQuery(contentId);
 
