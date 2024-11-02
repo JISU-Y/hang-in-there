@@ -74,7 +74,7 @@ export const useFetchEventListInfiniteQuery = (params: {
 
       return currentPage + 1;
     },
-    initialPageParam: 0,
+    initialPageParam: 1,
     select: ({ pages, pageParams }) => ({
       pages: pages.flatMap(({ data }) => data).filter(el => el),
       pageParams,
