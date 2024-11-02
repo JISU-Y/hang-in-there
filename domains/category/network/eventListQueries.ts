@@ -72,7 +72,7 @@ export const useFetchEventListInfiniteQuery = (params: {
 
       if (currentPage >= totalPage) return null;
 
-      return currentPage + 1;
+      return Number(currentPage) + 1;
     },
     initialPageParam: 1,
     select: ({ pages, pageParams }) => ({

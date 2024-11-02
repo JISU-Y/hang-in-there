@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
 
 import { isSameDay } from 'date-fns';
@@ -25,6 +26,8 @@ interface EventDetailPageProps {
 
 // TODO: ViewModel 만들기, emotion server side 걷어 낼지...
 const EventDetailPage = ({ contentId }: EventDetailPageProps) => {
+  const [error, setError] = useState(false);
+
   const { data: eventDetail } = useFetchEventDetailQuery(contentId);
 
   const getEventDetailInfo = (): DetailInfoType | null => {
@@ -73,13 +76,18 @@ const EventDetailPage = ({ contentId }: EventDetailPageProps) => {
             <Image
               width={394}
               height={557}
-              src={eventDetail?.img[0]?.url || '/logo/poster-fallback.png'}
+              src={
+                !error && !!eventDetail?.img[0]
+                  ? eventDetail?.img[0]?.url
+                  : '/logo/poster-fallback.png'
+              }
               alt={`festival-${eventDetail?.title}`}
               style={{
                 width: '100%',
                 height: '100%',
                 objectFit: 'cover'
               }}
+              onError={() => setError(true)}
             />
           </ImageWrapper>
 

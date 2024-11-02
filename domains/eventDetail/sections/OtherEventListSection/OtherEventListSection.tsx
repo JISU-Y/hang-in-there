@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import Slider, { Settings } from 'react-slick';
@@ -42,6 +43,8 @@ const OtherEventListSection = ({
   eventId,
   areaCode
 }: OtherEventListSectionProps) => {
+  const [error, setError] = useState(false);
+
   const { push } = useRouter();
 
   const [isMouseMoving, setIsMouseMoving, unsetIsMouseMoving] =
@@ -92,9 +95,10 @@ const OtherEventListSection = ({
               <CardBody padding="0">
                 <ImageWrapper>
                   <Img
-                    src={el.image}
+                    src={!error ? el.image : '/logo/poster-fallback.png'}
                     alt={`festival-${el.title}`}
                     objectFit="cover"
+                    onError={() => setError(true)}
                   />
                 </ImageWrapper>
               </CardBody>

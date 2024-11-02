@@ -1,36 +1,25 @@
 import { useState } from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
+import Link from 'next/link';
+
+import { formatISO } from 'date-fns/formatISO';
 
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { Card, CardBody, CardFooter, Heading, Text } from '@chakra-ui/react';
 import { formatDate } from '@logics/utils/dateFormat';
+import { EventDataTypeNew } from '@domains/category/types';
 
 interface EventCardProps {
-  eventId: string;
-  imageUrl: string;
-  title: string;
-  status: 'ongoing' | 'soon' | 'always' | 'closed';
-  range?: {
-    startDate: string;
-    endDate: string;
-  };
-  location: string;
+  event: EventDataTypeNew;
 }
 
-const EventCard = ({
-  eventId,
-  imageUrl,
-  title,
-  range,
-  location
-}: EventCardProps) => {
+export const EventCard = ({ event }: EventCardProps) => {
   const [error, setError] = useState(false);
 
   const getFormattedDate = (date: string) => {
     const formattedDate = formatDate({
-      date,
+      date: formatISO(date),
       customType: 'yy/MM/dd'
     });
 
@@ -40,9 +29,9 @@ const EventCard = ({
   return (
     <Card
       as={Link}
-      href={`/eventDetail/${eventId}`}
-      key={title}
-      w="233px"
+      href={`/eventDetail/${event.event_id}`}
+      key={event.title}
+      w="100%"
       h="auto"
       aspectRatio={2 / 3}
       size="sm"
@@ -55,15 +44,12 @@ const EventCard = ({
     >
       <CardBody padding="0">
         <ImageWrapper>
-          <Image
-            fill
-            src={!error ? imageUrl : '/logo/poster-fallback.png'}
-            alt={`festival-${title}`}
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover'
-            }}
+          <Img
+            width={249}
+            height={374}
+            src={!error && !!event ? event?.image : '/logo/poster-fallback.png'}
+            alt={`festival-${event.title}`}
+            objectFit="cover"
             onError={() => setError(true)}
           />
         </ImageWrapper>
@@ -81,14 +67,12 @@ const EventCard = ({
           fontWeight={700}
           css={HeadingCSS}
         >
-          {title}
+          {event.title}
         </Heading>
-        <Text>{location?.split(' ').slice(0, 2).join(' ')}</Text>
-        {range && (
-          <Text color="#999999">{`${getFormattedDate(
-            range.startDate
-          )}-${getFormattedDate(range.endDate)}`}</Text>
-        )}
+        <Text>{event.addr?.split(' ').slice(0, 2).join(' ')}</Text>
+        <Text color="#999999">{`${getFormattedDate(
+          event.event_st
+        )}-${getFormattedDate(event.event_ed)}`}</Text>
       </CardFooter>
     </Card>
   );
@@ -107,8 +91,13 @@ const HeadingCSS = css`
 `;
 
 const ImageWrapper = styled.div`
-  position: relative;
   width: 100%;
   height: auto;
   aspect-ratio: 2/3;
+`;
+
+const Img = styled(Image)`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 `;

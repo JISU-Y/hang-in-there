@@ -11,8 +11,6 @@ export const getEventList = (
     params: {
       page: param?.page || 1,
       size: param?.size || 10,
-      // NOTE: on_going event 파라미터 고정
-      category: '264', // A02
       status
     }
   });

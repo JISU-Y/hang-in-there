@@ -30,7 +30,7 @@ export const useFetchOtherEventListQuery = (
   >
 ) => {
   return useQuery({
-    queryKey: eventDetailQueryKeys.getOngoingEventList({ area_cd }),
+    queryKey: eventDetailQueryKeys.getOngoingEventList({ area_cd, eventId }),
     queryFn: async () => await getOtherEventList({ area_cd }),
     ...options,
     enabled: !!area_cd,

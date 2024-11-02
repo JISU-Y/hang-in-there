@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import styled from '@emotion/styled';
@@ -13,6 +14,8 @@ interface DetailInfoSectionProps {
 }
 
 const DetailInfoSection = ({ contentId }: DetailInfoSectionProps) => {
+  const [error, setError] = useState(false);
+
   const { push, back } = useRouter();
 
   const { data: eventDetail } = useFetchEventDetailQuery(contentId);
@@ -27,16 +30,19 @@ const DetailInfoSection = ({ contentId }: DetailInfoSectionProps) => {
 
   return (
     <DetailInfoContainer>
-      {eventDetail?.img?.map((image, index) => (
-        <ImageWrapper key={`${image.sort_order}-${index}`}>
-          <EventDetailImage
-            width={394}
-            height={557}
-            src={image.url}
-            alt="event-detail"
-          />
-        </ImageWrapper>
-      ))}
+      {!error &&
+        eventDetail?.img &&
+        eventDetail.img.map((image, index) => (
+          <ImageWrapper key={`${image.sort_order}-${index}`}>
+            <EventDetailImage
+              width={394}
+              height={557}
+              src={image.url}
+              alt="event-detail"
+              onError={() => setError(true)}
+            />
+          </ImageWrapper>
+        ))}
       <Description
         dangerouslySetInnerHTML={{
           __html: eventDetail?.description || ''
