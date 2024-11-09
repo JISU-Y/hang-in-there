@@ -5,8 +5,11 @@ import StyledProviders from '@logics/providers/StyledProvider';
 import KakaoScriptProvider from '@logics/providers/KakaoScriptProvider';
 
 export const metadata: Metadata = {
-  title: 'Hang-in-there 🚶',
-  description: '행사를 즐기는 인싸들'
+  title: 'Hang-in-there 행인들',
+  description: '행사를 즐기는 인싸들',
+  icons: {
+    icon: '/logo/hanginthere-logo.svg'
+  }
 };
 
 export default function RootLayout({
