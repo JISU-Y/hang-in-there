@@ -43,3 +43,10 @@ export interface EventDataType {
   tel: string;
   title: string;
 }
+
+export interface BannerType {
+  bg_image: string;
+  event_image: string;
+  content: string;
+  link: string;
+}

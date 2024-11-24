@@ -10,49 +10,50 @@ import { getOpacityColor } from '@styles/mixins';
 
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { useFetchBannerListQuery } from '@domains/home/network/homeQueries';
 
-const bannerList = [
-  {
-    themeColor: '#4B2E6C',
-    title: `궁궐 곳곳 숨은 옛이야기\n창덕궁 달빛기행`,
-    contentId: '1',
-    link: '',
-    backgroundImageUrl: 'banner/changduckgung-festival-background.png',
-    posterImageUrl: 'banner/changduckgung-festival-poster.png'
-  },
-  {
-    themeColor: '#EA553F',
-    title: `횡단, 도시, 숲, 광장\n안산 국제 거리극 축제`,
-    contentId: '2',
-    link: '',
-    backgroundImageUrl: 'banner/ansan-street-arts-festival-background.png',
-    posterImageUrl: 'banner/ansan-street-arts-festival-poster.png'
-  },
-  {
-    themeColor: '#FF7D34',
-    title: `마주, 봄.\n함께라서 행복한 자기\n여주 도자기 축제`,
-    contentId: '3',
-    link: '',
-    backgroundImageUrl: 'banner/yeoju-festival-background.png',
-    posterImageUrl: 'banner/yeoju-festival-background.png'
-  },
-  {
-    themeColor: '#3F3D3C',
-    title: `선화 공주의 사랑 이야기\n익산 서동 축제`,
-    contentId: '4',
-    link: '',
-    backgroundImageUrl: 'banner/iksan-seodong-festival-background.png',
-    posterImageUrl: 'banner/iksan-seodong-festival-poster.png'
-  },
-  {
-    themeColor: '#3F3D3C',
-    title: `지구인에서 우주인으로\n고흥 우주항공축제`,
-    contentId: '5',
-    link: '',
-    backgroundImageUrl: 'banner/goheung-universe-festival-background.png',
-    posterImageUrl: 'banner/goheung-universe-festival-poster.png'
-  }
-];
+// const bannerList = [
+//   {
+//     themeColor: '#4B2E6C',
+//     title: `궁궐 곳곳 숨은 옛이야기\n창덕궁 달빛기행`,
+//     contentId: '1',
+//     link: '',
+//     backgroundImageUrl: 'banner/changduckgung-festival-background.png',
+//     posterImageUrl: 'banner/changduckgung-festival-poster.png'
+//   },
+//   {
+//     themeColor: '#EA553F',
+//     title: `횡단, 도시, 숲, 광장\n안산 국제 거리극 축제`,
+//     contentId: '2',
+//     link: '',
+//     backgroundImageUrl: 'banner/ansan-street-arts-festival-background.png',
+//     posterImageUrl: 'banner/ansan-street-arts-festival-poster.png'
+//   },
+//   {
+//     themeColor: '#FF7D34',
+//     title: `마주, 봄.\n함께라서 행복한 자기\n여주 도자기 축제`,
+//     contentId: '3',
+//     link: '',
+//     backgroundImageUrl: 'banner/yeoju-festival-background.png',
+//     posterImageUrl: 'banner/yeoju-festival-background.png'
+//   },
+//   {
+//     themeColor: '#3F3D3C',
+//     title: `선화 공주의 사랑 이야기\n익산 서동 축제`,
+//     contentId: '4',
+//     link: '',
+//     backgroundImageUrl: 'banner/iksan-seodong-festival-background.png',
+//     posterImageUrl: 'banner/iksan-seodong-festival-poster.png'
+//   },
+//   {
+//     themeColor: '#3F3D3C',
+//     title: `지구인에서 우주인으로\n고흥 우주항공축제`,
+//     contentId: '5',
+//     link: '',
+//     backgroundImageUrl: 'banner/goheung-universe-festival-background.png',
+//     posterImageUrl: 'banner/goheung-universe-festival-poster.png'
+//   }
+// ];
 
 const CustomNextArrow = styled.button`
   width: 40px;
@@ -115,22 +116,26 @@ const settings: Settings = {
 };
 
 const Collections = () => {
+  const { data: bannerList } = useFetchBannerListQuery();
+
   return (
     <Container>
       <Slider {...settings}>
-        {bannerList.map(festival => (
-          <BannerCard key={festival.title}>
-            <BackgroundImageWrapper key={festival.contentId}>
+        {bannerList?.map(festival => (
+          <BannerCard key={festival.content}>
+            <BackgroundImageWrapper>
               <Image
-                src={festival.backgroundImageUrl}
-                alt={`festival-${festival.title}-background`}
+                src={festival.bg_image}
+                alt={`festival-${festival.content}-background`}
               />
             </BackgroundImageWrapper>
 
-            <BlurWrapper $themeColor={festival.themeColor} />
+            <BlurWrapper
+            // $themeColor={festival.themeColor} // TODO: banner에 theme color가 없음.
+            />
 
             <TitleWrapper>
-              <Title>{festival.title}</Title>
+              <Title>{festival.content}</Title>
               <DetailLink href="/">
                 <span>자세히 알아보기</span>
                 <ChevronRightIcon w={8} h={8} strokeWidth={1} color="#ffffff" />
@@ -139,8 +144,8 @@ const Collections = () => {
 
             <PosterImageWrapper>
               <Image
-                src={festival.posterImageUrl}
-                alt={`festival-${festival.title}-poster`}
+                src={festival.event_image}
+                alt={`festival-${festival.content}-poster`}
               />
             </PosterImageWrapper>
           </BannerCard>
@@ -233,7 +238,7 @@ const BackgroundImageWrapper = styled.div`
   height: 100%;
 `;
 
-const BlurWrapper = styled.div<{ $themeColor: string }>`
+const BlurWrapper = styled.div<{ $themeColor?: string }>`
   position: absolute;
   top: 0;
   left: 0;

@@ -3,7 +3,7 @@ import Collections from './sections/Collections';
 import OngoingEvents from './sections/OngoingEvents';
 import UpcomingEvents from './sections/UpcomingEvents';
 import { homeQueryKeys } from './constants/queryKeys';
-import { getEventList } from './network/eventListFetchHandlers';
+import { getEventList } from './network/homeFetchHandlers';
 
 export default async function HomePage() {
   const homeQueries = await getDehydratedQueries([
