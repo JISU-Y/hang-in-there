@@ -70,7 +70,6 @@ export async function uploadFile(file: File, imageType: UploadImageType) {
           },
           params: {
             type: imageType,
-            fileName: file.name,
             fileType: file.type
           }
         }

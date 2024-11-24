@@ -1,10 +1,31 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 
-import { UseQueryOptionsType } from '@domains/common/types/utilType';
+import {
+  ApiDataResponseTypeNew,
+  UseQueryOptionsType
+} from '@domains/common/types/utilType';
 
-import { EventListResponseDto } from '../types';
+import { BannerType, EventListResponseDto } from '../types';
 import { homeQueryKeys } from '../constants/queryKeys';
-import { getEventList } from './eventListFetchHandlers';
+import { getBannerList, getEventList } from './homeFetchHandlers';
+
+export const useFetchBannerListQuery = (
+  options?: Omit<
+    UseQueryOptions<
+      ApiDataResponseTypeNew<BannerType[]>,
+      unknown,
+      BannerType[]
+    >,
+    'select'
+  >
+) => {
+  return useQuery<ApiDataResponseTypeNew<BannerType[]>, unknown, BannerType[]>({
+    queryKey: homeQueryKeys.getBannerList(),
+    queryFn: async () => await getBannerList(),
+    ...options,
+    select: ({ data }) => data
+  });
+};
 
 export const useFetchOngoingEventListQuery = (
   options?: Omit<UseQueryOptionsType<EventListResponseDto>, 'select'>

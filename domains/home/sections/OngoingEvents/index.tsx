@@ -18,7 +18,7 @@ import { formatDate } from '@logics/utils/dateFormat';
 import Slider, { Settings } from 'react-slick';
 import { formatISO } from 'date-fns/formatISO';
 
-import { useFetchOngoingEventListQuery } from '../../network/eventListQueries';
+import { useFetchOngoingEventListQuery } from '../../network/homeQueries';
 
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';

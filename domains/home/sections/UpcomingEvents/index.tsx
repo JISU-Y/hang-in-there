@@ -6,7 +6,7 @@ import styled from '@emotion/styled';
 import { ChevronRightIcon, ChevronLeftIcon } from '@chakra-ui/icons';
 import EventCard from '@domains/home/components/EventCard/EventCard';
 
-import { useFetchUpcomingEventListQuery } from '../../network/eventListQueries';
+import { useFetchUpcomingEventListQuery } from '../../network/homeQueries';
 
 const UpcomingEvents = () => {
   const [pageNo, setPageNo] = useState(1);

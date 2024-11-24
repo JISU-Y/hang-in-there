@@ -20,6 +20,7 @@ export interface ApiDataResponseType<T> {
 export interface ApiDataResponseTypeNew<T> {
   data: T;
   message: string;
+  statusCode: number;
   timeStamp: string;
 }
 
