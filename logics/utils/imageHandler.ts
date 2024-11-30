@@ -114,3 +114,66 @@ export async function uploadFile(file: File, imageType: UploadImageType) {
     throw error;
   }
 }
+
+export function getAverageColorFromUrl(imageUrl: string) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = 'Anonymous'; // CORS 설정
+
+    // 이미지 로드 완료 시 처리
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+
+      // Canvas 크기를 이미지 크기로 설정
+      canvas.width = img.width;
+      canvas.height = img.height;
+
+      // Canvas에 이미지 그리기
+      context?.drawImage(img, 0, 0, img.width, img.height);
+
+      // 픽셀 데이터 가져오기
+      const imageData = context?.getImageData(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+      const data = imageData?.data || [];
+
+      // 평균 계산
+      let r = 0,
+        g = 0,
+        b = 0;
+      for (let i = 0; i < data.length; i += 4) {
+        r += data[i]; // Red
+        g += data[i + 1]; // Green
+        b += data[i + 2]; // Blue
+      }
+
+      const pixelCount = data.length / 4;
+
+      // 평균 색상 계산
+      r = Math.floor(r / pixelCount);
+      g = Math.floor(g / pixelCount);
+      b = Math.floor(b / pixelCount);
+
+      const darkenFactor = 0.4;
+      r = Math.min(255, Math.floor(r * darkenFactor));
+      g = Math.min(255, Math.floor(g * darkenFactor));
+      b = Math.min(255, Math.floor(b * darkenFactor));
+
+      resolve({
+        r,
+        g,
+        b
+      });
+    };
+
+    // 오류 처리
+    img.onerror = err => reject(err);
+
+    // 이미지 URL 설정
+    img.src = imageUrl;
+  });
+}

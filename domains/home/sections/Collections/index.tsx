@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 import Slider, { Settings } from 'react-slick';
@@ -7,10 +8,11 @@ import Slider, { Settings } from 'react-slick';
 import styled from '@emotion/styled';
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { getOpacityColor } from '@styles/mixins';
+import { useFetchBannerListQuery } from '@domains/home/network/homeQueries';
+import { getAverageColorFromUrl } from '@logics/utils/imageHandler';
 
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { useFetchBannerListQuery } from '@domains/home/network/homeQueries';
 
 // const bannerList = [
 //   {
@@ -117,6 +119,37 @@ const settings: Settings = {
 
 const Collections = () => {
   const { data: bannerList } = useFetchBannerListQuery();
+  const [themeColors, setThemeColors] = useState<{ [key in string]: string }>(
+    {}
+  );
+
+  const getImageThemeColor = async (imageUrl: string) => {
+    const averageColor = (await getAverageColorFromUrl(imageUrl)) as {
+      r: number;
+      g: number;
+      b: number;
+    };
+
+    // 여기서 평균 색상을 HEX 문자열로 변환
+    return `#${((1 << 24) + (averageColor.r << 16) + (averageColor.g << 8) + averageColor.b).toString(16).slice(1)}`;
+  };
+
+  useEffect(() => {
+    const fetchThemeColors = async () => {
+      if (!bannerList) return;
+
+      const colors = {} as { [key in string]: string };
+      for (const festival of bannerList) {
+        const themeColor = await getImageThemeColor(festival.event_image);
+        colors[festival.content] = themeColor;
+      }
+      setThemeColors(colors);
+    };
+
+    if (bannerList) {
+      fetchThemeColors();
+    }
+  }, [bannerList]);
 
   return (
     <Container>
@@ -130,9 +163,7 @@ const Collections = () => {
               />
             </BackgroundImageWrapper>
 
-            <BlurWrapper
-            // $themeColor={festival.themeColor} // TODO: banner에 theme color가 없음.
-            />
+            <BlurWrapper $themeColor={themeColors[festival.content]} />
 
             <TitleWrapper>
               <Title>{festival.content}</Title>
@@ -247,7 +278,7 @@ const BlurWrapper = styled.div<{ $themeColor?: string }>`
   height: 100%;
 
   background-color: ${({ $themeColor }) =>
-    getOpacityColor($themeColor || '#EA553F', 0.4)};
+    getOpacityColor($themeColor || '#000000', 0.6)};
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 `;
