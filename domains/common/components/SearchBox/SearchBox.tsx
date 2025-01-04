@@ -103,7 +103,12 @@ const SearchBox = () => {
   return (
     <Container ref={containerRef} onFocus={openDropdown}>
       <InputForm onSubmit={handleSubmitSearch}>
-        <SearchIcon width="24px" height="24px" />
+        <SearchIcon
+          width="24px"
+          height="24px"
+          onClick={openDropdown}
+          style={{ cursor: 'pointer' }}
+        />
         <Input
           value={keyword}
           onChange={handleChangeKeyword}
@@ -112,6 +117,13 @@ const SearchBox = () => {
       </InputForm>
       {isOpenDropdown && (
         <SearchDropdown ref={dropdownRef}>
+          <MobileInputForm onSubmit={handleSubmitSearch}>
+            <Input
+              value={keyword}
+              onChange={handleChangeKeyword}
+              placeholder="원하시는 행사를 검색해보세요."
+            />
+          </MobileInputForm>
           <ResultListWrapper>
             {keyword ? (
               <SearchResultContainer>
@@ -126,7 +138,7 @@ const SearchBox = () => {
                   ))}
               </SearchResultContainer>
             ) : (
-              <>
+              <PopularContainer>
                 <PopularTitle>인기행사</PopularTitle>
                 {popularEventList &&
                   popularEventList.map(event => (
@@ -145,7 +157,7 @@ const SearchBox = () => {
                       </EventInfo>
                     </PopularCard>
                   ))}
-              </>
+              </PopularContainer>
             )}
           </ResultListWrapper>
         </SearchDropdown>
@@ -157,6 +169,10 @@ const SearchBox = () => {
 const Container = styled.div`
   position: relative;
   width: 100%;
+
+  @media (max-width: 768px) {
+    position: unset;
+  }
 `;
 
 const InputForm = styled.form`
@@ -169,6 +185,33 @@ const InputForm = styled.form`
 
   svg {
     flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  @media (max-width: 768px) {
+    justify-content: center;
+    border-bottom: none;
+
+    input {
+      display: none;
+    }
+  }
+`;
+
+const MobileInputForm = styled.form`
+  display: none;
+
+  @media (max-width: 768px) {
+    position: sticky;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    border-bottom: 1px solid #999999;
+    padding: 8px 16px;
+    background-color: #ffffff;
   }
 `;
 
@@ -195,19 +238,36 @@ const SearchDropdown = styled.div`
   flex-direction: column;
   gap: 8px;
   width: 100%;
-  max-height: 424px;
-  padding: 24px 0;
+  max-height: 436px;
+  padding: 0;
   background-color: #ffffff;
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
   border: 1px solid #ededed;
   z-index: 10;
+
+  @media (max-width: 768px) {
+    top: calc(100% - 2px);
+    left: 0;
+    width: 100vw;
+    max-height: 60vh;
+
+    overflow-y: auto;
+    border: none;
+  }
 `;
 
 const ResultListWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
+`;
+
+export const PopularContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 0;
 `;
 
 const PopularTitle = styled.h4`
@@ -230,6 +290,11 @@ const PopularCard = styled.div`
   &:hover {
     background-color: #ededed;
   }
+
+  @media (max-width: 768px) {
+    height: 48px;
+    padding: 0 16px;
+  }
 `;
 
 const RankNumber = styled.span`
@@ -240,6 +305,11 @@ const RankNumber = styled.span`
   width: 38px;
   text-align: center;
   vertical-align: middle;
+
+  @media (max-width: 768px) {
+    font-size: 24px;
+    line-height: 48px;
+  }
 `;
 
 const EventInfo = styled.div`
@@ -252,12 +322,22 @@ const EventTitle = styled.span`
   font-size: 16px;
   font-weight: 700;
   line-height: 24px;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+    line-height: 21px;
+  }
 `;
 
 const EventAddress = styled.span`
   font-size: 16px;
   font-weight: 400;
   line-height: 24px;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+    line-height: 21px;
+  }
 `;
 
 const SearchResultContainer = styled.div`

@@ -70,9 +70,6 @@ export default function PageLayout({
                   height={35}
                   src="/logo/hanginthere-full-logo.svg"
                   alt="logo"
-                  style={{
-                    height: '35px'
-                  }}
                 />
               </Link>
               <MenuContainer>
@@ -80,7 +77,9 @@ export default function PageLayout({
                 <AuthMenu />
               </MenuContainer>
             </Navbar>
-            <CategoryMenu />
+            <CategoryMenuWrapper>
+              <CategoryMenu />
+            </CategoryMenuWrapper>
           </NavbarContainer>
         )}
         <Content>{children}</Content>
@@ -121,6 +120,10 @@ export default function PageLayout({
 const LineBannerWrapper = styled.div`
   width: 100%;
   height: 44px;
+
+  @media (max-width: 768px) {
+    height: 32px;
+  }
 `;
 
 const BannerLink = styled(Link)`
@@ -136,6 +139,11 @@ const BannerLink = styled(Link)`
     font-weight: 400;
     line-height: 36px;
     color: #ffffff;
+
+    @media (max-width: 768px) {
+      font-size: 16px;
+      line-height: 28px;
+    }
   }
 
   strong {
@@ -146,6 +154,10 @@ const BannerLink = styled(Link)`
   img {
     width: auto;
     height: 22px;
+
+    @media (max-width: 768px) {
+      height: 18px;
+    }
   }
 `;
 
@@ -162,6 +174,12 @@ const NavbarContainer = styled.header`
   gap: 24px;
   width: 100%;
   padding: 38px 112px 0;
+
+  @media (max-width: 768px) {
+    position: relative;
+    padding: 13px 20px;
+    gap: 16px;
+  }
 `;
 
 const Navbar = styled.nav`
@@ -175,6 +193,11 @@ const Navbar = styled.nav`
   & > a {
     flex-shrink: 0;
   }
+
+  @media (max-width: 768px) {
+    flex-direction: row;
+    gap: 8px;
+  }
 `;
 
 const MenuContainer = styled.div`
@@ -183,12 +206,26 @@ const MenuContainer = styled.div`
   gap: 16px;
   width: 100%;
   max-width: 616px;
+
+  @media (max-width: 768px) {
+    gap: 8px;
+  }
+`;
+
+const CategoryMenuWrapper = styled.div`
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const ImageWrapper = styled(Image)`
   width: auto;
   height: 32px;
   cursor: pointer;
+
+  @media (max-width: 768px) {
+    height: 24px;
+  }
 `;
 
 const Content = styled.section`
@@ -196,6 +233,10 @@ const Content = styled.section`
   height: 100%;
   background-color: #ffffff;
   margin: 0 auto;
+
+  @media (max-width: 768px) {
+    padding: 0 16px;
+  }
 `;
 
 const Footer = styled.footer`
@@ -204,6 +245,12 @@ const Footer = styled.footer`
   justify-content: space-between;
   padding: 56px 42px;
   background-color: #ededed;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 32px 16px;
+    gap: 24px;
+  }
 `;
 
 const CopyRightWrapper = styled.div`
@@ -225,11 +272,19 @@ const CopyRightWrapper = styled.div`
       margin-right: 8px;
     }
   }
+
+  @media (max-width: 768px) {
+    gap: 16px;
+
+    & p {
+      font-size: 12px;
+      line-height: 18px;
+    }
+  }
 `;
 
 const ExternalLinksWrapper = styled.div`
   margin-top: auto;
-
   display: flex;
   gap: 32px;
 
@@ -239,9 +294,23 @@ const ExternalLinksWrapper = styled.div`
     font-weight: 600;
     color: #000000;
   }
+
+  @media (max-width: 768px) {
+    gap: 16px;
+
+    & > a {
+      font-size: 14px;
+      line-height: 21px;
+    }
+  }
 `;
 
 const FooterLogoImage = styled(Image)`
   width: 98px;
   height: 32px;
+
+  @media (max-width: 768px) {
+    width: 80px;
+    height: 26px;
+  }
 `;
