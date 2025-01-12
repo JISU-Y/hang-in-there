@@ -1,10 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import { useMediaQuery, Tooltip } from '@chakra-ui/react';
 
 import Slider, { Settings } from 'react-slick';
-
 import styled from '@emotion/styled';
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { getOpacityColor } from '@styles/mixins';
@@ -14,48 +15,40 @@ import { getAverageColorFromUrl } from '@logics/utils/imageHandler';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-// const bannerList = [
-//   {
-//     themeColor: '#4B2E6C',
-//     title: `궁궐 곳곳 숨은 옛이야기\n창덕궁 달빛기행`,
-//     contentId: '1',
-//     link: '',
-//     backgroundImageUrl: 'banner/changduckgung-festival-background.png',
-//     posterImageUrl: 'banner/changduckgung-festival-poster.png'
-//   },
-//   {
-//     themeColor: '#EA553F',
-//     title: `횡단, 도시, 숲, 광장\n안산 국제 거리극 축제`,
-//     contentId: '2',
-//     link: '',
-//     backgroundImageUrl: 'banner/ansan-street-arts-festival-background.png',
-//     posterImageUrl: 'banner/ansan-street-arts-festival-poster.png'
-//   },
-//   {
-//     themeColor: '#FF7D34',
-//     title: `마주, 봄.\n함께라서 행복한 자기\n여주 도자기 축제`,
-//     contentId: '3',
-//     link: '',
-//     backgroundImageUrl: 'banner/yeoju-festival-background.png',
-//     posterImageUrl: 'banner/yeoju-festival-background.png'
-//   },
-//   {
-//     themeColor: '#3F3D3C',
-//     title: `선화 공주의 사랑 이야기\n익산 서동 축제`,
-//     contentId: '4',
-//     link: '',
-//     backgroundImageUrl: 'banner/iksan-seodong-festival-background.png',
-//     posterImageUrl: 'banner/iksan-seodong-festival-poster.png'
-//   },
-//   {
-//     themeColor: '#3F3D3C',
-//     title: `지구인에서 우주인으로\n고흥 우주항공축제`,
-//     contentId: '5',
-//     link: '',
-//     backgroundImageUrl: 'banner/goheung-universe-festival-background.png',
-//     posterImageUrl: 'banner/goheung-universe-festival-poster.png'
-//   }
-// ];
+const CATEGORIES = [
+  {
+    id: 'festival',
+    name: '축제',
+    icon: '/assets/festival.svg',
+    code: 'A0207'
+  },
+  {
+    id: 'performance',
+    name: '공연',
+    icon: '/assets/performance.svg',
+    code: 'A0208'
+  },
+  {
+    id: 'exhibition',
+    name: '전시',
+    icon: '/assets/exhibition.svg',
+    code: 'A0209'
+  },
+  {
+    id: 'education',
+    name: '교육/체험',
+    icon: '/assets/education.svg',
+    code: 'A0209',
+    disabled: true
+  },
+  {
+    id: 'youth',
+    name: '아동/청소년',
+    icon: '/assets/youth.svg',
+    code: 'A0209',
+    disabled: true
+  }
+];
 
 const CustomNextArrow = styled.button`
   width: 40px;
@@ -122,6 +115,36 @@ const Collections = () => {
   const [themeColors, setThemeColors] = useState<{ [key in string]: string }>(
     {}
   );
+  const [isMobile] = useMediaQuery('(max-width: 768px)');
+  const { push } = useRouter();
+  const searchParams = useSearchParams();
+
+  const buildSearchParams = () => {
+    const params = new URLSearchParams();
+
+    const searchKeyword = searchParams.get('search');
+    const areaCode = searchParams.getAll('areaCode')?.[0];
+    const status = searchParams.getAll('status')?.[0];
+
+    if (searchKeyword) {
+      params.append('searchKeyword', searchKeyword);
+    }
+    if (areaCode) {
+      params.append('areaCode', areaCode);
+    }
+    if (status) {
+      params.append('status', status);
+    }
+
+    return params.toString();
+  };
+
+  const handleCategoryClick = (categoryId: string) => {
+    const queryString = buildSearchParams();
+    push(
+      `/category?category=${categoryId}${queryString ? `&${queryString}` : ''}`
+    );
+  };
 
   const getImageThemeColor = async (imageUrl: string) => {
     const averageColor = (await getAverageColorFromUrl(imageUrl)) as {
@@ -151,6 +174,81 @@ const Collections = () => {
     }
   }, [bannerList]);
 
+  const renderCategoryItem = (category: (typeof CATEGORIES)[0]) => {
+    const content = (
+      <CategoryItem key={category.id} $disabled={category?.disabled}>
+        <div
+          onClick={() =>
+            !category.disabled && handleCategoryClick(category.code)
+          }
+          style={{ cursor: category.disabled ? 'not-allowed' : 'pointer' }}
+        >
+          <CategoryIcon>
+            <Image
+              src={category.icon}
+              alt={category.name}
+              width={24}
+              height={24}
+            />
+          </CategoryIcon>
+          <CategoryName>{category.name}</CategoryName>
+        </div>
+      </CategoryItem>
+    );
+
+    if (category.disabled) {
+      return (
+        <Tooltip
+          key={category.id}
+          label="준비 중입니다."
+          placement="top"
+          hasArrow
+        >
+          {content}
+        </Tooltip>
+      );
+    }
+
+    return content;
+  };
+
+  if (isMobile) {
+    return (
+      <MobileContainer>
+        <MobileSliderWrapper {...settings}>
+          {bannerList?.map(festival => (
+            <BannerCard key={festival.content}>
+              <TitleWrapper>
+                <Title>{festival.content}</Title>
+                <DetailLink href="/">
+                  <span>자세히 알아보기</span>
+                  <ChevronRightIcon
+                    w={8}
+                    h={8}
+                    strokeWidth={1}
+                    color="#ffffff"
+                  />
+                </DetailLink>
+              </TitleWrapper>
+
+              <PosterImageWrapper>
+                <Image
+                  src={festival.event_image}
+                  alt={`festival-${festival.content}-poster`}
+                  width={400}
+                  height={580}
+                />
+              </PosterImageWrapper>
+            </BannerCard>
+          ))}
+        </MobileSliderWrapper>
+
+        <CategoryList>{CATEGORIES.map(renderCategoryItem)}</CategoryList>
+        <HorizontalLine />
+      </MobileContainer>
+    );
+  }
+
   return (
     <Container>
       <Slider {...settings}>
@@ -160,6 +258,8 @@ const Collections = () => {
               <Image
                 src={festival.bg_image}
                 alt={`festival-${festival.content}-background`}
+                width={1920}
+                height={580}
               />
             </BackgroundImageWrapper>
 
@@ -177,6 +277,8 @@ const Collections = () => {
               <Image
                 src={festival.event_image}
                 alt={`festival-${festival.content}-poster`}
+                width={400}
+                height={580}
               />
             </PosterImageWrapper>
           </BannerCard>
@@ -232,12 +334,12 @@ const Container = styled.section`
     height: 40px;
     z-index: 1;
     border-radius: 50%;
-  }
 
-  .slick-arrow::before {
-    width: 100%;
-    height: 100%;
-    display: none;
+    &::before {
+      width: 100%;
+      height: 100%;
+      display: none;
+    }
   }
 
   .slick-prev,
@@ -259,6 +361,11 @@ const BannerCard = styled.div`
   height: 580px;
   padding: 0 112px;
   gap: 24px;
+
+  @media (max-width: 768px) {
+    padding: 0;
+    height: 360px;
+  }
 `;
 
 const BackgroundImageWrapper = styled.div`
@@ -294,12 +401,41 @@ const PosterImageWrapper = styled.div`
   width: 363px;
   height: 480px;
   flex-shrink: 0;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+
+    @media (max-width: 768px) {
+      width: 100%;
+      height: 50%;
+      background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.7));
+    }
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 const TitleWrapper = styled.div`
   max-width: 740px;
   margin: auto 0 36px;
-  z-index: 1;
+  z-index: 2;
+
+  @media (max-width: 768px) {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    margin: 0;
+    max-width: 204px;
+  }
 `;
 
 const Title = styled.h2`
@@ -308,6 +444,12 @@ const Title = styled.h2`
   color: #ffffff;
   margin-bottom: 16px;
   white-space: pre-line;
+
+  @media (max-width: 768px) {
+    font-size: 32px;
+    font-weight: 600;
+    word-break: keep-all;
+  }
 `;
 
 const DetailLink = styled(Link)`
@@ -317,6 +459,108 @@ const DetailLink = styled(Link)`
 
   display: flex;
   align-items: center;
+`;
+
+const MobileContainer = styled.section`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  background-color: #ffffff;
+  position: relative;
+
+  .slick-arrow {
+    display: none !important;
+  }
+
+  .slick-prev,
+  .slick-next {
+    display: none;
+  }
+
+  .custom-dots {
+    position: absolute;
+    bottom: 26px;
+    right: 43px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 2;
+  }
+
+  .custom-dots li {
+    margin: 0;
+  }
+
+  .custom-dots li button {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    color: transparent;
+    font-size: 0;
+    padding: 0;
+  }
+
+  .custom-dots li.slick-active button {
+    background-color: #ffffff;
+    width: 8px;
+    height: 8px;
+  }
+`;
+
+export const MobileSliderWrapper = styled(Slider)`
+  position: relative;
+  padding: 0 20px;
+`;
+
+const CategoryList = styled.ul`
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
+  padding: 0 20px;
+  margin: 0;
+  width: 100%;
+  height: 54px;
+`;
+
+const CategoryItem = styled.li<{ $disabled?: boolean }>`
+  width: 60px;
+  opacity: ${({ $disabled }) => ($disabled ? 0.5 : 1)};
+
+  a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: inherit;
+    width: 100%;
+    cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
+  }
+`;
+
+const CategoryIcon = styled.div`
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f5f5f5;
+  border-radius: 50%;
+`;
+
+const CategoryName = styled.span`
+  font-size: 16px;
+  color: #333333;
+  text-align: center;
+  white-space: nowrap;
+`;
+
+const HorizontalLine = styled.div`
+  width: 100%;
+  height: 6px;
+  background-color: #ededed;
 `;
 
 export default Collections;

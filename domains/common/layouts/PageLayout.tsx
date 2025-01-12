@@ -233,10 +233,6 @@ const Content = styled.section`
   height: 100%;
   background-color: #ffffff;
   margin: 0 auto;
-
-  @media (max-width: 768px) {
-    padding: 0 16px;
-  }
 `;
 
 const Footer = styled.footer`

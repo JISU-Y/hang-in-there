@@ -189,7 +189,7 @@ const InputForm = styled.form`
   }
 
   @media (max-width: 768px) {
-    justify-content: center;
+    justify-content: flex-end;
     border-bottom: none;
 
     input {

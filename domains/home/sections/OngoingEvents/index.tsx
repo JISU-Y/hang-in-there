@@ -28,7 +28,7 @@ const CustomNextArrow = styled.button`
   height: 40px;
   position: absolute;
   top: 50%;
-  right: -3%;
+  right: 0;
   z-index: 3;
   background-color: rgba(128, 128, 128, 0.3);
   border-radius: 50%;
@@ -45,7 +45,7 @@ const CustomPrevArrow = styled.button`
   height: 40px;
   position: absolute;
   top: 50%;
-  left: -3%;
+  left: 0;
   z-index: 3;
   background-color: rgba(128, 128, 128, 0.3);
   border-radius: 50%;
