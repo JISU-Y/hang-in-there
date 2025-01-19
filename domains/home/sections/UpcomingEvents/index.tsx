@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 import styled from '@emotion/styled';
 import { ChevronRightIcon, ChevronLeftIcon } from '@chakra-ui/icons';
@@ -10,6 +11,7 @@ import { useFetchUpcomingEventListQuery } from '../../network/homeQueries';
 
 const UpcomingEvents = () => {
   const [pageNo, setPageNo] = useState(1);
+  const router = useRouter();
 
   const {
     data: eventData,
@@ -25,9 +27,11 @@ const UpcomingEvents = () => {
 
   return (
     <Container>
-      <SectionTitle>진행 예정인 행사</SectionTitle>
+      <TitleContainer>
+        <SectionTitle>진행 예정인 행사</SectionTitle>
+      </TitleContainer>
       <CardListWrapper>
-        {eventData?.list?.map(el => <EventCard event={el} />)}
+        {eventData?.list?.map(el => <EventCard key={el.event_id} event={el} />)}
       </CardListWrapper>
       <PaginationWrapper>
         <ArrowButton
@@ -82,29 +86,46 @@ const Container = styled.section`
   }
 `;
 
+const TitleContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+`;
+
 const SectionTitle = styled.h3`
   font-size: 24px;
   font-weight: 600;
+  line-height: 150%;
   color: #191919;
-  margin-bottom: 36px;
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+    font-weight: 600;
+    word-break: keep-all;
+  }
 `;
 
 const CardListWrapper = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 32px;
+  width: 100%;
 
-  @media (max-width: 1200px) {
-    grid-template-columns: repeat(4, 1fr);
+  & > * {
+    width: 100%;
+    max-width: 264px;
+    aspect-ratio: 2/3;
   }
-  @media (max-width: 992px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
+
   @media (max-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
-  }
-  @media (max-width: 576px) {
-    grid-template-columns: 1fr;
+    gap: 16px;
+
+    & > * {
+      max-width: none;
+      width: 100%;
+    }
   }
 `;
 

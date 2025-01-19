@@ -186,7 +186,6 @@ const HeadingCSS = css`
 
 const Container = styled.section`
   width: 100%;
-  margin-bottom: 64px;
 
   @media (max-width: 1400px) {
     padding: 16px;
