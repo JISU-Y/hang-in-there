@@ -25,26 +25,26 @@ export default async function HomePage() {
   ]);
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '64px'
-      }}
-    >
-      <Collections />
-      <section
+    <Hydrate state={{ queries: homeQueries }}>
+      <div
         style={{
-          width: '100%',
-          maxWidth: '1127px',
-          margin: 'auto'
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '24px'
         }}
       >
-        <Hydrate state={{ queries: homeQueries }}>
+        <Collections />
+        <section
+          style={{
+            width: '100%',
+            maxWidth: '1127px',
+            margin: 'auto'
+          }}
+        >
           <OngoingEvents />
           <UpcomingEvents />
-        </Hydrate>
-      </section>
-    </div>
+        </section>
+      </div>
+    </Hydrate>
   );
 }
