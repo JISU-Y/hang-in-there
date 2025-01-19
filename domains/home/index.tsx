@@ -30,7 +30,7 @@ export default async function HomePage() {
         style={{
           display: 'flex',
           flexDirection: 'column',
-          gap: '64px'
+          gap: '24px'
         }}
       >
         <Collections />
