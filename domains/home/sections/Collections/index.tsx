@@ -361,7 +361,6 @@ const BannerCard = styled.div`
 
   @media (max-width: 768px) {
     padding: 0;
-    height: 360px;
   }
 `;
 
