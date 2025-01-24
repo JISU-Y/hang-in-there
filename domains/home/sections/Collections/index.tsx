@@ -176,23 +176,20 @@ const Collections = () => {
 
   const renderCategoryItem = (category: (typeof CATEGORIES)[0]) => {
     const content = (
-      <CategoryItem key={category.id} $disabled={category?.disabled}>
-        <div
-          onClick={() =>
-            !category.disabled && handleCategoryClick(category.code)
-          }
-          style={{ cursor: category.disabled ? 'not-allowed' : 'pointer' }}
-        >
-          <CategoryIcon>
-            <Image
-              src={category.icon}
-              alt={category.name}
-              width={24}
-              height={24}
-            />
-          </CategoryIcon>
-          <CategoryName>{category.name}</CategoryName>
-        </div>
+      <CategoryItem
+        key={category.id}
+        $disabled={category?.disabled}
+        onClick={() => !category.disabled && handleCategoryClick(category.code)}
+      >
+        <CategoryIcon>
+          <Image
+            src={category.icon}
+            alt={category.name}
+            width={24}
+            height={24}
+          />
+        </CategoryIcon>
+        <CategoryName>{category.name}</CategoryName>
       </CategoryItem>
     );
 
@@ -525,14 +522,14 @@ const CategoryList = styled.ul`
 `;
 
 const CategoryItem = styled.li<{ $disabled?: boolean }>`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
   width: 60px;
   opacity: ${({ $disabled }) => ($disabled ? 0.5 : 1)};
 
   a {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
     text-decoration: none;
     color: inherit;
     width: 100%;

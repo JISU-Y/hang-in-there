@@ -87,6 +87,7 @@ const LoginButton = styled.button`
   font-weight: 500;
   width: 42px;
   flex-shrink: 0;
+  white-space: nowrap;
 `;
 
 const MenuBox = styled(Menu)`
