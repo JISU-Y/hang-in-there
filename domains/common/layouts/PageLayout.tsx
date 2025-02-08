@@ -165,7 +165,9 @@ const PageContainer = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
+  max-width: 1120px;
   min-height: 100vh;
+  margin: auto;
 `;
 
 const NavbarContainer = styled.header`
@@ -173,7 +175,7 @@ const NavbarContainer = styled.header`
   flex-direction: column;
   gap: 24px;
   width: 100%;
-  padding: 38px 112px 0;
+  padding: 38px 32px 0;
 
   @media (max-width: 768px) {
     position: relative;
@@ -212,11 +214,7 @@ const MenuContainer = styled.div`
   }
 `;
 
-const CategoryMenuWrapper = styled.div`
-  @media (max-width: 768px) {
-    display: none;
-  }
-`;
+const CategoryMenuWrapper = styled.div``;
 
 const ImageWrapper = styled(Image)`
   width: auto;

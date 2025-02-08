@@ -13,7 +13,12 @@ import {
   Stack,
   Checkbox,
   Divider,
-  useDisclosure
+  useDisclosure,
+  Menu,
+  MenuButton,
+  MenuList,
+  Button,
+  Portal
 } from '@chakra-ui/react';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import useGeoLocationPoint from '@logics/hooks/useGeoLocation';
@@ -132,26 +137,101 @@ const Filter = ({ mapX, mapY, handleSetGeoLocation }: FilterProps) => {
         color="#EDEDED"
         margin="24px 0"
         orientation="horizontal"
+        display={{ base: 'none', md: 'block' }}
       />
 
-      <Accordion
-        defaultIndex={[0, 1]}
-        allowMultiple
-        css={css`
-          width: 237px;
-        `}
-      >
-        <AccordionItem>
-          {({ isExpanded }) => (
-            <>
-              <Stack>
+      {/* Desktop Filter */}
+      <DesktopFilter>
+        <Accordion
+          defaultIndex={[0, 1]}
+          allowMultiple
+          css={css`
+            width: 168px;
+          `}
+        >
+          <AccordionItem>
+            {({ isExpanded }) => (
+              <>
+                <Stack>
+                  <AccordionButton
+                    as={FilterButtonContainer}
+                    css={accordionButtonCSS}
+                    padding={0}
+                  >
+                    <FilterTitle>
+                      <span>지역별 검색</span>
+                      {isExpanded ? (
+                        <ChevronUpIcon
+                          w={6}
+                          h={6}
+                          strokeWidth={1}
+                          color="#000000"
+                        />
+                      ) : (
+                        <ChevronDownIcon
+                          w={6}
+                          h={6}
+                          strokeWidth={1}
+                          color="#000000"
+                        />
+                      )}
+                    </FilterTitle>
+                  </AccordionButton>
+                </Stack>
+                <AccordionPanel
+                  pb={4}
+                  css={css`
+                    border-top: none;
+                    padding: 0;
+                  `}
+                >
+                  <AreaListPanel>
+                    {Object.values(AREA_CODE).map(({ code, name }) => {
+                      const queryParams = queryString.parse(location.search);
+                      const areaCodes: string[] = queryParams.areaCode
+                        ? (queryParams.areaCode as string).split(',')
+                        : [];
+
+                      return (
+                        <AreaListButton key={`${name}-${code}`} role="button">
+                          <Checkbox
+                            size="md"
+                            colorScheme="blackAlpha"
+                            borderColor="black"
+                            defaultChecked={areaCodes.includes(String(code))}
+                            onChange={e => {
+                              e.preventDefault();
+                              handleRegionClick({ code, name });
+                            }}
+                          >
+                            {name}
+                          </Checkbox>
+                        </AreaListButton>
+                      );
+                    })}
+                  </AreaListPanel>
+                </AccordionPanel>
+              </>
+            )}
+          </AccordionItem>
+
+          <Divider
+            height="1px"
+            color="#EDEDED"
+            margin="24px 0"
+            orientation="horizontal"
+          />
+
+          <AccordionItem>
+            {({ isExpanded }) => (
+              <>
                 <AccordionButton
                   as={FilterButtonContainer}
                   css={accordionButtonCSS}
                   padding={0}
                 >
                   <FilterTitle>
-                    <span>지역별 검색</span>
+                    <span>진행 상태</span>
                     {isExpanded ? (
                       <ChevronUpIcon
                         w={6}
@@ -169,115 +249,163 @@ const Filter = ({ mapX, mapY, handleSetGeoLocation }: FilterProps) => {
                     )}
                   </FilterTitle>
                 </AccordionButton>
-              </Stack>
-              <AccordionPanel
-                pb={4}
+                <AccordionPanel
+                  pb={4}
+                  css={css`
+                    border-top: none;
+                    padding: 0;
+                  `}
+                >
+                  <AreaListPanel>
+                    {Object.entries(EVENT_STATUS).map(([key, value]) => {
+                      const queryParams = queryString.parse(location.search);
+                      const selectedStatus: string[] = queryParams.status
+                        ? (queryParams.status as string).split(',')
+                        : [];
+
+                      return (
+                        <AreaListButton key={key} role="button">
+                          <Checkbox
+                            size="md"
+                            colorScheme="blackAlpha"
+                            borderColor="black"
+                            defaultChecked={selectedStatus?.includes(key)}
+                            onChange={e => {
+                              e.preventDefault();
+                              handleStatusClick(key as EventStatusEnumType);
+                            }}
+                          >
+                            {value}
+                          </Checkbox>
+                        </AreaListButton>
+                      );
+                    })}
+                  </AreaListPanel>
+                </AccordionPanel>
+              </>
+            )}
+          </AccordionItem>
+        </Accordion>
+      </DesktopFilter>
+
+      {/* Mobile Filter */}
+      <MobileFilter>
+        <FilterChipsContainer>
+          <Menu>
+            <MenuButton
+              as={Button}
+              variant="outline"
+              rightIcon={<ChevronDownIcon />}
+              size="sm"
+              height="32px"
+              borderRadius="16px"
+              borderColor="#EDEDED"
+              _hover={{ bg: 'transparent' }}
+              _active={{ bg: 'transparent' }}
+            >
+              지역별 검색
+            </MenuButton>
+            <Portal>
+              <MenuList
+                maxHeight="270px"
+                width="110px"
+                overflowY="auto"
+                padding="8px"
                 css={css`
-                  border-top: none;
-                  padding: 0;
+                  &::-webkit-scrollbar {
+                    width: 4px;
+                  }
+                  &::-webkit-scrollbar-thumb {
+                    background-color: #e2e8f0;
+                    border-radius: 2px;
+                  }
                 `}
               >
-                <AreaListPanel>
-                  {Object.values(AREA_CODE).map(({ code, name }) => {
-                    const queryParams = queryString.parse(location.search);
-                    const areaCodes: string[] = queryParams.areaCode
-                      ? (queryParams.areaCode as string).split(',')
-                      : [];
+                {Object.values(AREA_CODE).map(({ code, name }) => {
+                  const queryParams = queryString.parse(location.search);
+                  const areaCodes: string[] = queryParams.areaCode
+                    ? (queryParams.areaCode as string).split(',')
+                    : [];
 
-                    return (
-                      <AreaListButton key={`${name}-${code}`} role="button">
-                        <Checkbox
-                          size="md"
-                          colorScheme="blackAlpha"
-                          borderColor="black"
-                          defaultChecked={areaCodes.includes(String(code))}
-                          onChange={e => {
-                            e.preventDefault();
-                            handleRegionClick({ code, name });
-                          }}
-                        >
-                          {name}
-                        </Checkbox>
-                      </AreaListButton>
-                    );
-                  })}
-                </AreaListPanel>
-              </AccordionPanel>
-            </>
-          )}
-        </AccordionItem>
+                  return (
+                    <MobileCheckboxItem key={`${name}-${code}`}>
+                      <Checkbox
+                        size="md"
+                        colorScheme="blackAlpha"
+                        borderColor="black"
+                        defaultChecked={areaCodes.includes(String(code))}
+                        onChange={e => {
+                          e.preventDefault();
+                          handleRegionClick({ code, name });
+                        }}
+                      >
+                        {name}
+                      </Checkbox>
+                    </MobileCheckboxItem>
+                  );
+                })}
+              </MenuList>
+            </Portal>
+          </Menu>
 
-        <Divider
-          height="1px"
-          color="#EDEDED"
-          margin="24px 0"
-          orientation="horizontal"
-        />
-
-        <AccordionItem>
-          {({ isExpanded }) => (
-            <>
-              <AccordionButton
-                as={FilterButtonContainer}
-                css={accordionButtonCSS}
-                padding={0}
-              >
-                <FilterTitle>
-                  <span>진행 상태</span>
-                  {isExpanded ? (
-                    <ChevronUpIcon
-                      w={6}
-                      h={6}
-                      strokeWidth={1}
-                      color="#000000"
-                    />
-                  ) : (
-                    <ChevronDownIcon
-                      w={6}
-                      h={6}
-                      strokeWidth={1}
-                      color="#000000"
-                    />
-                  )}
-                </FilterTitle>
-              </AccordionButton>
-              <AccordionPanel
-                pb={4}
+          <Menu>
+            <MenuButton
+              as={Button}
+              variant="outline"
+              rightIcon={<ChevronDownIcon />}
+              size="sm"
+              height="32px"
+              borderRadius="16px"
+              borderColor="#EDEDED"
+              _hover={{ bg: 'transparent' }}
+              _active={{ bg: 'transparent' }}
+            >
+              진행 상태
+            </MenuButton>
+            <Portal>
+              <MenuList
+                maxHeight="270px"
+                width="110px"
+                overflowY="auto"
+                padding="8px"
                 css={css`
-                  border-top: none;
-                  padding: 0;
+                  &::-webkit-scrollbar {
+                    width: 4px;
+                  }
+                  &::-webkit-scrollbar-thumb {
+                    background-color: #e2e8f0;
+                    border-radius: 2px;
+                  }
                 `}
               >
-                <AreaListPanel>
-                  {Object.entries(EVENT_STATUS).map(([key, value]) => {
-                    const queryParams = queryString.parse(location.search);
-                    const selectedStatus: string[] = queryParams.status
-                      ? (queryParams.status as string).split(',')
-                      : [];
+                {Object.entries(EVENT_STATUS).map(([key, value]) => {
+                  const queryParams = queryString.parse(location.search);
+                  const selectedStatus: string[] = queryParams.status
+                    ? (queryParams.status as string).split(',')
+                    : [];
 
-                    return (
-                      <AreaListButton key={key} role="button">
-                        <Checkbox
-                          size="md"
-                          colorScheme="blackAlpha"
-                          borderColor="black"
-                          defaultChecked={selectedStatus?.includes(key)}
-                          onChange={e => {
-                            e.preventDefault();
-                            handleStatusClick(key as EventStatusEnumType);
-                          }}
-                        >
-                          {value}
-                        </Checkbox>
-                      </AreaListButton>
-                    );
-                  })}
-                </AreaListPanel>
-              </AccordionPanel>
-            </>
-          )}
-        </AccordionItem>
-      </Accordion>
+                  return (
+                    <MobileCheckboxItem key={key}>
+                      <Checkbox
+                        size="md"
+                        colorScheme="blackAlpha"
+                        borderColor="black"
+                        defaultChecked={selectedStatus?.includes(key)}
+                        onChange={e => {
+                          e.preventDefault();
+                          handleStatusClick(key as EventStatusEnumType);
+                        }}
+                      >
+                        {value}
+                      </Checkbox>
+                    </MobileCheckboxItem>
+                  );
+                })}
+              </MenuList>
+            </Portal>
+          </Menu>
+        </FilterChipsContainer>
+      </MobileFilter>
     </FilterContainer>
   );
 };
@@ -345,6 +473,35 @@ const NearEventButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: space-between;
+`;
+
+const DesktopFilter = styled.div`
+  display: none;
+  width: 100%;
+
+  @media (min-width: 769px) {
+    display: block;
+  }
+`;
+
+const MobileFilter = styled.div`
+  display: none;
+  width: 100%;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
+`;
+
+const FilterChipsContainer = styled.div`
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+`;
+
+const MobileCheckboxItem = styled.div`
+  padding: 4px 0;
 `;
 
 export default Filter;

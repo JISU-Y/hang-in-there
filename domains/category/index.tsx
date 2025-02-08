@@ -135,7 +135,11 @@ const CategoryPage = () => {
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 40px 112px;
+  padding: 0 40px 112px;
+
+  @media (max-width: 768px) {
+    padding: 0 24px 16px;
+  }
 `;
 
 const StatusWrapper = styled.div`
@@ -143,6 +147,10 @@ const StatusWrapper = styled.div`
   justify-content: space-between;
   width: 100%;
   margin-bottom: 27px;
+
+  @media (max-width: 768px) {
+    margin-bottom: 0;
+  }
 `;
 
 const SearchResultPhrase = styled.span`
@@ -158,10 +166,21 @@ const SearchResultPhrase = styled.span`
 const ContainerWrapper = styled.div`
   display: flex;
   gap: 27px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 16px;
+  }
 `;
 
 const CardListContainer = styled.div`
   width: 100%;
+
+  @media (max-width: 768px) {
+    .chakra-simple-grid {
+      gap: 16px !important;
+    }
+  }
 `;
 
 const HeightImpressionArea = styled(ImpressionArea)`
