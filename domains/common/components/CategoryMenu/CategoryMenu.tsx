@@ -60,18 +60,34 @@ const CategoryMenu = () => {
 const MenuContainer = styled.ul`
   display: flex;
   gap: 40px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    gap: 24px;
+  }
 `;
 
 const MenuItemWrapper = styled.div`
   position: relative;
   padding: 8px;
+  white-space: nowrap;
+
+  @media (max-width: 768px) {
+    padding: 4px;
+  }
 `;
 
 const MenuItem = styled.li<{ $isActive: boolean }>`
   border-bottom: 3px solid
     ${({ $isActive }) => ($isActive ? 'black' : 'transparent')};
   padding: 0 8px 16px;
-
   transition: border-bottom 0.3s ease-in-out;
 
   &:hover {
@@ -82,13 +98,21 @@ const MenuItem = styled.li<{ $isActive: boolean }>`
       color: #191919;
     }
   }
+
+  @media (max-width: 768px) {
+    padding: 0 4px 12px;
+  }
 `;
 
 const MenuName = styled.span<{ $isActive: boolean }>`
   font-weight: ${({ $isActive }) => ($isActive ? 'bold' : 'normal')};
   color: ${({ $isActive }) => ($isActive ? '#191919' : '#767676')};
-
+  font-size: 16px;
   transition: color 0.3s ease-in-out;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
 `;
 
 export default CategoryMenu;
