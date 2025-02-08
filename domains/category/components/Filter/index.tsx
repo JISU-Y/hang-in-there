@@ -290,121 +290,131 @@ const Filter = ({ mapX, mapY, handleSetGeoLocation }: FilterProps) => {
 
       {/* Mobile Filter */}
       <MobileFilter>
-        <FilterChipsContainer>
-          <Menu>
-            <MenuButton
-              as={Button}
-              variant="outline"
-              rightIcon={<ChevronDownIcon />}
-              size="sm"
-              height="32px"
-              borderRadius="16px"
-              borderColor="#EDEDED"
-              _hover={{ bg: 'transparent' }}
-              _active={{ bg: 'transparent' }}
-            >
-              지역별 검색
-            </MenuButton>
-            <Portal>
-              <MenuList
-                maxHeight="270px"
-                width="110px"
-                overflowY="auto"
-                padding="8px"
-                css={css`
-                  &::-webkit-scrollbar {
-                    width: 4px;
-                  }
-                  &::-webkit-scrollbar-thumb {
-                    background-color: #e2e8f0;
-                    border-radius: 2px;
-                  }
-                `}
+        <MobileFilterHeader>
+          <FilterChipsContainer>
+            <Menu>
+              <MenuButton
+                as={Button}
+                variant="outline"
+                rightIcon={<ChevronDownIcon />}
+                size="sm"
+                height="32px"
+                borderRadius="16px"
+                borderColor="#EDEDED"
+                _hover={{ bg: 'transparent' }}
+                _active={{ bg: 'transparent' }}
               >
-                {Object.values(AREA_CODE).map(({ code, name }) => {
-                  const queryParams = queryString.parse(location.search);
-                  const areaCodes: string[] = queryParams.areaCode
-                    ? (queryParams.areaCode as string).split(',')
-                    : [];
+                지역별 검색
+              </MenuButton>
+              <Portal>
+                <MenuList
+                  maxHeight="270px"
+                  width="110px"
+                  overflowY="auto"
+                  padding="8px"
+                  css={css`
+                    &::-webkit-scrollbar {
+                      width: 4px;
+                    }
+                    &::-webkit-scrollbar-thumb {
+                      background-color: #e2e8f0;
+                      border-radius: 2px;
+                    }
+                  `}
+                >
+                  {Object.values(AREA_CODE).map(({ code, name }) => {
+                    const queryParams = queryString.parse(location.search);
+                    const areaCodes: string[] = queryParams.areaCode
+                      ? (queryParams.areaCode as string).split(',')
+                      : [];
 
-                  return (
-                    <MobileCheckboxItem key={`${name}-${code}`}>
-                      <Checkbox
-                        size="md"
-                        colorScheme="blackAlpha"
-                        borderColor="black"
-                        defaultChecked={areaCodes.includes(String(code))}
-                        onChange={e => {
-                          e.preventDefault();
-                          handleRegionClick({ code, name });
-                        }}
-                      >
-                        {name}
-                      </Checkbox>
-                    </MobileCheckboxItem>
-                  );
-                })}
-              </MenuList>
-            </Portal>
-          </Menu>
+                    return (
+                      <MobileCheckboxItem key={`${name}-${code}`}>
+                        <Checkbox
+                          size="md"
+                          colorScheme="blackAlpha"
+                          borderColor="black"
+                          defaultChecked={areaCodes.includes(String(code))}
+                          onChange={e => {
+                            e.preventDefault();
+                            handleRegionClick({ code, name });
+                          }}
+                        >
+                          {name}
+                        </Checkbox>
+                      </MobileCheckboxItem>
+                    );
+                  })}
+                </MenuList>
+              </Portal>
+            </Menu>
 
-          <Menu>
-            <MenuButton
-              as={Button}
-              variant="outline"
-              rightIcon={<ChevronDownIcon />}
-              size="sm"
-              height="32px"
-              borderRadius="16px"
-              borderColor="#EDEDED"
-              _hover={{ bg: 'transparent' }}
-              _active={{ bg: 'transparent' }}
-            >
-              진행 상태
-            </MenuButton>
-            <Portal>
-              <MenuList
-                maxHeight="270px"
-                width="110px"
-                overflowY="auto"
-                padding="8px"
-                css={css`
-                  &::-webkit-scrollbar {
-                    width: 4px;
-                  }
-                  &::-webkit-scrollbar-thumb {
-                    background-color: #e2e8f0;
-                    border-radius: 2px;
-                  }
-                `}
+            <Menu>
+              <MenuButton
+                as={Button}
+                variant="outline"
+                rightIcon={<ChevronDownIcon />}
+                size="sm"
+                height="32px"
+                borderRadius="16px"
+                borderColor="#EDEDED"
+                _hover={{ bg: 'transparent' }}
+                _active={{ bg: 'transparent' }}
               >
-                {Object.entries(EVENT_STATUS).map(([key, value]) => {
-                  const queryParams = queryString.parse(location.search);
-                  const selectedStatus: string[] = queryParams.status
-                    ? (queryParams.status as string).split(',')
-                    : [];
+                진행 상태
+              </MenuButton>
+              <Portal>
+                <MenuList
+                  maxHeight="270px"
+                  width="110px"
+                  overflowY="auto"
+                  padding="8px"
+                  css={css`
+                    &::-webkit-scrollbar {
+                      width: 4px;
+                    }
+                    &::-webkit-scrollbar-thumb {
+                      background-color: #e2e8f0;
+                      border-radius: 2px;
+                    }
+                  `}
+                >
+                  {Object.entries(EVENT_STATUS).map(([key, value]) => {
+                    const queryParams = queryString.parse(location.search);
+                    const selectedStatus: string[] = queryParams.status
+                      ? (queryParams.status as string).split(',')
+                      : [];
 
-                  return (
-                    <MobileCheckboxItem key={key}>
-                      <Checkbox
-                        size="md"
-                        colorScheme="blackAlpha"
-                        borderColor="black"
-                        defaultChecked={selectedStatus?.includes(key)}
-                        onChange={e => {
-                          e.preventDefault();
-                          handleStatusClick(key as EventStatusEnumType);
-                        }}
-                      >
-                        {value}
-                      </Checkbox>
-                    </MobileCheckboxItem>
-                  );
-                })}
-              </MenuList>
-            </Portal>
-          </Menu>
-        </FilterChipsContainer>
+                    return (
+                      <MobileCheckboxItem key={key}>
+                        <Checkbox
+                          size="md"
+                          colorScheme="blackAlpha"
+                          borderColor="black"
+                          defaultChecked={selectedStatus?.includes(key)}
+                          onChange={e => {
+                            e.preventDefault();
+                            handleStatusClick(key as EventStatusEnumType);
+                          }}
+                        >
+                          {value}
+                        </Checkbox>
+                      </MobileCheckboxItem>
+                    );
+                  })}
+                </MenuList>
+              </Portal>
+            </Menu>
+          </FilterChipsContainer>
+
+          <MobileNearEventButton
+            type="button"
+            onClick={handleClickFindNearEvent}
+          >
+            <span>내 주변</span>
+            <LocationIcon width={4} height={4} color="#ff6917" />
+          </MobileNearEventButton>
+        </MobileFilterHeader>
       </MobileFilter>
     </FilterContainer>
   );
@@ -469,10 +479,13 @@ const NearEventButton = styled.button`
   line-height: 36px;
   text-align: left;
   width: 100%;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const DesktopFilter = styled.div`
@@ -497,11 +510,44 @@ const FilterChipsContainer = styled.div`
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
-  margin-top: 16px;
 `;
 
 const MobileCheckboxItem = styled.div`
   padding: 4px 0;
+`;
+
+const MobileFilterHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+`;
+
+const MobileNearEventButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #ff6917;
+  background-color: transparent;
+
+  &:hover {
+    background-color: #f7f7f7;
+  }
+
+  & > span {
+    margin-top: 1px;
+    white-space: nowrap;
+  }
+
+  & svg,
+  & g {
+    fill: #ff6917;
+  }
 `;
 
 export default Filter;

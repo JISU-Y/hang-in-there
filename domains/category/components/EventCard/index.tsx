@@ -42,7 +42,7 @@ const EventCard = ({
       as={Link}
       href={`/eventDetail/${eventId}`}
       key={title}
-      w={{ base: '100%', md: '233px' }}
+      w="100%"
       h="auto"
       aspectRatio={2 / 3}
       size="sm"
@@ -69,10 +69,10 @@ const EventCard = ({
         </ImageWrapper>
       </CardBody>
       <CardFooter
-        marginTop={{ base: '12px', md: '20px' }}
+        marginTop={{ base: '8px', md: '12px' }}
         padding="0px"
         flexDirection="column"
-        gap="8px"
+        gap={{ base: '4px', md: '8px' }}
       >
         <Heading
           as="h4"
@@ -83,11 +83,11 @@ const EventCard = ({
         >
           {title}
         </Heading>
-        <Text fontSize={{ base: '13px', md: '14px' }}>
+        <Text fontSize={{ base: '12px', md: '14px' }}>
           {location?.split(' ').slice(0, 2).join(' ')}
         </Text>
         {range && (
-          <Text fontSize={{ base: '12px', md: '14px' }} color="#999999">
+          <Text fontSize={{ base: '11px', md: '14px' }} color="#999999">
             {`${getFormattedDate(range.startDate)}-${getFormattedDate(range.endDate)}`}
           </Text>
         )}

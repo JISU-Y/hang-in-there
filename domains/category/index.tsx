@@ -95,7 +95,11 @@ const CategoryPage = () => {
         />
 
         <CardListContainer>
-          <SimpleGrid minChildWidth="232px" spacing="32px">
+          <SimpleGrid
+            columns={{ base: 2, md: 3 }}
+            spacing={{ base: '16px', md: '32px' }}
+            width="100%"
+          >
             {isLoading ? (
               <div>loading..</div>
             ) : (
