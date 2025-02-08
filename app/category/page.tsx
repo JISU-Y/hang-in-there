@@ -5,7 +5,7 @@ import CategoryPage from '@domains/category';
 
 const Category = () => {
   return (
-    <PageLayout>
+    <PageLayout hasMaxWidth>
       <Suspense fallback={<div>fallback</div>}>
         <CategoryPage />
       </Suspense>

@@ -19,12 +19,14 @@ const EXTERNAL_DOCUMENT_LINKS = {
 };
 
 interface PageLayoutProps {
+  hasMaxWidth?: boolean;
   withLineBanner?: boolean;
   withNavbar?: boolean;
   withFooter?: boolean;
 }
 
 export default function PageLayout({
+  hasMaxWidth,
   withLineBanner,
   withNavbar = true,
   withFooter = true,
@@ -60,7 +62,7 @@ export default function PageLayout({
         </LineBannerWrapper>
       )}
 
-      <PageContainer>
+      <PageContainer hasMaxWidth={hasMaxWidth}>
         {withNavbar && (
           <NavbarContainer>
             <Navbar>
@@ -161,12 +163,11 @@ const BannerLink = styled(Link)`
   }
 `;
 
-const PageContainer = styled.div`
+const PageContainer = styled.div<{ hasMaxWidth?: boolean }>`
   position: relative;
   width: 100%;
   height: 100%;
-  max-width: 1120px;
-  min-height: 100vh;
+  max-width: ${({ hasMaxWidth }) => (hasMaxWidth ? '1120px' : 'unset')};
   margin: auto;
 `;
 
