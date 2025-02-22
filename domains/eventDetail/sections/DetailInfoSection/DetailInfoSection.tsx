@@ -69,6 +69,11 @@ export default DetailInfoSection;
 
 const DetailInfoContainer = styled.section`
   width: 100%;
+  padding: 0 20px;
+
+  @media (min-width: 768px) {
+    padding: 0;
+  }
 `;
 
 const ImageWrapper = styled.div`

@@ -13,11 +13,13 @@ import 'slick-carousel/slick/slick-theme.css';
 const settings: Settings = {
   dots: false,
   infinite: false,
-  slidesToShow: 5,
-  slidesToScroll: 1,
+  arrows: false,
   swipeToSlide: true,
-  touchThreshold: 100,
-  initialSlide: 0
+  touchThreshold: 1000,
+  initialSlide: 0,
+  variableWidth: false,
+  slidesToShow: 5,
+  slidesToScroll: 1
 };
 
 interface OtherEventListSectionProps {
@@ -38,7 +40,11 @@ const OtherEventListSection = ({
       <SectionTitle>이 지역 다른 행사</SectionTitle>
       <SliderWrapper>
         <Slider {...settings}>
-          {eventData?.list?.map(el => <EventCard event={el} />)}
+          {eventData?.list?.map(el => (
+            <CardWrapper key={el.event_id}>
+              <EventCard event={el} />
+            </CardWrapper>
+          ))}
         </Slider>
       </SliderWrapper>
     </Container>
@@ -47,32 +53,42 @@ const OtherEventListSection = ({
 
 const Container = styled.section`
   width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 93px 20px 0;
 
-  @media (max-width: 1400px) {
-    padding: 16px;
+  @media (max-width: 768px) {
+    padding: 36px 16px 0;
   }
 `;
 
 const SliderWrapper = styled.div`
   width: 100%;
   flex-shrink: 0;
-  border-radius: 4px;
-  padding: 8px 0;
+  overflow: hidden;
 
-  .slick-list {
-    margin: 0 -7px;
-
-    & .slick-slide > div {
-      padding: 0 16px;
-    }
+  .slick-track {
+    display: flex;
+    gap: 16px;
+    margin-left: 0;
   }
+
+  .slick-slide {
+    width: calc((100% - 64px) / 5) !important;
+    min-width: 136px;
+    max-width: 264px;
+  }
+`;
+
+const CardWrapper = styled.div`
+  width: 100%;
 `;
 
 const SectionTitle = styled.h3`
   font-size: 24px;
   font-weight: 600;
   color: #191919;
-  margin-bottom: 36px;
+  margin-bottom: 4px;
 `;
 
 export default OtherEventListSection;

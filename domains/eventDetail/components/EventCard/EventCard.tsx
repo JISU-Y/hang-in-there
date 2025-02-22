@@ -5,14 +5,7 @@ import { formatISO } from 'date-fns/formatISO';
 
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  Heading,
-  Image,
-  Text
-} from '@chakra-ui/react';
+import { Card, CardBody, Heading, Image, Text } from '@chakra-ui/react';
 import { useBooleanState } from '@toss/react';
 import { formatDate } from '@logics/utils/dateFormat';
 import { EventDataTypeNew } from '@domains/category/types';
@@ -72,12 +65,7 @@ export const EventCard = ({ event }: EventCardProps) => {
           />
         </ImageWrapper>
       </CardBody>
-      <CardFooter
-        marginTop="20px"
-        padding="0px"
-        flexDirection="column"
-        gap="8px"
-      >
+      <CardFooter>
         <Heading
           as="h4"
           size="md"
@@ -97,13 +85,20 @@ export const EventCard = ({ event }: EventCardProps) => {
 };
 
 const HeadingCSS = css`
-  text-overflow: eventlipsis;
+  text-overflow: ellipsis;
   overflow: hidden;
   word-break: break-word;
+  font-size: 16px;
+  line-height: 24px;
 
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+    line-height: 20px;
+  }
 `;
 
 const ImageWrapper = styled.div`
@@ -116,4 +111,22 @@ const Img = styled(Image)`
   width: 100%;
   height: 100%;
   object-fit: cover;
+`;
+
+const CardFooter = styled.div`
+  margin-top: 20px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  p {
+    font-size: 14px;
+    line-height: 20px;
+
+    @media (max-width: 768px) {
+      font-size: 12px;
+      line-height: 16px;
+    }
+  }
 `;

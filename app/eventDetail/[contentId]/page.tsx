@@ -28,7 +28,7 @@ const Detail = async ({ params }: PageParamProps<{ contentId: string }>) => {
   });
 
   return (
-    <PageLayout>
+    <PageLayout withCategoryMenu={false}>
       <Suspense fallback={<div>fallback</div>}>
         <Hydrate state={{ queries: [eventDetailQuery, otherEventListQuery] }}>
           <EventDetailPage contentId={params.contentId} />
