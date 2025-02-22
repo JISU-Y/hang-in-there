@@ -19,6 +19,8 @@ import { DetailInfoType } from './types/detail';
 import { useFetchEventDetailQuery } from './network/eventDetailQueries';
 
 import '@styles/custom-slick.css';
+import MarkerIcon from '@styles/icons/MarkerIcon';
+import CalendarIcon from '@styles/icons/CalendarIcon';
 
 interface EventDetailPageProps {
   contentId: string;
@@ -72,74 +74,118 @@ const EventDetailPage = ({ contentId }: EventDetailPageProps) => {
     <Container>
       <DetailContainer>
         <ContentWrapper>
-          <ImageWrapper>
-            <Image
-              width={394}
-              height={557}
-              src={
-                !error && !!eventDetail?.img[0]
-                  ? eventDetail?.img[0]?.url
-                  : '/logo/poster-fallback.png'
-              }
-              alt={`festival-${eventDetail?.title}`}
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover'
-              }}
-              onError={() => setError(true)}
-            />
-          </ImageWrapper>
+          <ImageSection>
+            <BackgroundImageWrapper>
+              <BlurredBackground
+                src={
+                  !error && !!eventDetail?.img[0]
+                    ? eventDetail?.img[0]?.url
+                    : '/logo/poster-fallback.png'
+                }
+                alt=""
+                fill
+                style={{ objectFit: 'cover' }}
+              />
+              <Overlay />
+            </BackgroundImageWrapper>
+
+            <ImageWrapper>
+              <Image
+                width={112}
+                height={150}
+                src={
+                  !error && !!eventDetail?.img[0]
+                    ? eventDetail?.img[0]?.url
+                    : '/logo/poster-fallback.png'
+                }
+                alt={`festival-${eventDetail?.title}`}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover'
+                }}
+                onError={() => setError(true)}
+              />
+            </ImageWrapper>
+
+            <IconsWrapper>
+              <IconButton type="button" onClick={handleClickShare}>
+                <ShareIcon color="#ffffff" />
+              </IconButton>
+            </IconsWrapper>
+          </ImageSection>
 
           <DetailWrapper>
             <Title>{eventDetail?.title}</Title>
+
             <EventTimeWrapper>
-              <EventTime
-                dangerouslySetInnerHTML={{
-                  __html: eventDetailInfo?.period || ''
-                }}
-              />
-              <EventTime
-                dangerouslySetInnerHTML={{
-                  __html: eventDetailInfo?.time || ''
-                }}
-              />
+              <CalendarIcon width="16px" height="16px" color="#191919" />
+              <EventPeriodTimeBox>
+                {eventDetailInfo?.period && (
+                  <EventTime
+                    dangerouslySetInnerHTML={{
+                      __html: eventDetailInfo?.period || ''
+                    }}
+                  />
+                )}
+                {eventDetailInfo?.time && (
+                  <EventTime
+                    dangerouslySetInnerHTML={{
+                      __html: eventDetailInfo?.time || ''
+                    }}
+                  />
+                )}
+              </EventPeriodTimeBox>
             </EventTimeWrapper>
 
             <EventInfoWrapper>
               <EventPlace>
-                <LocationIcon color="#000000" />
+                <MarkerIcon width="16px" height="16px" color="#FF6917" />
                 <span>{eventDetailInfo?.place}</span>
               </EventPlace>
               {eventDetailInfo?.hostPhone && (
                 <EventHostPhone>
-                  <CallOutgoingIcon color="#000000" />
-                  <span>{eventDetailInfo?.hostPhone}</span>
+                  <CallOutgoingIcon
+                    width="16px"
+                    height="16px"
+                    color="#FF6917"
+                  />
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: eventDetailInfo?.hostPhone
+                    }}
+                  />
                 </EventHostPhone>
               )}
-              <IconButton type="button" onClick={handleClickShare}>
-                <ShareIcon color="#000000" />
-              </IconButton>
             </EventInfoWrapper>
 
-            <EventHostInfoWrapper>
-              <HostInfoKey>주관</HostInfoKey>
-              <HostInfoValue>{eventDetailInfo?.sponsorName}</HostInfoValue>
-            </EventHostInfoWrapper>
-            <EventHostInfoWrapper>
-              <HostInfoKey>주최</HostInfoKey>
-              <HostInfoValue>
-                {eventDetailInfo?.homePageLink ? (
-                  <a href={eventDetailInfo?.homePageLink} target="_blank">
-                    {eventDetailInfo?.hostName || eventDetailInfo?.homePageLink}
-                  </a>
-                ) : (
-                  <span>{eventDetailInfo?.hostName}</span>
-                )}
-              </HostInfoValue>
-            </EventHostInfoWrapper>
+            <ShareButton type="button" onClick={handleClickShare}>
+              <ShareIcon />
+            </ShareButton>
+
+            <EventHostInfoSection>
+              <EventHostInfoWrapper>
+                <HostInfoKey>주관</HostInfoKey>
+                <HostInfoValue>{eventDetailInfo?.sponsorName}</HostInfoValue>
+              </EventHostInfoWrapper>
+              <EventHostInfoWrapper>
+                <HostInfoKey>주최</HostInfoKey>
+                <HostInfoValue>
+                  {eventDetailInfo?.homePageLink ? (
+                    <a href={eventDetailInfo?.homePageLink} target="_blank">
+                      {eventDetailInfo?.hostName ||
+                        eventDetailInfo?.homePageLink}
+                    </a>
+                  ) : (
+                    <span>{eventDetailInfo?.hostName}</span>
+                  )}
+                </HostInfoValue>
+              </EventHostInfoWrapper>
+            </EventHostInfoSection>
           </DetailWrapper>
         </ContentWrapper>
+
+        <Divider />
 
         <DetailInfoSection contentId={contentId} />
       </DetailContainer>
@@ -155,120 +201,297 @@ const EventDetailPage = ({ contentId }: EventDetailPageProps) => {
 };
 
 const Container = styled.div`
-  padding: 32px 48px 64px;
+  padding: 0;
+
+  @media (min-width: 768px) {
+    padding: 32px 48px 64px;
+  }
 `;
 
 const DetailContainer = styled.div`
   display: flex;
   flex-direction: column;
   max-width: 808px;
-  gap: 72px;
   margin: auto;
+
+  @media (min-width: 768px) {
+    gap: 32px;
+  }
 `;
 
 const ContentWrapper = styled.section`
   width: 100%;
   display: flex;
-  justify-content: center;
-  gap: 32px;
+  flex-direction: column;
+  gap: 24px;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    gap: 24px;
+  }
+`;
+
+const ImageSection = styled.div`
+  position: relative;
+  width: 100%;
+  height: 191px;
+
+  @media (min-width: 768px) {
+    width: 60%;
+    max-width: 394px;
+    height: 563px;
+  }
+`;
+
+const BackgroundImageWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+`;
+
+const BlurredBackground = styled(Image)`
+  filter: blur(10px);
+  transform: scale(1.1);
+`;
+
+const Overlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
 `;
 
 const ImageWrapper = styled.div`
-  width: 60%;
-  max-width: 394px;
-  height: auto;
-  max-height: 563px;
+  width: 112px;
+  height: 150px;
+  position: absolute;
+  left: 20px;
+  bottom: -23px;
+  flex-shrink: 0;
+
+  @media (min-width: 768px) {
+    position: relative;
+    width: 100%;
+    min-width: 360px;
+    height: 100%;
+    left: 0;
+    bottom: 0;
+    flex-shrink: 0;
+  }
+`;
+
+const IconsWrapper = styled.div`
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  display: flex;
+  gap: 8px;
+
+  @media (min-width: 768px) {
+    bottom: 24px;
+    right: 24px;
+  }
 `;
 
 const DetailWrapper = styled.div`
-  width: 40%;
-  max-width: 496px;
-  padding: 56px 0;
+  width: 100%;
+  padding: 12px 20px 0;
+
+  @media (min-width: 768px) {
+    width: 100%;
+    max-width: 496px;
+    padding: 0;
+  }
 `;
 
 const Title = styled.h2`
-  font-size: 24px;
-  font-weight: 600;
-  line-height: 36px;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 28px;
   width: 100%;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   color: #191919;
+
+  @media (min-width: 768px) {
+    font-size: 36px;
+    line-height: 44px;
+    font-weight: 600;
+    margin-bottom: 24px;
+  }
 `;
 
 const EventTimeWrapper = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: column;
   gap: 8px;
-  margin-bottom: 32px;
+  margin-bottom: 4px;
+
+  @media (min-width: 768px) {
+    margin-bottom: 8px;
+  }
+`;
+
+const EventPeriodTimeBox = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
 `;
 
 const EventTime = styled.p`
   width: 100%;
-  font-size: 18px;
-  line-height: 24px;
+  font-size: 14px;
+  line-height: 20px;
   font-weight: 400;
   color: #191919;
+
+  @media (min-width: 768px) {
+    font-size: 16px;
+    line-height: 22px;
+  }
 `;
 
 const EventInfoWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin-bottom: 24px;
+  gap: 12px;
+  margin-bottom: 20px;
+
+  @media (min-width: 768px) {
+    gap: 16px;
+    margin-bottom: 4px;
+  }
 `;
 
 const EventPlace = styled.p`
   width: 100%;
-  font-size: 18px;
-  line-height: 24px;
+  font-size: 14px;
+  line-height: 20px;
   font-weight: 400;
-  color: #191919;
+  color: #ff6917;
   display: flex;
   align-items: center;
   gap: 6px;
+
+  @media (min-width: 768px) {
+    font-size: 16px;
+    line-height: 22px;
+  }
 `;
 
 const EventHostPhone = styled.p`
   width: 100%;
-  font-size: 18px;
-  line-height: 24px;
+  font-size: 14px;
+  line-height: 20px;
   font-weight: 400;
-  color: #191919;
+  color: #ff6917;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 6px;
+
+  @media (min-width: 768px) {
+    font-size: 16px;
+    line-height: 22px;
+  }
+`;
+
+export const EventHostInfoSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
 `;
 
 const EventHostInfoWrapper = styled.div`
   width: 100%;
   display: flex;
   gap: 8px;
-  margin-bottom: 8px;
 `;
 
 const HostInfoKey = styled.p`
-  font-size: 16px;
-  line-height: 22px;
+  font-size: 12px;
+  line-height: 16px;
   font-weight: 600;
   color: #767676;
+
+  @media (min-width: 768px) {
+    font-size: 14px;
+    line-height: 20px;
+  }
 `;
 
 const HostInfoValue = styled.p`
-  font-size: 16px;
-  line-height: 22px;
+  font-size: 12px;
+  line-height: 16px;
   font-weight: 400;
   color: #767676;
 
   a {
     text-decoration: underline;
   }
+
+  @media (min-width: 768px) {
+    font-size: 14px;
+    line-height: 20px;
+  }
 `;
 
 const IconButton = styled.button`
-  width: fit-content;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.1);
+  }
+
+  * {
+    fill: #ffffff;
+  }
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+`;
+
+const ShareButton = styled.button`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.1);
+  }
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
+
+const Divider = styled.div`
+  width: 100%;
+  height: 6px;
+  background: #ededed;
+  margin: 80px 0 34px;
+
+  @media (min-width: 768px) {
+    display: none;
+  }
 `;
 
 export default EventDetailPage;

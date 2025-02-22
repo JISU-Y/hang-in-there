@@ -23,6 +23,7 @@ interface PageLayoutProps {
   withLineBanner?: boolean;
   withNavbar?: boolean;
   withFooter?: boolean;
+  withCategoryMenu?: boolean;
 }
 
 export default function PageLayout({
@@ -30,6 +31,7 @@ export default function PageLayout({
   withLineBanner,
   withNavbar = true,
   withFooter = true,
+  withCategoryMenu = true,
   children
 }: PropsWithChildren<PageLayoutProps>) {
   const { isOpen, onOpen } = useDisclosure();
@@ -79,9 +81,11 @@ export default function PageLayout({
                 <AuthMenu />
               </MenuContainer>
             </Navbar>
-            <CategoryMenuWrapper>
-              <CategoryMenu />
-            </CategoryMenuWrapper>
+            {withCategoryMenu && (
+              <CategoryMenuWrapper>
+                <CategoryMenu />
+              </CategoryMenuWrapper>
+            )}
           </NavbarContainer>
         )}
         <Content>{children}</Content>

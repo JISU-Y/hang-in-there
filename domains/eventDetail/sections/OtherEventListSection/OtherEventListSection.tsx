@@ -13,6 +13,7 @@ import 'slick-carousel/slick/slick-theme.css';
 const settings: Settings = {
   dots: false,
   infinite: false,
+  arrows: false,
   slidesToShow: 5,
   slidesToScroll: 1,
   swipeToSlide: true,

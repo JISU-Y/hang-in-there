@@ -104,8 +104,8 @@ const SearchBox = () => {
     <Container ref={containerRef} onFocus={openDropdown}>
       <InputForm onSubmit={handleSubmitSearch}>
         <SearchIcon
-          width="24px"
-          height="24px"
+          width="16px"
+          height="16px"
           onClick={openDropdown}
           style={{ cursor: 'pointer' }}
         />
