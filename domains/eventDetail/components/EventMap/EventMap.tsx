@@ -29,7 +29,9 @@ const EventMap = ({ position }: EventMapProps) => {
       zoomControl: true,
       center: new naver.maps.LatLng(position.lat, position.lng),
       zoom: 16,
-      scrollWheel: false
+      draggable: false,
+      scrollWheel: false,
+      disableKineticPan: false
     };
 
     // 지도 초기화 확인
