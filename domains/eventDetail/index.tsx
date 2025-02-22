@@ -308,6 +308,9 @@ const DetailWrapper = styled.div`
     width: 100%;
     max-width: 496px;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 563px;
   }
 `;
 
@@ -406,7 +409,10 @@ export const EventHostInfoSection = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-top: auto;
+
+  @media (min-width: 768px) {
+    margin-top: auto;
+  }
 `;
 
 const EventHostInfoWrapper = styled.div`
