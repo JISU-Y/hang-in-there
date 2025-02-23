@@ -238,7 +238,7 @@ const SliderWrapper = styled.div`
 
   @media (max-width: 768px) {
     overflow: hidden;
-    width: calc(100% + 32px);
+    width: calc(100% + 16px);
     padding: 0;
 
     .slick-list {

@@ -476,16 +476,21 @@ const MobileContainer = styled.section`
 
   .custom-dots {
     position: absolute;
-    bottom: 26px;
-    right: 43px;
-    display: flex;
+    bottom: 20px;
+    right: 46px;
+    display: flex !important;
     flex-direction: column;
     gap: 8px;
     z-index: 2;
+    transform: none;
+    left: auto;
   }
 
   .custom-dots li {
     margin: 0;
+    padding: 0;
+    width: 8px;
+    height: 8px;
   }
 
   .custom-dots li button {
@@ -496,12 +501,11 @@ const MobileContainer = styled.section`
     color: transparent;
     font-size: 0;
     padding: 0;
+    margin: 0;
   }
 
   .custom-dots li.slick-active button {
     background-color: #ffffff;
-    width: 8px;
-    height: 8px;
   }
 `;
 
