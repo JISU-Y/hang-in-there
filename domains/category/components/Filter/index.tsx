@@ -13,7 +13,6 @@ import {
   Stack,
   Checkbox,
   Divider,
-  useDisclosure,
   Menu,
   MenuButton,
   MenuList,
@@ -21,12 +20,10 @@ import {
   Portal
 } from '@chakra-ui/react';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
-import useGeoLocationPoint from '@logics/hooks/useGeoLocation';
 import LocationIcon from '@styles/icons/LocationIcon';
 
 import { AREA_CODE } from '../../constants/categories';
 import { AreaCodeType, EventStatusEnumType } from '../../types';
-import NearEventListModal from '../../modal/NearEventListModal';
 
 const EVENT_STATUS = {
   on_going: '진행 중',
@@ -34,19 +31,8 @@ const EVENT_STATUS = {
   closed: '진행 마감'
 } as const;
 
-interface FilterProps {
-  mapX: string;
-  mapY: string;
-  handleSetGeoLocation: (args: { mapX: string; mapY: string }) => void;
-}
-
-const Filter = ({ mapX, mapY, handleSetGeoLocation }: FilterProps) => {
+const Filter = () => {
   const { push } = useRouter();
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const { loading: isGeoLocationLoading, loadGeoLocation } =
-    useGeoLocationPoint();
 
   const handleRegionClick = (region: AreaCodeType) => {
     const regionCode = String(region.code);
@@ -105,16 +91,8 @@ const Filter = ({ mapX, mapY, handleSetGeoLocation }: FilterProps) => {
     push(`${location.pathname}?${queryString.stringify(newQueryParams)}`);
   };
 
-  const handleClickFindNearEvent = async () => {
-    onOpen();
-
-    const geoLocationRes = await loadGeoLocation();
-
-    if (geoLocationRes) {
-      const { latitude, longitude } = geoLocationRes;
-
-      handleSetGeoLocation({ mapX: String(longitude), mapY: String(latitude) });
-    }
+  const handleClickFindNearEvent = () => {
+    push('/near-events');
   };
 
   return (
@@ -123,14 +101,6 @@ const Filter = ({ mapX, mapY, handleSetGeoLocation }: FilterProps) => {
         <span>내 주변 찾기</span>
         <LocationIcon color="#000000" />
       </NearEventButton>
-
-      <NearEventListModal
-        isLocationLoading={isGeoLocationLoading}
-        mapX={mapX}
-        mapY={mapY}
-        isOpen={isOpen}
-        onClose={onClose}
-      />
 
       <Divider
         height="1px"
