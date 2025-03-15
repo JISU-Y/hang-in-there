@@ -125,6 +125,8 @@ export interface EventDataTypeNew {
   reg_dt: string;
   addr: string;
   addr_detail: string;
+  map_x: string;
+  map_y: string;
 }
 
 export interface EventDetailIntroDataType {
