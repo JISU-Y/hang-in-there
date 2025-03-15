@@ -25,11 +25,6 @@ const CategoryPage = () => {
   const areaCode = searchParams.getAll('areaCode')?.[0];
   const status = searchParams.getAll('status')?.[0];
 
-  const [geoLocation, setGeoLocation] = useState<{
-    mapX: string;
-    mapY: string;
-  }>();
-
   const {
     data: eventListPageData,
     fetchNextPage: fetchNextPageEventList,
@@ -51,10 +46,6 @@ const CategoryPage = () => {
       detail_sub_category: CATEGORY_CODE[categoryCode].subCategoryList.join(',')
     })
   });
-
-  const handleSetGeoLocation = (param: { mapX: string; mapY: string }) => {
-    setGeoLocation(param);
-  };
 
   useEffect(() => {
     refetch();
@@ -88,11 +79,7 @@ const CategoryPage = () => {
       </StatusWrapper>
 
       <ContainerWrapper>
-        <Filter
-          mapX={geoLocation?.mapX || ''}
-          mapY={geoLocation?.mapY || ''}
-          handleSetGeoLocation={handleSetGeoLocation}
-        />
+        <Filter />
 
         <CardListContainer>
           <SimpleGrid
