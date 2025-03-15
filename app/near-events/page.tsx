@@ -88,6 +88,7 @@ const ListSection = styled.div`
   width: 380px;
   height: 100%;
   overflow-y: auto;
+  padding: 0 16px;
 
   @media (max-width: 768px) {
     display: none;

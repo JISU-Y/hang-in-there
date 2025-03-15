@@ -3,7 +3,6 @@
 import { useEffect, useState, useRef } from 'react';
 import styled from '@emotion/styled';
 import { SimpleGrid } from '@chakra-ui/react';
-import { ImpressionArea } from '@toss/impression-area';
 import useGeoLocationPoint from '@logics/hooks/useGeoLocation';
 import Loader from '@domains/common/components/Loader/Loader';
 import EventCard from '@domains/category/components/EventCard';
@@ -72,13 +71,6 @@ const NearEventsList = () => {
                   />
                 ))}
               </SimpleGrid>
-
-              <HeightImpressionArea
-                onImpressionStart={() => {
-                  // 추후 무한 스크롤 구현 시 사용
-                }}
-                areaThreshold={0.5}
-              />
             </EventListWrapper>
           )}
         </>
@@ -92,33 +84,11 @@ const ListContainer = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  padding: 0;
-`;
-
-const ListHeader = styled.div`
-  margin-bottom: 16px;
-  flex-shrink: 0;
-`;
-
-const ListTitle = styled.h2`
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 8px;
-`;
-
-const EventCount = styled.p`
-  font-size: 14px;
-
-  strong {
-    color: #ff6917;
-    font-weight: 600;
-  }
 `;
 
 const EventListWrapper = styled.div`
   flex: 1;
   overflow-y: auto;
-  padding-right: 8px;
 
   &::-webkit-scrollbar {
     width: 4px;
@@ -149,11 +119,6 @@ const LoaderWrapper = styled.div`
   align-items: center;
   width: 100%;
   flex: 1;
-`;
-
-const HeightImpressionArea = styled(ImpressionArea)`
-  height: 40px;
-  flex-shrink: 0;
 `;
 
 export default NearEventsList;

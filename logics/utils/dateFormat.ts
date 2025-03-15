@@ -1,4 +1,4 @@
-import { format, isValid } from 'date-fns';
+import { format, isValid, parse } from 'date-fns';
 import { FormatOptions } from 'date-fns/format';
 import { ko } from 'date-fns/locale/ko';
 
@@ -111,6 +111,39 @@ const formatDiffDate = (date: string) => {
   });
 };
 
+/**
+ * "YYYYMMDD" 포맷의 date string을 "yyyy.MM.dd" 포맷으로 변환
+ * @param dateStr - format 할 date string
+ * @returns "yyyy.MM.dd" format date string
+ */
+const parseDate = (dateStr?: string) => {
+  if (!dateStr) return '';
+
+  // "YYYYMMDD" 형식의 문자열을 date-fns를 사용하여 변환
+  if (dateStr.length === 8 && !isNaN(Number(dateStr))) {
+    try {
+      const parsedDate = parse(dateStr, 'yyyyMMdd', new Date());
+
+      if (isValid(parsedDate)) {
+        return format(parsedDate, 'yyyy.MM.dd');
+      }
+    } catch (e) {
+      console.error('날짜 파싱 오류:', e);
+    }
+  }
+
+  try {
+    const date = new Date(dateStr);
+    if (isValid(date)) {
+      return format(date, 'yyyy.MM.dd');
+    }
+  } catch (e) {
+    console.error('날짜 변환 오류:', e);
+  }
+
+  return dateStr;
+};
+
 export type { FormatOptions };
 
-export { DATE_FORMAT_TYPE, formatDate, formatDiffDate };
+export { DATE_FORMAT_TYPE, formatDate, formatDiffDate, parseDate };

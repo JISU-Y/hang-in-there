@@ -2,10 +2,12 @@
 
 import { useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
+import { motion, AnimatePresence } from 'framer-motion';
 import useGeoLocationPoint from '@logics/hooks/useGeoLocation';
 import { useFetchNearEventListQuery } from '@domains/category/network/eventListQueries';
-import EventCard from '@domains/category/components/EventCard';
-import LocationIcon from '@styles/icons/LocationIcon';
+import { parseDate } from '@logics/utils/dateFormat';
+import { CloseIcon } from '@chakra-ui/icons';
+import { useRouter } from 'next/navigation';
 
 function loadNaverMapsScript(callback: () => void) {
   const script = document.createElement('script');
@@ -22,8 +24,42 @@ interface EventMarker {
   event: any; // 이벤트 데이터 타입
 }
 
+// 새로운 이벤트 카드 컴포넌트
+interface EventCardProps {
+  eventId: string;
+  imageUrl: string;
+  title: string;
+  location: string;
+  date?: string;
+  onClick?: () => void;
+}
+
+const EventCard = ({
+  imageUrl,
+  title,
+  location,
+  date,
+  onClick
+}: EventCardProps) => {
+  return (
+    <EventCardContainer onClick={onClick}>
+      <EventImageWrapper>
+        <EventImage src={imageUrl} alt={title} />
+      </EventImageWrapper>
+      <EventInfo>
+        <EventTitle>{title}</EventTitle>
+        <EventLocation>{location}</EventLocation>
+        {date && <EventDate>{date}</EventDate>}
+      </EventInfo>
+    </EventCardContainer>
+  );
+};
+
 const NearEventsMap = () => {
+  const { push } = useRouter();
+
   const mapElement = useRef<HTMLDivElement | null>(null);
+
   const [mapLoaded, setMapLoaded] = useState(false);
   const [map, setMap] = useState<naver.maps.Map | null>(null);
   const [currentPosition, setCurrentPosition] = useState<{
@@ -33,15 +69,15 @@ const NearEventsMap = () => {
   const [eventMarkers, setEventMarkers] = useState<EventMarker[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<any | null>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
 
   const { loading: isGeoLocationLoading, loadGeoLocation } =
     useGeoLocationPoint();
 
-  const { data: nearEventList, isLoading: isEventLoading } =
-    useFetchNearEventListQuery({
-      mapX: currentPosition?.lng.toString() || '',
-      mapY: currentPosition?.lat.toString() || ''
-    });
+  const { data: nearEventList } = useFetchNearEventListQuery({
+    mapX: currentPosition?.lng.toString() || '',
+    mapY: currentPosition?.lat.toString() || ''
+  });
 
   const checkIsMobile = () => {
     setIsMobile(window.innerWidth <= 768);
@@ -57,7 +93,7 @@ const NearEventsMap = () => {
         position: naver.maps.Position.TOP_RIGHT
       },
       center: new naver.maps.LatLng(currentPosition.lat, currentPosition.lng),
-      zoom: 14,
+      zoom: 12,
       draggable: true,
       scrollWheel: true,
       disableKineticPan: false
@@ -78,8 +114,7 @@ const NearEventsMap = () => {
         ),
         map: newMap,
         icon: {
-          //   content,
-          content: `<div class="event-marker"></div>`,
+          content,
           anchor: new naver.maps.Point(15, 15)
         }
       });
@@ -98,24 +133,22 @@ const NearEventsMap = () => {
 
     // 새 마커 생성
     const newMarkers: EventMarker[] = nearEventList.map(event => {
-      // 주소 좌표 변환 (실제로는 API에서 좌표를 받아와야 함)
-      // 여기서는 임시로 현재 위치 주변에 랜덤하게 배치
-      const lat = currentPosition!.lat + (Math.random() - 0.5) * 0.01;
-      const lng = currentPosition!.lng + (Math.random() - 0.5) * 0.01;
+      const lat = Number(event.map_y);
+      const lng = Number(event.map_x);
 
       const marker = new naver.maps.Marker({
         position: new naver.maps.LatLng(lat, lng),
         map,
         icon: {
-          content: `<div class="event-marker">${event.title.substring(0, 1)}</div>`,
+          content: `<div class="event-marker" />`,
           anchor: new naver.maps.Point(15, 15)
         }
       });
 
-      // 마커 클릭 이벤트
       naver.maps.Event.addListener(marker, 'click', () => {
         if (isMobile) {
           setSelectedEvent(event);
+          setIsBottomSheetOpen(true);
         }
       });
 
@@ -140,8 +173,12 @@ const NearEventsMap = () => {
     }
   };
 
-  const handleCloseCard = () => {
-    setSelectedEvent(null);
+  const handleCloseBottomSheet = () => {
+    setIsBottomSheetOpen(false);
+
+    setTimeout(() => {
+      setSelectedEvent(null);
+    }, 300); // NOTE: 애니메이션 시간과 맞춤
   };
 
   useEffect(() => {
@@ -155,7 +192,6 @@ const NearEventsMap = () => {
   useEffect(() => {
     if (!currentPosition) return;
 
-    // 스크립트 로딩 확인
     if (typeof window !== 'undefined') {
       if (typeof naver === 'undefined') {
         loadNaverMapsScript(initMap);
@@ -185,6 +221,23 @@ const NearEventsMap = () => {
     }
   }, [map]);
 
+  const handleEventCardClick = () => {
+    push(`/eventDetail/${selectedEvent.event_id}`);
+  };
+
+  const formatDateRange = (startDate?: string, endDate?: string) => {
+    if (!startDate) return '';
+
+    const parsedStartDate = parseDate(startDate);
+
+    if (!endDate || startDate === endDate) {
+      return parsedStartDate;
+    }
+
+    const parsedEndDate = parseDate(endDate);
+    return `${parsedStartDate} ~ ${parsedEndDate}`;
+  };
+
   return (
     <MapContainer>
       {isGeoLocationLoading && !mapLoaded ? (
@@ -193,18 +246,45 @@ const NearEventsMap = () => {
         <>
           <MapElement id="near-events-map" ref={mapElement} />
 
-          {isMobile && selectedEvent && (
-            <MobileEventCard>
-              <CloseButton onClick={handleCloseCard}>×</CloseButton>
-              <EventCard
-                eventId={String(selectedEvent.event_id)}
-                imageUrl={selectedEvent.image}
-                title={selectedEvent.title}
-                status="always"
-                location={selectedEvent.addr}
-              />
-            </MobileEventCard>
-          )}
+          <AnimatePresence>
+            {isMobile && selectedEvent && isBottomSheetOpen && (
+              <BottomSheet
+                initial={{ y: '100%' }}
+                animate={{ y: 0 }}
+                exit={{ y: '100%' }}
+                transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              >
+                <BottomSheetHeader>
+                  <CloseButton
+                    whileHover={{
+                      backgroundColor: 'rgba(0, 0, 0, 0.1)'
+                    }}
+                    whileTap={{
+                      backgroundColor: 'rgba(0, 0, 0, 0.2)'
+                    }}
+                    onClick={handleCloseBottomSheet}
+                  >
+                    <CloseIcon width={3} height={3} />
+                  </CloseButton>
+                </BottomSheetHeader>
+                <BottomSheetContent>
+                  <EventCard
+                    eventId={String(selectedEvent.event_id)}
+                    imageUrl={
+                      selectedEvent.image || 'https://placehold.co/600x400'
+                    }
+                    title={selectedEvent.title}
+                    location={selectedEvent.addr}
+                    date={formatDateRange(
+                      selectedEvent.event_st,
+                      selectedEvent.event_ed
+                    )}
+                    onClick={handleEventCardClick}
+                  />
+                </BottomSheetContent>
+              </BottomSheet>
+            )}
+          </AnimatePresence>
         </>
       )}
       <style jsx global>{`
@@ -246,40 +326,98 @@ const LoadingMessage = styled.div`
   font-size: 16px;
 `;
 
-const MobileEventCard = styled.div`
+const BottomSheet = styled(motion.div)`
   position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90%;
-  max-width: 320px;
+  bottom: 0;
+  left: 0;
+  width: 100%;
   background-color: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-  padding: 16px;
-  z-index: 1000;
+  border-radius: 20px 20px 0 0;
+  padding: 8px 20px 20px;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 20px);
+  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+  height: auto;
+  overflow: hidden;
+  z-index: 100;
 `;
 
-const CloseButton = styled.button`
-  position: absolute;
-  top: 8px;
-  right: 8px;
+const BottomSheetHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+`;
+
+const BottomSheetContent = styled.div`
+  width: 100%;
+`;
+
+const CloseButton = styled(motion.button)`
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background-color: rgba(0, 0, 0, 0.1);
-  color: #333;
-  font-size: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
   border: none;
   cursor: pointer;
-  z-index: 1001;
+`;
 
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.2);
-  }
+// 이벤트 카드 스타일 컴포넌트
+const EventCardContainer = styled.div`
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  overflow: hidden;
+`;
+
+const EventImageWrapper = styled.div`
+  width: 112px;
+  height: 154px;
+  flex-shrink: 0;
+  overflow: hidden;
+`;
+
+const EventImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`;
+
+const EventInfo = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`;
+
+const EventTitle = styled.h4`
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: #191919;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+const EventLocation = styled.span`
+  font-size: 14px;
+  line-height: 1.2;
+  color: #191919;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+const EventDate = styled.span`
+  font-size: 12px;
+  color: #999999;
+  font-weight: 400;
 `;
 
 export default NearEventsMap;
