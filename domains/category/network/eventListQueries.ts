@@ -30,7 +30,7 @@ export const useFetchNearEventListQuery = (
           params: {
             currentLat: params.mapY,
             currentLng: params.mapX,
-            distance: 5000 // NOTE: 반경 5KM 이내
+            distance: 20000 // NOTE: 반경 20KM 이내
           } as NearEventListRequestDto
         }
       );
