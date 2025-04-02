@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import styled from '@emotion/styled';
 import {
@@ -11,6 +11,7 @@ const CategoryMenu = () => {
   const [, setMenuEl] = useState<HTMLDivElement | null>(null);
 
   const { push } = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const categoryCode = searchParams.get('category') as CategoryCodeType;
 
@@ -38,6 +39,10 @@ const CategoryMenu = () => {
     push(`/category?category=${categoryCode}&${buildSearchParams()}`);
   };
 
+  const handleCommunityClick = () => {
+    push('/community');
+  };
+
   return (
     <MenuContainer>
       {categories.map(category => (
@@ -53,6 +58,17 @@ const CategoryMenu = () => {
           </MenuItem>
         </MenuItemWrapper>
       ))}
+      <MenuItemWrapper ref={setMenuEl}>
+        <MenuItem
+          as="button"
+          $isActive={pathname.includes('community')}
+          onClick={handleCommunityClick}
+        >
+          <MenuName $isActive={pathname.includes('community')}>
+            커뮤니티
+          </MenuName>
+        </MenuItem>
+      </MenuItemWrapper>
     </MenuContainer>
   );
 };
