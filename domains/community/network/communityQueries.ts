@@ -55,7 +55,7 @@ export const useFetchPostDetailQuery = (
     queryKey: communityQueryKeys.postDetail({ postId }),
     queryFn: async () => {
       const data = await communityApi.get<PostDetailResponseDto>(
-        `/community/posts/${postId}`
+        `/posts/${postId}`
       );
       return data;
     },

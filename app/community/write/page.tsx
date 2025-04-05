@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import styled from '@emotion/styled';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useCreatePostMutation } from '@domains/community/network/communityMutations';
@@ -21,6 +21,8 @@ const postSchema = yup.object({
     .max(100, '최대 100자까지 입력 가능합니다'),
   content: yup.string().required('내용을 입력해주세요')
 });
+
+type PostFormData = yup.InferType<typeof postSchema>;
 
 // 태그 추출 정규식
 const TAG_REGEX = /#[^\s#]+/g;
@@ -57,10 +59,10 @@ export default function CommunityWritePage() {
     handleSubmit,
     setValue,
     formState: { errors }
-  } = useForm({
+  } = useForm<PostFormData>({
     resolver: yupResolver(postSchema),
     defaultValues: {
-      boardIdx: 1, // 기본 게시판 ID (필요에 따라 변경)
+      boardIdx: 1, // TODO: 기본 게시판 ID (필요에 따라 변경)
       title: '',
       content: ''
     }
@@ -157,7 +159,7 @@ export default function CommunityWritePage() {
     });
   };
 
-  const onSubmit = async (data: any) => {
+  const onSubmit: SubmitHandler<PostFormData> = async data => {
     try {
       setIsSubmitting(true);
 
@@ -194,8 +196,8 @@ export default function CommunityWritePage() {
       // 미리보기 URL 메모리 해제
       imagePreviewList.forEach(item => URL.revokeObjectURL(item.previewUrl));
 
-      //   alert('게시글이 등록되었습니다.');
-      //   router.push('/community');
+      alert('게시글이 등록되었습니다.');
+      router.push('/community');
     } catch (error) {
       console.error('게시글 등록 오류:', error);
       alert('게시글 등록에 실패했습니다. 다시 시도해주세요.');

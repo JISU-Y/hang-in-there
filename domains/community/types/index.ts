@@ -3,13 +3,28 @@ import {
   ApiPaginationDataResponseType
 } from '@domains/common/types/utilType';
 
-export interface CommunityPostType {
+export interface PostListType {
   createId: string;
   createDt: string;
   updateDt: string;
   idx: string;
   boardIdx: number;
   title: string;
+  like: number;
+  viewCount: number;
+  tags: string[];
+  images: string[];
+  useYn: string;
+}
+
+export interface PostDetailType {
+  createId: string;
+  createDt: string;
+  updateDt: string;
+  idx: string;
+  boardIdx: number;
+  title: string;
+  content: string;
   like: number;
   viewCount: number;
   tags: string[];
@@ -33,11 +48,9 @@ export interface UpdatePostRequestDto {
   images: string[];
 }
 
-export type PostListResponseDto = ApiPaginationDataResponseType<
-  CommunityPostType[]
->;
+export type PostListResponseDto = ApiPaginationDataResponseType<PostListType[]>;
 
-export type PostDetailResponseDto = ApiDataResponseTypeNew<CommunityPostType>;
+export type PostDetailResponseDto = ApiDataResponseTypeNew<PostDetailType>;
 
 export interface PostListRequestDto {
   page: number;

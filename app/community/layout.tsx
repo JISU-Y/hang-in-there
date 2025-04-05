@@ -36,5 +36,4 @@ const LoadingContainer = styled.div`
   justify-content: center;
   align-items: center;
 `;
-
 export default CommunityLayout;
