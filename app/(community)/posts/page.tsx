@@ -173,7 +173,7 @@ export default function CommunityPage() {
 
       <HeaderContainer>
         <ListTitle>게시글 목록</ListTitle>
-        <WriteButton href="/community/write">글쓰기</WriteButton>
+        <WriteButton href="/post">글쓰기</WriteButton>
       </HeaderContainer>
 
       <PostListContainer ref={postListRef}>
