@@ -169,9 +169,12 @@ const BannerLink = styled(Link)`
 
 const PageContainer = styled.div<{ hasMaxWidth?: boolean }>`
   position: relative;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100%;
   max-width: ${({ hasMaxWidth }) => (hasMaxWidth ? '1120px' : 'unset')};
+  min-height: 100vh;
   margin: auto;
 `;
 
@@ -180,6 +183,7 @@ const NavbarContainer = styled.header`
   flex-direction: column;
   gap: 24px;
   width: 100%;
+  height: fit-content;
   padding: 38px 32px 0;
 
   @media (max-width: 768px) {
@@ -244,6 +248,7 @@ const Footer = styled.footer`
   justify-content: space-between;
   padding: 56px 42px;
   background-color: #ededed;
+  margin-top: auto;
 
   @media (max-width: 768px) {
     flex-direction: column;

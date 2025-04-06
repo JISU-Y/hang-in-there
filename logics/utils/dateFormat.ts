@@ -94,15 +94,15 @@ const formatDiffDate = (date: string) => {
   const diffInMonths = Math.floor(diffInDays / 30);
 
   if (diffInMinutes < 1) {
-    return 'just now';
+    return '방금 전';
   } else if (diffInMinutes < 60) {
-    return `${diffInMinutes} minute${diffInMinutes > 1 ? 's' : ''} ago`;
+    return `${diffInMinutes}분 전`;
   } else if (diffInHours < 24) {
-    return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
+    return `${diffInHours}시간 전`;
   } else if (diffInDays <= 31) {
-    return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
+    return `${diffInDays}일 전`;
   } else if (diffInMonths < 12) {
-    return `${diffInMonths} month${diffInMonths > 1 ? 's' : ''} ago`;
+    return `${diffInMonths}달 전`;
   }
 
   return formatDate({
@@ -144,6 +144,16 @@ const parseDate = (dateStr?: string) => {
   return dateStr;
 };
 
+const ignoreTimezone = (date: string) => {
+  return date.replace('Z', '');
+};
+
 export type { FormatOptions };
 
-export { DATE_FORMAT_TYPE, formatDate, formatDiffDate, parseDate };
+export {
+  DATE_FORMAT_TYPE,
+  formatDate,
+  formatDiffDate,
+  parseDate,
+  ignoreTimezone
+};
