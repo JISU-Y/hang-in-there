@@ -15,10 +15,6 @@ import {
   Box,
   Text,
   IconButton,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
   Divider,
   Spinner
 } from '@chakra-ui/react';
@@ -29,6 +25,8 @@ import 'slick-carousel/slick/slick-theme.css';
 import { useFetchPostDetailQuery } from '../network/communityQueries';
 import { formatISO } from 'date-fns';
 import { formatDate, ignoreTimezone } from '@logics/utils/dateFormat';
+import PostMenuOptions from '../components/PostMenuOptions';
+import ShareButton from '../components/ShareButton';
 
 interface PostDetailModalProps {
   postId: string;
@@ -128,58 +126,12 @@ const PostDetailModal = ({
                 </Flex>
 
                 <Flex>
-                  <IconButton
-                    aria-label="공유하기"
-                    icon={
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
-                        <polyline points="16 6 12 2 8 6"></polyline>
-                        <line x1="12" y1="2" x2="12" y2="15"></line>
-                      </svg>
-                    }
-                    variant="ghost"
-                    mr={2}
+                  <ShareButton postId={postId} />
+                  <PostMenuOptions
+                    postId={postId}
+                    postAuthorId={data?.createId}
+                    onClose={handleClose}
                   />
-
-                  <Menu>
-                    <MenuButton
-                      as={IconButton}
-                      aria-label="더보기"
-                      icon={
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="20"
-                          height="20"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <circle cx="12" cy="12" r="1"></circle>
-                          <circle cx="12" cy="5" r="1"></circle>
-                          <circle cx="12" cy="19" r="1"></circle>
-                        </svg>
-                      }
-                      variant="ghost"
-                    />
-                    <MenuList>
-                      <MenuItem>수정하기</MenuItem>
-                      <MenuItem>삭제하기</MenuItem>
-                      <MenuItem>신고하기</MenuItem>
-                    </MenuList>
-                  </Menu>
                 </Flex>
               </Flex>
 
