@@ -50,7 +50,7 @@ export interface UpdatePostRequestDto {
 
 export type PostListResponseDto = ApiPaginationDataResponseType<PostListType[]>;
 
-export type PostDetailResponseDto = ApiDataResponseTypeNew<PostDetailType>;
+export type PostDetailResponseDto = ApiDataResponseTypeNew<PostDetailType[]>;
 
 export interface PostListRequestDto {
   page: number;

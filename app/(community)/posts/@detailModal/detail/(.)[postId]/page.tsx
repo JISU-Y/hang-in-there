@@ -19,7 +19,7 @@ const CommunityDetailPageSlotInterceptor = ({
 
   return (
     <Suspense fallback={<div>로딩 중...</div>}>
-      <PostDetailModal postId={postId} isOpen={true} onClose={() => {}} />
+      <PostDetailModal postId={postId} isOpen={true} />
     </Suspense>
   );
 };

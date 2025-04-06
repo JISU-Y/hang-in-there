@@ -183,7 +183,7 @@ export default function CommunityPage() {
           </LoadingWrapper>
         ) : posts.length > 0 ? (
           posts.map(post => (
-            <PostItem key={post.idx} href={`/posts/${post.idx}`}>
+            <PostItem key={post.idx} href={`/posts/detail/${post.idx}`}>
               <PostHeader>
                 <PostTitle>{post.title}</PostTitle>
                 {post.images && post.images.length > 0 && (

@@ -6,15 +6,17 @@ import PageLayout from '@domains/common/layouts/PageLayout';
 
 interface CommunityLayoutProps {
   children: React.ReactNode;
+  detailModal: React.ReactNode;
 }
 
-const CommunityLayout = ({ children }: CommunityLayoutProps) => {
+const CommunityLayout = ({ children, detailModal }: CommunityLayoutProps) => {
   return (
     <PageLayout>
       <CommunityContainer>
         <Suspense fallback={<LoadingContainer>로딩 중...</LoadingContainer>}>
           {children}
         </Suspense>
+        {detailModal}
       </CommunityContainer>
     </PageLayout>
   );
@@ -27,6 +29,7 @@ const CommunityContainer = styled.main`
   max-width: 1000px;
   margin: 0 auto;
   padding: 0 20px;
+  position: relative;
 `;
 
 const LoadingContainer = styled.div`

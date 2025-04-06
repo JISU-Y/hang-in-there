@@ -50,7 +50,7 @@ export const useFetchPostDetailQuery = (
   return useQuery<
     PostDetailResponseDto,
     unknown,
-    PostDetailResponseDto['data']
+    PostDetailResponseDto['data'][0]
   >({
     queryKey: communityQueryKeys.postDetail({ postId }),
     queryFn: async () => {
@@ -60,7 +60,7 @@ export const useFetchPostDetailQuery = (
       return data;
     },
     ...options,
-    select: ({ data }) => data
+    select: ({ data }) => data[0]
   });
 };
 

@@ -144,6 +144,16 @@ const parseDate = (dateStr?: string) => {
   return dateStr;
 };
 
+const ignoreTimezone = (date: string) => {
+  return date.replace('Z', '');
+};
+
 export type { FormatOptions };
 
-export { DATE_FORMAT_TYPE, formatDate, formatDiffDate, parseDate };
+export {
+  DATE_FORMAT_TYPE,
+  formatDate,
+  formatDiffDate,
+  parseDate,
+  ignoreTimezone
+};
