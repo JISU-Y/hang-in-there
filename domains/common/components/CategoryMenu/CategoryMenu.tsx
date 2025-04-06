@@ -40,7 +40,7 @@ const CategoryMenu = () => {
   };
 
   const handleCommunityClick = () => {
-    push('/community');
+    push('/posts');
   };
 
   return (

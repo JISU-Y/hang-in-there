@@ -197,7 +197,7 @@ export default function CommunityWritePage() {
       imagePreviewList.forEach(item => URL.revokeObjectURL(item.previewUrl));
 
       alert('게시글이 등록되었습니다.');
-      router.push('/community');
+      router.push('/posts');
     } catch (error) {
       console.error('게시글 등록 오류:', error);
       alert('게시글 등록에 실패했습니다. 다시 시도해주세요.');
@@ -307,7 +307,7 @@ export default function CommunityWritePage() {
           </FormGroup>
 
           <FormActions>
-            <CancelButton href="/community">취소</CancelButton>
+            <CancelButton href="/posts">취소</CancelButton>
             <SubmitButton type="submit" disabled={isPending || isSubmitting}>
               {isSubmitting
                 ? '등록 중...'
