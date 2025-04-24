@@ -18,7 +18,7 @@ export const usePostActions = ({
   onClose
 }: UsePostActionsProps) => {
   const router = useRouter();
-  const { isUserLoggedIn } = useAuthSession();
+  const { isUserLoggedIn, guardRoute } = useAuthSession();
   const { data: userProfile } = useFetchUserProfileQuery({
     enabled: isUserLoggedIn
   });
@@ -47,16 +47,20 @@ export const usePostActions = ({
     }
   }, [isAuthor, postId, router, onClose]);
 
-  const handleReport = useCallback(() => {
-    if (!isUserLoggedIn) {
-      alert('신고하기 기능은 로그인 후 이용 가능합니다.');
-      return;
-    }
-
-    // TODO: 신고 로직 (구현 필요)
-    console.log('게시글 신고:', postId);
-    alert('신고가 접수되었습니다.');
-  }, [isUserLoggedIn, postId]);
+  const handleReport = () =>
+    guardRoute(
+      () => {
+        // TODO: 신고 로직 (구현 필요)
+        console.log('게시글 신고:', postId);
+        alert('신고가 접수되었습니다.');
+      },
+      {
+        onReject: () => {
+          alert('로그인이 필요한 기능입니다. 로그인 후 이용해주세요!');
+          router.push('/login');
+        }
+      }
+    );
 
   return {
     isUserLoggedIn,

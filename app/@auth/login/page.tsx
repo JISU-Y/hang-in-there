@@ -1,5 +1,7 @@
-import Image from 'next/image';
+'use client';
 
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import {
   Modal,
   ModalBody,
@@ -9,18 +11,18 @@ import {
   ModalOverlay
 } from '@chakra-ui/react';
 import styled from '@emotion/styled';
-import { setRedirectPath } from '../utils/authTokenHandler';
+import { setRedirectPath } from '@domains/auth/utils/authTokenHandler';
 
-interface LoginModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+export default function LoginModal() {
+  const router = useRouter();
 
-const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
   const kakaoLoginHandler = () => {
     if (!window.Kakao) return;
 
-    setRedirectPath(`${window.location.pathname}${window.location.search}`);
+    // 현재 페이지의 경로를 저장해둡니다 (로그인 후 돌아오기 위함)
+    setRedirectPath(
+      `${window.location.pathname.replace('/login', '')}${window.location.search}`
+    );
 
     window.Kakao.Auth.authorize({
       redirectUri: `${process.env.NEXT_PUBLIC_HANGINTHERE_API_END_POINT}/v1/user/kakao-login`,
@@ -28,18 +30,22 @@ const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
     });
   };
 
+  const handleClose = () => {
+    router.back();
+  };
+
   return (
     <Modal
       size="sm"
       scrollBehavior="inside"
-      onClose={onClose}
-      isOpen={isOpen}
+      onClose={handleClose}
+      isOpen={true}
       isCentered
     >
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
-          <ModalCloseButton />
+          <ModalCloseButton color="black" />
         </ModalHeader>
 
         <StyledModalBody>
@@ -62,7 +68,7 @@ const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
       </ModalContent>
     </Modal>
   );
-};
+}
 
 const StyledModalBody = styled(ModalBody)`
   display: flex;
@@ -94,5 +100,3 @@ const KakaoIcon = styled(Image)`
   height: 100%;
   object-fit: contain;
 `;
-
-export default LoginModal;
