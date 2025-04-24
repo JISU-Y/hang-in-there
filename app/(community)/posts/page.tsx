@@ -10,8 +10,15 @@ import {
 } from '@domains/community/network/communityQueries';
 import useDebounceValue from '@logics/hooks/useDebounceValue';
 import { formatDiffDate } from '@logics/utils/dateFormat';
+import { useRouter } from 'next/navigation';
+import { useAuthSession } from '@domains/auth/hooks/useAuthSession';
+import { useDisclosure } from '@chakra-ui/react';
 
 export default function CommunityPage() {
+  const { push } = useRouter();
+
+  const { guardRoute } = useAuthSession();
+
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [isSearchInputVisible, setIsSearchInputVisible] = useState(false);
   const [tagSearchWord, setTagSearchWord] = useState('');
@@ -20,6 +27,8 @@ export default function CommunityPage() {
   const observerRef = useRef<IntersectionObserver | null>(null);
   const loaderRef = useRef<HTMLDivElement | null>(null);
   const postListRef = useRef<HTMLDivElement>(null);
+
+  const { isOpen, onOpen: handleLoginButtonClick, onClose } = useDisclosure();
 
   const tagsParam =
     selectedTags.length > 0 ? selectedTags.join(',') : undefined;
@@ -61,6 +70,21 @@ export default function CommunityPage() {
   // 검색어 입력 처리
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTagSearchWord(e.target.value);
+  };
+
+  const handleWriteButtonClick = () => {
+    guardRoute(
+      () => {
+        console.log('로그인 후 이동');
+        push('/post');
+      },
+      {
+        onReject: () => {
+          alert('로그인이 필요한 기능입니다. 로그인 후 이용해주세요!');
+          push('/login');
+        }
+      }
+    );
   };
 
   // 검색어 입력 시 외부 클릭 감지
@@ -119,107 +143,111 @@ export default function CommunityPage() {
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   return (
-    <Container>
-      {postTags && (
-        <TagsContainer>
-          <SearchIconWrapper
-            className="search-icon"
-            onClick={handleSearchIconClick}
-            isActive={isSearchInputVisible}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+    <>
+      <Container>
+        {postTags && (
+          <TagsContainer>
+            <SearchIconWrapper
+              className="search-icon"
+              onClick={handleSearchIconClick}
+              isActive={isSearchInputVisible}
             >
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-          </SearchIconWrapper>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </SearchIconWrapper>
 
-          <SearchInputWrapper isVisible={isSearchInputVisible}>
-            <SearchInput
-              ref={inputRef}
-              type="text"
-              placeholder="태그 검색..."
-              value={tagSearchWord}
-              onChange={handleSearchInputChange}
-            />
-          </SearchInputWrapper>
+            <SearchInputWrapper isVisible={isSearchInputVisible}>
+              <SearchInput
+                ref={inputRef}
+                type="text"
+                placeholder="태그 검색..."
+                value={tagSearchWord}
+                onChange={handleSearchInputChange}
+              />
+            </SearchInputWrapper>
 
-          <TagChipList isSearchVisible={isSearchInputVisible}>
-            {postTags.length > 0 ? (
-              postTags.map((tag, index) => (
-                <TagChip
-                  key={index}
-                  onClick={() => handleTagClick(tag.name)}
-                  isSelected={selectedTags.includes(tag.name)}
-                >
-                  #{tag.name}
-                </TagChip>
-              ))
-            ) : (
-              <EmptyTagsMessage>검색 결과가 없습니다</EmptyTagsMessage>
-            )}
-          </TagChipList>
-        </TagsContainer>
-      )}
-
-      <HeaderContainer>
-        <ListTitle>게시글 목록</ListTitle>
-        <WriteButton href="/post">글쓰기</WriteButton>
-      </HeaderContainer>
-
-      <PostListContainer ref={postListRef}>
-        {isLoading ? (
-          <LoadingWrapper>
-            <LoadingText>게시글을 불러오는 중입니다...</LoadingText>
-          </LoadingWrapper>
-        ) : posts.length > 0 ? (
-          posts.map(post => (
-            <PostItem key={post.idx} href={`/posts/detail/${post.idx}`}>
-              <PostHeader>
-                <PostTitle>{post.title}</PostTitle>
-                {post.images && post.images.length > 0 && (
-                  <PostImage>
-                    <Image
-                      src={post.images[0]}
-                      alt={post.title}
-                      width={74}
-                      height={74}
-                      style={{ objectFit: 'cover' }}
-                    />
-                  </PostImage>
-                )}
-              </PostHeader>
-              <PostFooter>
-                <PostInfoItem>{post.createId}</PostInfoItem>
-                <PostInfoItem>{formatDiffDate(post.createDt)}</PostInfoItem>
-                <PostInfoItem>조회 {post.viewCount || 0}</PostInfoItem>
-                <PostInfoItem>좋아요 {post.like}</PostInfoItem>
-              </PostFooter>
-            </PostItem>
-          ))
-        ) : (
-          <EmptyState>
-            <EmptyText>게시글이 없습니다.</EmptyText>
-          </EmptyState>
+            <TagChipList isSearchVisible={isSearchInputVisible}>
+              {postTags.length > 0 ? (
+                postTags.map((tag, index) => (
+                  <TagChip
+                    key={index}
+                    onClick={() => handleTagClick(tag.name)}
+                    isSelected={selectedTags.includes(tag.name)}
+                  >
+                    #{tag.name}
+                  </TagChip>
+                ))
+              ) : (
+                <EmptyTagsMessage>검색 결과가 없습니다</EmptyTagsMessage>
+              )}
+            </TagChipList>
+          </TagsContainer>
         )}
 
-        {/* 무한 스크롤을 위한 로더 요소 */}
-        {(hasNextPage || isFetchingNextPage) && (
-          <LoaderElement ref={loaderRef}>
-            {isFetchingNextPage && <LoadingDots>로딩 중...</LoadingDots>}
-          </LoaderElement>
-        )}
-      </PostListContainer>
-    </Container>
+        <HeaderContainer>
+          <ListTitle>게시글 목록</ListTitle>
+          <WriteButton type="button" onClick={handleWriteButtonClick}>
+            글쓰기
+          </WriteButton>
+        </HeaderContainer>
+
+        <PostListContainer ref={postListRef}>
+          {isLoading ? (
+            <LoadingWrapper>
+              <LoadingText>게시글을 불러오는 중입니다...</LoadingText>
+            </LoadingWrapper>
+          ) : posts.length > 0 ? (
+            posts.map(post => (
+              <PostItem key={post.idx} href={`/posts/detail/${post.idx}`}>
+                <PostHeader>
+                  <PostTitle>{post.title}</PostTitle>
+                  {post.images && post.images.length > 0 && (
+                    <PostImage>
+                      <Image
+                        src={post.images[0]}
+                        alt={post.title}
+                        width={74}
+                        height={74}
+                        style={{ objectFit: 'cover' }}
+                      />
+                    </PostImage>
+                  )}
+                </PostHeader>
+                <PostFooter>
+                  <PostInfoItem>{post.createId}</PostInfoItem>
+                  <PostInfoItem>{formatDiffDate(post.createDt)}</PostInfoItem>
+                  <PostInfoItem>조회 {post.viewCount || 0}</PostInfoItem>
+                  <PostInfoItem>좋아요 {post.like}</PostInfoItem>
+                </PostFooter>
+              </PostItem>
+            ))
+          ) : (
+            <EmptyState>
+              <EmptyText>게시글이 없습니다.</EmptyText>
+            </EmptyState>
+          )}
+
+          {/* 무한 스크롤을 위한 로더 요소 */}
+          {(hasNextPage || isFetchingNextPage) && (
+            <LoaderElement ref={loaderRef}>
+              {isFetchingNextPage && <LoadingDots>로딩 중...</LoadingDots>}
+            </LoaderElement>
+          )}
+        </PostListContainer>
+      </Container>
+    </>
   );
 }
 
@@ -370,7 +398,7 @@ const ListTitle = styled.h2`
   font-weight: 600;
 `;
 
-const WriteButton = styled(Link)`
+const WriteButton = styled.button`
   padding: 10px 16px;
   background-color: #3182ce;
   color: white;

@@ -17,16 +17,16 @@ export const useAuthSession = () => {
   };
 
   const guardRoute = useCallback(
-    (callback: () => void) => {
+    (callback: () => void, { onReject }: { onReject?: () => void } = {}) => {
       if (!token) {
-        push('/');
+        onReject?.();
 
         return;
       }
 
       callback();
     },
-    [push, token]
+    [token]
   );
 
   useEffect(() => {

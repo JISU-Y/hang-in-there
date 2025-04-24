@@ -1,18 +1,10 @@
 import styled from '@emotion/styled';
-import {
-  Avatar,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  useDisclosure
-} from '@chakra-ui/react';
+import { Avatar, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import {
   useFetchUserProfileQuery,
   useFetchUserUnlinkQuery
 } from '@domains/auth/network/authQueries';
 import { useAuthSession } from '@domains/auth/hooks/useAuthSession';
-import LoginModal from '@domains/auth/modal/LoginModal';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import { useRouter } from 'next/navigation';
 
@@ -20,8 +12,6 @@ const AuthMenu = () => {
   const { push } = useRouter();
 
   const { isUserLoggedIn, logout } = useAuthSession();
-
-  const { isOpen, onOpen: handleLoginButtonClick, onClose } = useDisclosure();
 
   const { data: userProfile } = useFetchUserProfileQuery({
     enabled: isUserLoggedIn
@@ -34,41 +24,41 @@ const AuthMenu = () => {
     push('/myPage');
   };
 
+  const handleLoginButtonClick = () => {
+    push('/login');
+  };
+
   return (
-    <>
-      <Container>
-        {isUserLoggedIn && userProfile ? (
-          <MenuBox autoSelect={false}>
-            <UserMy>
+    <Container>
+      {isUserLoggedIn && userProfile ? (
+        <MenuBox autoSelect={false}>
+          <UserMy>
+            <Avatar
+              size="sm"
+              name={userProfile.nickname || 'Name'}
+              src={userProfile.img || ''}
+            />
+          </UserMy>
+          <MenuList>
+            <UserMenuMyPage onClick={handleClickMyPageMenu}>
               <Avatar
                 size="sm"
                 name={userProfile.nickname || 'Name'}
                 src={userProfile.img || ''}
               />
-            </UserMy>
-            <MenuList>
-              <UserMenuMyPage onClick={handleClickMyPageMenu}>
-                <Avatar
-                  size="sm"
-                  name={userProfile.nickname || 'Name'}
-                  src={userProfile.img || ''}
-                />
-                <UserName>{userProfile.nickname || 'Name'}</UserName>
-                <ChevronRightIcon w={6} h={6} />
-              </UserMenuMyPage>
-              <LogoutButton onClick={logout}>로그아웃</LogoutButton>
-              <UnlinkButton onClick={() => withdraw()}>회원탈퇴</UnlinkButton>
-            </MenuList>
-          </MenuBox>
-        ) : (
-          <LoginButton type="button" onClick={handleLoginButtonClick}>
-            로그인
-          </LoginButton>
-        )}
-      </Container>
-
-      <LoginModal isOpen={isOpen} onClose={onClose} />
-    </>
+              <UserName>{userProfile.nickname || 'Name'}</UserName>
+              <ChevronRightIcon w={6} h={6} />
+            </UserMenuMyPage>
+            <LogoutButton onClick={logout}>로그아웃</LogoutButton>
+            <UnlinkButton onClick={() => withdraw()}>회원탈퇴</UnlinkButton>
+          </MenuList>
+        </MenuBox>
+      ) : (
+        <LoginButton type="button" onClick={handleLoginButtonClick}>
+          로그인
+        </LoginButton>
+      )}
+    </Container>
   );
 };
 
