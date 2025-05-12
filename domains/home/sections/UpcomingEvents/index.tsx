@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 
 import styled from '@emotion/styled';
 import { ChevronRightIcon, ChevronLeftIcon } from '@chakra-ui/icons';
@@ -11,7 +10,6 @@ import { useFetchUpcomingEventListQuery } from '../../network/homeQueries';
 
 const UpcomingEvents = () => {
   const [pageNo, setPageNo] = useState(1);
-  const router = useRouter();
 
   const {
     data: eventData,
@@ -24,6 +22,44 @@ const UpcomingEvents = () => {
 
   if (isLoading) return <div>로딩 중...</div>;
   if (isError) return <div>오류가 발생했습니다.</div>;
+
+  const getPaginationRange = () => {
+    if (!eventData?.pageInfo.totalPage) return [];
+
+    const totalPage = eventData.pageInfo.totalPage;
+    const visiblePageCount = 5; // NOTE: 현재 페이지 + 양쪽 2개씩
+
+    let startPage = Math.max(1, pageNo - 2);
+    let endPage = Math.min(totalPage, pageNo + 2);
+
+    if (endPage - startPage + 1 < visiblePageCount) {
+      if (startPage === 1) {
+        endPage = Math.min(visiblePageCount, totalPage);
+      } else if (endPage === totalPage) {
+        startPage = Math.max(1, totalPage - visiblePageCount + 1);
+      }
+    }
+
+    const range = [];
+
+    if (startPage > 1) {
+      range.push(1);
+      if (startPage > 2) range.push('ellipsis_start');
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      range.push(i);
+    }
+
+    if (endPage < totalPage) {
+      if (endPage < totalPage - 1) range.push('ellipsis_end');
+      range.push(totalPage);
+    }
+
+    return range;
+  };
+
+  const paginationRange = getPaginationRange();
 
   return (
     <Container>
@@ -46,19 +82,22 @@ const UpcomingEvents = () => {
             color={pageNo === 1 ? '#8B8B8B' : '#000000'}
           />
         </ArrowButton>
-        {new Array(eventData?.pageInfo.totalPage)
-          .fill(0)
-          .map((_, i) => i + 1)
-          .map(el => (
+
+        {paginationRange.map((page, index) =>
+          typeof page === 'number' ? (
             <PageButton
-              key={el}
+              key={`page-${page}`}
               type="button"
-              $isActive={el === pageNo}
-              onClick={() => setPageNo(el)}
+              $isActive={page === pageNo}
+              onClick={() => setPageNo(page)}
             >
-              {el}
+              {page}
             </PageButton>
-          ))}
+          ) : (
+            <EllipsisSpan key={`${page}-${index}`}>...</EllipsisSpan>
+          )
+        )}
+
         <ArrowButton
           type="button"
           disabled={eventData?.pageInfo.totalPage === pageNo}
@@ -132,7 +171,9 @@ const CardListWrapper = styled.div`
 const PaginationWrapper = styled.div`
   margin: 56px auto;
   width: fit-content;
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 `;
 
 const PageButton = styled.button<{ $isActive?: boolean }>`
@@ -157,6 +198,16 @@ const ArrowButton = styled(PageButton)`
   &:disabled {
     pointer-events: none;
   }
+`;
+
+const EllipsisSpan = styled.span`
+  font-size: 16px;
+  line-height: 24px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export default UpcomingEvents;
