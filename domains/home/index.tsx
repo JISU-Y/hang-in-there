@@ -34,7 +34,7 @@ export default async function HomePage() {
         }}
       >
         <Collections />
-        <section
+        <div
           style={{
             width: '100%',
             maxWidth: '1127px',
@@ -43,7 +43,7 @@ export default async function HomePage() {
         >
           <OngoingEvents />
           <UpcomingEvents />
-        </section>
+        </div>
       </div>
     </Hydrate>
   );
