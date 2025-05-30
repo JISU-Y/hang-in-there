@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useRef } from 'react';
 import Image from 'next/image';
 import {
@@ -40,6 +40,7 @@ const PostDetailModal = ({
   postId
 }: PostDetailModalProps) => {
   const router = useRouter();
+  const pathname = usePathname();
   const sliderRef = useRef<Slider>(null);
   const { isOpen } = useDisclosure({
     isOpen: propIsOpen,
@@ -52,7 +53,12 @@ const PostDetailModal = ({
     if (propOnClose) {
       propOnClose();
     } else {
-      router.back();
+      // NOTE: 현재 경로가 /posts/detail/[id] 형태의 직접 접근의 경우
+      if (pathname.includes('/posts/detail/')) {
+        router.push('/posts');
+      } else {
+        router.back();
+      }
     }
   };
 
