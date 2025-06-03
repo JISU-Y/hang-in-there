@@ -220,7 +220,11 @@ export default function CommunityPage() {
                         alt={post.title}
                         width={74}
                         height={74}
-                        style={{ objectFit: 'cover' }}
+                        style={{
+                          objectFit: 'cover',
+                          width: '100%',
+                          height: '100%'
+                        }}
                       />
                     </PostImage>
                   )}
