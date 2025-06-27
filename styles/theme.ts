@@ -32,6 +32,7 @@ export const lightTheme = {
   danger: '#FA5252', // 위험/에러 상태
   warning: '#FAB005', // 경고 상태
   info: '#1C7ED6',     // 정보 상태
+  white: '#FFFFFF', // 흰색 추가
 };
 
 export const darkTheme = {
@@ -68,6 +69,7 @@ export const darkTheme = {
   danger: '#FF6B6B', // 위험/에러 상태 (다크모드)
   warning: '#FFC078', // 경고 상태 (다크모ode)
   info: '#4DABF7',     // 정보 상태 (다크모드)
+  white: '#FFFFFF', // 흰색 추가 (다크모드에서도 흰색 텍스트가 필요할 수 있음)
 };
 
 export type Theme = typeof lightTheme;

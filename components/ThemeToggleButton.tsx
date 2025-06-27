@@ -1,11 +1,10 @@
 'use client';
 
-import { useThemeStore } from '@/store/themeStore';
+import { useTheme } from '@/contexts/ThemeContext'; // Context 사용
 import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
 
-// 아이콘은 예시이며, 실제 프로젝트에 맞는 아이콘으로 교체해야 합니다.
-// 또는 CSS로 아이콘을 직접 만들거나, 라이브러리 (e.g., react-icons)를 사용할 수 있습니다.
+// 아이콘 SVG 정의 (이전과 동일)
 const SunIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="12" cy="12" r="5"></circle>
@@ -35,20 +34,20 @@ const ToggleButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${(props: any) => props.theme.text}; // 테마에 따라 아이콘 색상 변경
+  color: ${(props: any) => props.theme.text};
 
   &:hover {
-    background-color: ${(props: any) => props.theme.gray200}; // 테마에 따라 호버 배경색 변경
+    background-color: ${(props: any) => props.theme.gray200};
   }
 
   svg {
-    width: 20px; // 아이콘 크기 조절
-    height: 20px; // 아이콘 크기 조절
+    width: 20px;
+    height: 20px;
   }
 `;
 
 export default function ThemeToggleButton() {
-  const { theme, toggleTheme } = useThemeStore();
+  const { theme, toggleTheme } = useTheme(); // Context에서 테마 상태와 토글 함수 가져오기
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -56,7 +55,6 @@ export default function ThemeToggleButton() {
   }, []);
 
   if (!mounted) {
-    // SSR 시 버튼 렌더링을 피하거나, 기본 아이콘을 보여줄 수 있음
     return <div style={{ width: '36px', height: '36px' }} />; // Placeholder for SSR
   }
 

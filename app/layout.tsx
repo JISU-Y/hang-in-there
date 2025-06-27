@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
 import { Providers } from './providers';
-import CustomThemeProvider from '@/styles/CustomThemeProvider';
+import { CustomThemeProvider } from '@/contexts/ThemeContext'; // 경로 수정
 
 export const metadata: Metadata = {
   title: 'Hang-in-there 행인들',

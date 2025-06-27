@@ -139,14 +139,14 @@ const BannerLink = styled(Link)`
   gap: 16px;
   justify-content: center;
   align-items: center;
-  background-color: ${(props: any) => props.theme.accent}; // 테마 적용
+  background-color: ${(props: any) => props.theme.accent};
   padding: 4px 0;
 
   span {
     font-size: 20px;
     font-weight: 400;
     line-height: 36px;
-    color: ${(props: any) => props.theme.white || '#ffffff'}; // 테마에 white가 정의되어 있다면 사용
+    color: ${(props: any) => props.theme.white || '#ffffff'};
 
     @media (max-width: 768px) {
       font-size: 16px;
@@ -156,7 +156,7 @@ const BannerLink = styled(Link)`
 
   strong {
     font-weight: 600;
-    color: ${(props: any) => props.theme.white || '#ffffff'}; // 테마에 white가 정의되어 있다면 사용
+    color: ${(props: any) => props.theme.white || '#ffffff'};
   }
 
   img {
@@ -178,8 +178,8 @@ const PageContainer = styled.div<{ hasMaxWidth?: boolean }>`
   max-width: ${({ hasMaxWidth }) => (hasMaxWidth ? '1120px' : 'unset')};
   min-height: 100vh;
   margin: auto;
-  background-color: ${(props: any) => props.theme.background}; // 테마 적용
-  color: ${(props: any) => props.theme.text}; // 테마 적용
+  background-color: ${(props: any) => props.theme.background};
+  color: ${(props: any) => props.theme.text};
 `;
 
 const NavbarContainer = styled.header`
@@ -203,7 +203,7 @@ const Navbar = styled.nav`
   align-items: center;
   gap: 24px;
   width: 100%;
-  background-color: ${(props: any) => props.theme.background}; // 테마 적용
+  background-color: ${(props: any) => props.theme.background};
 
   & > a {
     flex-shrink: 0;
@@ -242,7 +242,7 @@ const ImageWrapper = styled(Image)`
 const Content = styled.section`
   width: 100%;
   height: 100%;
-  background-color: ${(props: any) => props.theme.background}; // 테마 적용
+  background-color: ${(props: any) => props.theme.background};
   margin: 0 auto;
 `;
 
@@ -251,8 +251,8 @@ const Footer = styled.footer`
   gap: 16px;
   justify-content: space-between;
   padding: 56px 42px;
-  background-color: ${(props: any) => props.theme.gray100}; // 테마 적용 (예: 밝은 회색 또는 어두운 배경의 경우 더 어두운 회색)
-  color: ${(props: any) => props.theme.subText}; // 테마 적용
+  background-color: ${(props: any) => props.theme.gray100};
+  color: ${(props: any) => props.theme.subText};
   margin-top: auto;
 
   @media (max-width: 768px) {
@@ -277,7 +277,7 @@ const CopyRightWrapper = styled.div`
     }
 
     & span {
-      color: ${(props: any) => props.theme.gray500}; // 테마 적용
+      color: ${(props: any) => props.theme.gray500};
       margin-right: 8px;
     }
   }
@@ -301,7 +301,7 @@ const ExternalLinksWrapper = styled.div`
     font-size: 16px;
     line-height: 24px;
     font-weight: 600;
-    color: ${(props: any) => props.theme.text}; // 테마 적용
+    color: ${(props: any) => props.theme.text};
   }
 
   @media (max-width: 768px) {
