@@ -7,6 +7,7 @@ import Image from 'next/image';
 import styled from '@emotion/styled';
 import { Collapse, useDisclosure } from '@chakra-ui/react';
 import AuthMenu from '@domains/auth/components/AuthMenu/AuthMenu';
+import ThemeToggleButton from '@/components/ThemeToggleButton'; // 테마 토글 버튼 import
 
 import CategoryMenu from '../components/CategoryMenu/CategoryMenu';
 import SearchBox from '../components/SearchBox/SearchBox';
@@ -79,6 +80,7 @@ export default function PageLayout({
               <MenuContainer>
                 <SearchBox />
                 <AuthMenu />
+                <ThemeToggleButton /> {/* 테마 토글 버튼 추가 */}
               </MenuContainer>
             </Navbar>
             {withCategoryMenu && (
@@ -137,14 +139,14 @@ const BannerLink = styled(Link)`
   gap: 16px;
   justify-content: center;
   align-items: center;
-  background-color: #ff6917;
+  background-color: ${(props: any) => props.theme.accent}; // 테마 적용
   padding: 4px 0;
 
   span {
     font-size: 20px;
     font-weight: 400;
     line-height: 36px;
-    color: #ffffff;
+    color: ${(props: any) => props.theme.white || '#ffffff'}; // 테마에 white가 정의되어 있다면 사용
 
     @media (max-width: 768px) {
       font-size: 16px;
@@ -154,7 +156,7 @@ const BannerLink = styled(Link)`
 
   strong {
     font-weight: 600;
-    color: #ffffff;
+    color: ${(props: any) => props.theme.white || '#ffffff'}; // 테마에 white가 정의되어 있다면 사용
   }
 
   img {
@@ -176,6 +178,8 @@ const PageContainer = styled.div<{ hasMaxWidth?: boolean }>`
   max-width: ${({ hasMaxWidth }) => (hasMaxWidth ? '1120px' : 'unset')};
   min-height: 100vh;
   margin: auto;
+  background-color: ${(props: any) => props.theme.background}; // 테마 적용
+  color: ${(props: any) => props.theme.text}; // 테마 적용
 `;
 
 const NavbarContainer = styled.header`
@@ -199,7 +203,7 @@ const Navbar = styled.nav`
   align-items: center;
   gap: 24px;
   width: 100%;
-  background-color: #ffffff;
+  background-color: ${(props: any) => props.theme.background}; // 테마 적용
 
   & > a {
     flex-shrink: 0;
@@ -238,7 +242,7 @@ const ImageWrapper = styled(Image)`
 const Content = styled.section`
   width: 100%;
   height: 100%;
-  background-color: #ffffff;
+  background-color: ${(props: any) => props.theme.background}; // 테마 적용
   margin: 0 auto;
 `;
 
@@ -247,7 +251,8 @@ const Footer = styled.footer`
   gap: 16px;
   justify-content: space-between;
   padding: 56px 42px;
-  background-color: #ededed;
+  background-color: ${(props: any) => props.theme.gray100}; // 테마 적용 (예: 밝은 회색 또는 어두운 배경의 경우 더 어두운 회색)
+  color: ${(props: any) => props.theme.subText}; // 테마 적용
   margin-top: auto;
 
   @media (max-width: 768px) {
@@ -272,7 +277,7 @@ const CopyRightWrapper = styled.div`
     }
 
     & span {
-      color: #8b8b8b;
+      color: ${(props: any) => props.theme.gray500}; // 테마 적용
       margin-right: 8px;
     }
   }
@@ -296,7 +301,7 @@ const ExternalLinksWrapper = styled.div`
     font-size: 16px;
     line-height: 24px;
     font-weight: 600;
-    color: #000000;
+    color: ${(props: any) => props.theme.text}; // 테마 적용
   }
 
   @media (max-width: 768px) {

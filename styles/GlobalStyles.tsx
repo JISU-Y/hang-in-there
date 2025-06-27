@@ -1,7 +1,8 @@
-import { Global, css } from '@emotion/react';
+import { Global, css, useTheme } from '@emotion/react';
+import { Theme } from './theme'; // Theme 타입을 import 합니다.
 
-const style = css`
-  /* http://meyerweb.com/eric/tools/css/reset/ 
+const createGlobalStyle = (theme: Theme) => css`
+  /* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
    License: none (public domain)
 */
@@ -112,6 +113,9 @@ const style = css`
   body {
     line-height: 1;
     overflow-x: hidden;
+    background-color: ${theme.background};
+    color: ${theme.text};
+    transition: background-color 0.3s ease, color 0.3s ease; // 부드러운 테마 전환 효과
   }
   ol,
   ul {
@@ -135,7 +139,8 @@ const style = css`
 `;
 
 function GlobalStyles() {
-  return <Global styles={style} />;
+  const theme = useTheme() as Theme; // ThemeProvider로부터 현재 테마를 가져옵니다.
+  return <Global styles={createGlobalStyle(theme)} />;
 }
 
 export default GlobalStyles;
