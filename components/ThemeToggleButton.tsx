@@ -1,6 +1,6 @@
 'use client';
 
-import { useTheme } from '@/contexts/ThemeContext'; // Context 사용
+import { useTheme } from '@contexts/ThemeContext'; // Context 사용
 import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
 

@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
-import { lightTheme, darkTheme, Theme } from '@/styles/theme'; // theme.ts 경로는 실제 프로젝트에 맞게 조정해주세요.
+import { lightTheme, darkTheme, Theme } from '@styles/theme'; // theme.ts 경로는 실제 프로젝트에 맞게 조정해주세요.
 
 type ThemeContextType = {
   theme: 'light' | 'dark';

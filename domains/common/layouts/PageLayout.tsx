@@ -7,7 +7,7 @@ import Image from 'next/image';
 import styled from '@emotion/styled';
 import { Collapse, useDisclosure } from '@chakra-ui/react';
 import AuthMenu from '@domains/auth/components/AuthMenu/AuthMenu';
-import ThemeToggleButton from '@/components/ThemeToggleButton'; // 테마 토글 버튼 import
+import ThemeToggleButton from '@components/ThemeToggleButton'; // 테마 토글 버튼 import
 
 import CategoryMenu from '../components/CategoryMenu/CategoryMenu';
 import SearchBox from '../components/SearchBox/SearchBox';
